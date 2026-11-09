@@ -249,7 +249,7 @@ class TrustRAGPipeline:
                     answer_text = f"The saved evidence could not fully verify this advice. Please confirm with the official sources. {refs}".strip()
 
             freshness, agreement, conflicts = self._response_signals(final_trust, final_context, answer_text, as_of)
-            response_sources = self._response_sources(final_context, answer_text)
+            response_sources = self._response_sources(final_context, answer_text, final_trust.get("sources", []))
             trace["faithfulness_verifier"] = final_verification.get("verifier")
             trace["claim_checks"] = final_verification.get("claims", [])
             trace["context_evidence"] = [
@@ -345,7 +345,7 @@ class TrustRAGPipeline:
             freshness=freshness,
             agreement=agreement,
             conflicts=conflicts,
-            sources=self._response_sources(context, answer_text),
+            sources=self._response_sources(context, answer_text, trust_result.get("sources", [])),
             unsupported_claims=[],
             flags=list(dict.fromkeys(policy.get("flags", []) + trust_result.get("flags", []))),
             trace=trace,
@@ -594,12 +594,27 @@ class TrustRAGPipeline:
         return widened
 
     @staticmethod
-    def _response_sources(evidence: list[dict[str, Any]], answer: str) -> list[dict[str, Any]]:
+    def _response_sources(
+        evidence: list[dict[str, Any]], answer: str, trust_sources: list[dict[str, Any]] | None = None
+    ) -> list[dict[str, Any]]:
+        """One row per document, sorted by trust.
+
+        ``evidence_id`` lists every citation id of that document (e.g. "E1, E2") so it matches the [E#] markers in
+        the answer. Documents that were retrieved and trust-scored but left out of the generation context (e.g. a
+        low-trust stale blog) are appended with ``cited=False`` so the UI can show them greyed out.
+        """
+        citation_ids: dict[str, list[str]] = {}
+        for item in evidence:
+            document_id = str(item.get("document_id", item.get("citation_id")))
+            if item.get("citation_id"):
+                citation_ids.setdefault(document_id, [])
+                if item["citation_id"] not in citation_ids[document_id]:
+                    citation_ids[document_id].append(item["citation_id"])
         sources_by_document = {}
         for item in evidence:
             document_id = str(item.get("document_id", item.get("citation_id")))
             source = {
-                "evidence_id": item.get("citation_id"),
+                "evidence_id": ", ".join(citation_ids.get(document_id, [])) or item.get("citation_id"),
                 "title": item.get("title", ""),
                 "url": item.get("url", ""),
                 "source_type": item.get("source_type", "unknown"),
@@ -619,6 +634,24 @@ class TrustRAGPipeline:
                 if source["trust"] > previous["trust"]:
                     source["cited"] = previous["cited"]
                     sources_by_document[document_id] = source
+        for scored in trust_sources or []:
+            document_id = str(scored.get("document_id"))
+            if document_id in sources_by_document:
+                continue
+            sources_by_document[document_id] = {
+                "evidence_id": None,
+                "title": scored.get("title", ""),
+                "url": scored.get("url", ""),
+                "source_type": scored.get("source_type", "unknown"),
+                "trust": float(scored.get("trust", 0.0)),
+                "cited": False,
+                "in_context": False,
+                "live": False,
+                "origin": "Offline index",
+                "search_fallback": False,
+                "fetched_at": None,
+                "nationality_scope": scored.get("nationality_scope", "UNKNOWN"),
+            }
         return sorted(sources_by_document.values(), key=lambda source: source["trust"], reverse=True)
 
     @staticmethod

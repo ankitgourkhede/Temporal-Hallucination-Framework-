@@ -98,6 +98,7 @@ def summarize_sources(evidence: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "url": item.get("url", ""),
                 "source_domain": item.get("source_domain"),
                 "source_type": item.get("source_type"),
+                "nationality_scope": item.get("nationality_scope", "UNKNOWN"),
                 "trust": float(item["Trust"]),
             }
     return list(sources.values())
