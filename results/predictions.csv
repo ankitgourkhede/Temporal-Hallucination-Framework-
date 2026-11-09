@@ -1,0 +1,5 @@
+query_id,system,gold_value,predicted_value,correct,verification_status,confidence,faithfulness,hallucination_rate,latency_ms,retry,evidence_precision,evidence_recall,has_conflict,predicted_conflict,trust_labels,trust_scores,skipped
+smoke_vietnam_visa,S0,30,45.0,False,UNVERIFIED,0.899351,,0.0,430.19654899944726,False,0.0,0.0,True,False,[],[],
+smoke_vietnam_visa,S1,30,30.0,True,VERIFIED,0.041987,1.0,0.0,386.7531850000887,False,0.0,0.0,True,True,"[False, False]","[0.2692972488558216, 0.11799810241546867]",
+smoke_vietnam_visa,S2,30,30.0,True,VERIFIED,0.044083,1.0,0.0,248.95742500029883,False,0.0,0.0,True,True,"[False, False]","[0.2680083732837325, 0.10543465362320298]",
+smoke_vietnam_visa,S3,,,,,,,,,,,,,,,,Learned weights are not available: trustrag/policies/weights_learned/visa_policy.yaml

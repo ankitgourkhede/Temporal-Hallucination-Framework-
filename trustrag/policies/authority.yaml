@@ -1,0 +1,12 @@
+tiers:
+  government: 1.0
+  embassy: 0.95
+  intl_body: 0.9
+  foreign_gov_advisory: 0.9
+  commercial_aggregator: 0.85
+  airline: 0.8
+  news: 0.6
+  travel_blog: 0.35
+  forum_social: 0.2
+  unknown: 0.3
+domain_overrides: {}

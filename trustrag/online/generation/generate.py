@@ -1,0 +1,101 @@
+"""Trust-ranked context construction and evidence-bounded generation."""
+
+from __future__ import annotations
+
+import json
+from typing import Any
+
+from trustrag.online.generation.llm import LLM, LLMResult
+
+
+SYSTEM_PROMPT = (
+    "Answer only from the provided evidence. Every factual sentence must end with citations "
+    "such as [E1]. Never present a conflicting view as fact. If evidence does not answer the "
+    "question, say so plainly. Use plain language and at most 120 words."
+)
+BASELINE_PROMPT = (
+    "Answer the user's travel advisory question using only the supplied raw retrieved passages. "
+    "Cite factual sentences with their evidence IDs and use at most 120 words."
+)
+
+
+def build_generation_payload(
+    query: str,
+    policy: dict[str, Any],
+    trust_result: dict[str, Any],
+    *,
+    baseline_evidence: list[dict[str, Any]] | None = None,
+    max_evidence: int = 6,
+    min_trust: float = 0.20,
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    if trust_result.get("evidence"):
+        chosen = sorted(trust_result["evidence"], key=lambda item: item.get("Trust", 0.0), reverse=True)
+        chosen = [item for item in chosen if item.get("Trust", 0.0) >= min_trust][:max_evidence]
+        trust_key = "Trust"
+    else:
+        chosen = sorted(baseline_evidence or [], key=lambda item: item.get("relevance", 0.0), reverse=True)[:max_evidence]
+        trust_key = "relevance"
+
+    evidence = []
+    citation_by_evidence_id = {}
+    for index, item in enumerate(chosen, start=1):
+        citation_id = f"E{index}"
+        enriched = {**item, "citation_id": citation_id}
+        evidence.append(enriched)
+        citation_by_evidence_id[item.get("evidence_id", item.get("chunk_id", citation_id))] = citation_id
+
+    facts = []
+    if trust_result.get("fusion"):
+        for slot in trust_result["fusion"]:
+            value = slot["value"]
+            matching = next(
+                (item for item in evidence if item.get("slot") == slot["slot"] and item.get("value_norm") == value),
+                None,
+            )
+            if matching:
+                facts.append({"slot": slot["slot"], "value": value, "evidence_id": matching["citation_id"]})
+    else:
+        seen = set()
+        for item in evidence:
+            key = (item.get("slot"), item.get("value_norm"))
+            if item.get("slot") and key not in seen:
+                seen.add(key)
+                facts.append({"slot": item["slot"], "value": item["value_norm"], "evidence_id": item["citation_id"]})
+
+    payload = {
+        "query": query,
+        "nationality": policy.get("entities", {}).get("nationality"),
+        "destination": policy.get("entities", {}).get("destination"),
+        "facts": facts,
+        "conflicts": [slot for slot in trust_result.get("fusion", []) if slot.get("conflicting_view")],
+        "evidence": [
+            {
+                "evidence_id": item["citation_id"],
+                "title": item.get("title", ""),
+                "source_type": item.get("source_type", "unknown"),
+                "trust": item.get("Trust", item.get("relevance", 0.0)),
+                "text": item.get("chunk_text", item.get("text", "")),
+                "slot": item.get("slot"),
+                "value": item.get("value_norm"),
+                "document_id": item.get("document_id"),
+                "source_domain": item.get("source_domain"),
+                "url": item.get("url", ""),
+            }
+            for item in evidence
+        ],
+    }
+    return payload, evidence
+
+
+def generate_answer(
+    llm: LLM,
+    payload: dict[str, Any],
+    *,
+    baseline: bool = False,
+) -> LLMResult:
+    return llm.generate(
+        BASELINE_PROMPT if baseline else SYSTEM_PROMPT,
+        json.dumps(payload, ensure_ascii=True),
+        temperature=0.0,
+        max_tokens=512,
+    )

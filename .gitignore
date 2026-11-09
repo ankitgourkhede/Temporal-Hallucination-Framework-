@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.venv/
+venv/
+.env
+.env.*
+
+# Build / tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Models and data
+models/**/*.bin
+models/**/*.pt
+models/**/*.safetensors
+vector_db/
+cache/
+*.pkl
+*.h5
+*.joblib
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/
+
+# Logs
+logs/
+*.log

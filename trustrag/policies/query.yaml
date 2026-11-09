@@ -1,0 +1,99 @@
+intents:
+  travel_entry:
+    - visa
+    - e-visa
+    - evisa
+    - passport
+    - entry
+    - enter
+    - stay
+    - traveller
+    - traveler
+    - travellers
+    - travel
+  health_safety:
+    - vaccination
+    - vaccine
+    - health
+    - outbreak
+    - covid
+    - yellow fever
+    - certificate
+  customs_regulations:
+    - customs
+    - duty
+    - declare
+    - import
+    - restricted items
+    - carry
+    - bring
+    - allowed
+    - prohibited
+  out_of_scope:
+    - beaches
+    - sightseeing
+    - hotel
+    - hotels
+    - weather
+    - restaurant
+    - restaurants
+    - flight price
+    - things to do
+categories:
+  visa_policy:
+    - visa
+    - e-visa
+    - visa-free
+    - stay
+    - passport
+    - entry requirement
+  vaccination_requirement:
+    - vaccination
+    - vaccine
+    - health requirement
+    - outbreak
+    - covid
+  customs_regulation:
+    - customs
+    - duty
+    - declare
+    - import
+    - restricted items
+entities:
+  destinations:
+    Vietnam: [vietnam, viet nam]
+    India: [india]
+    Thailand: [thailand]
+    Singapore: [singapore]
+    Malaysia: [malaysia]
+    Indonesia: [indonesia]
+    Japan: [japan]
+    China: [china]
+    Nepal: [nepal]
+    Kenya: [kenya]
+    Australia: [australia]
+    Canada: [canada]
+    "United Kingdom": ["united kingdom", uk, britain]
+    "United States": ["united states", usa, "u.s."]
+  nationalities:
+    India: [indian, indians]
+    Thailand: [thai]
+    Singapore: [singaporean, singaporeans]
+    Malaysia: [malaysian, malaysians]
+    Indonesia: [indonesian, indonesians]
+    Japan: [japanese]
+    China: [chinese]
+    Nepal: [nepalese]
+    Australia: [australian, australians]
+    Canada: [canadian, canadians]
+    "United Kingdom": [british, briton, britons, british citizen]
+    "United States": [american, americans]
+  items:
+    drone: [drone, drones, unmanned aircraft]
+    medicine: [medicine, medicines, medication, medications]
+    paracetamol: [paracetamol, acetaminophen]
+    "e-cigarette": [e-cigarette, vape, vaping device]
+    currency: [currency, cash]
+    food: [food, fruit, meat]
+    alcohol: [alcohol, liquor, spirits]
+    tobacco: [tobacco, cigarettes]

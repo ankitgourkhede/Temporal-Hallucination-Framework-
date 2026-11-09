@@ -1,0 +1,21 @@
+visa_policy:
+  w_A: 0.30
+  w_F: 0.30
+  w_G: 0.15
+  w_E: 0.10
+  w_SR: 0.15
+  w_C: 0.40
+vaccination_requirement:
+  w_A: 0.35
+  w_F: 0.20
+  w_G: 0.20
+  w_E: 0.10
+  w_SR: 0.15
+  w_C: 0.30
+customs_regulation:
+  w_A: 0.35
+  w_F: 0.10
+  w_G: 0.25
+  w_E: 0.15
+  w_SR: 0.15
+  w_C: 0.30

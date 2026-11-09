@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "temporal-hallucination-framework"
+version = "0.1.0"
+description = "Framework for detecting and mitigating temporal hallucinations in LLM pipelines"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Temporal Hallucination Project" }]
+license = { text = "MIT" }
+keywords = ["llm", "hallucination", "retrieval", "evaluation", "temporal"]
+
+[tool.setuptools]
+packages = ["trustrag", "trustrag.offline", "trustrag.online", "trustrag.online.query", "trustrag.online.policy", "trustrag.online.retrieval", "trustrag.online.trust", "trustrag.online.generation", "experiments"]
+
+[tool.setuptools.package-data]
+trustrag = ["*.yaml", "policies/*.yaml", "prompts/*.txt", "prompts/*.yaml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [".", "src"]
+addopts = "-ra"
+
+[tool.black]
+line-length = 100
+
+[tool.isort]
+profile = "black"
+
+[tool.ruff]
+line-length = 100

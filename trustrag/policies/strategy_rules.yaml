@@ -1,0 +1,20 @@
+- when:
+    flag: low_intent_confidence
+  strategy: MULTI_SOURCE
+  top_k: {primary: 8, secondary: 8}
+- when:
+    live_requested: true
+  strategy: LIVE_API
+  top_k: {primary: 8, secondary: 5}
+- when:
+    volatility: High
+  strategy: PRIMARY_AND_VALIDATION
+  top_k: {primary: 8, secondary: 5}
+- when:
+    volatility: Medium
+  strategy: PRIMARY_AND_VALIDATION
+  top_k: {primary: 8, secondary: 5}
+- when:
+    volatility: Low
+  strategy: PRIMARY_ONLY
+  top_k: {primary: 8, secondary: 0}

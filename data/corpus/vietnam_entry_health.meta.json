@@ -1,0 +1,13 @@
+{
+  "doc_key": "vn_health_gov_01",
+  "title": "Vietnam health entry requirements",
+  "url": "https://moh.gov.vn/travel/health-entry",
+  "source_domain": "moh.gov.vn",
+  "source_type": "government",
+  "country": "Vietnam",
+  "category": "vaccination_requirement",
+  "nationality_scope": "IN",
+  "content_date": "2026-10-15",
+  "snapshot_date": "2026-11-06",
+  "synthetic": true
+}

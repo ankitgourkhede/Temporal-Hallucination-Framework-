@@ -1,0 +1,17 @@
+visa_policy:
+  expert_prior: 0.8
+  freshness_half_life_days: 60
+  live_api: false
+  target_slots: [visa_required, visa_type, max_stay_days, passport_validity_months]
+
+vaccination_requirement:
+  expert_prior: 0.5
+  freshness_half_life_days: 120
+  live_api: false
+  target_slots: [vaccine_required, vaccine_name, certificate_required]
+
+customs_regulation:
+  expert_prior: 0.2
+  freshness_half_life_days: 365
+  live_api: false
+  target_slots: [item_allowed, duty_free_limit, declaration_required]

@@ -1,0 +1,7 @@
+benchmark_path: data/benchmark/benchmark.csv
+classifier_data: data/train/queries_labeled.csv
+results_dir: results
+seed: 42
+as_of_date: "2026-11-09"
+llm: mock
+systems: [S0, S1, S2, S3]
