@@ -14,7 +14,11 @@ class Claim:
 
 def extract_claims(answer: str) -> list[Claim]:
     claims = []
-    nonfactual = re.compile(r"^(hello|hi\b|please check the official|check the official|for (?:indian|uk|us) passport holders,? i assume)", re.IGNORECASE)
+    nonfactual = re.compile(
+        r"^(hello|hi\b|please check the official|check the official|for (?:indian|uk|us) passport holders,? i assume"
+        r"|i (?:couldn't|could not) (?:find|determine))",  # refusals are not factual claims (Phase 4 §4)
+        re.IGNORECASE,
+    )
     for sentence in re.split(r"(?<=[.!?])\s+", answer.strip()):
         sentence = sentence.strip()
         if not sentence or nonfactual.search(sentence):

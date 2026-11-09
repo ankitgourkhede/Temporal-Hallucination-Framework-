@@ -1,4 +1,4 @@
-"""Generate the concise thesis report and paired S0/S2 test from experiment outputs."""
+"""Generate the thesis report with all planned RQ comparisons (Holm-corrected) from experiment outputs."""
 
 from __future__ import annotations
 
@@ -6,7 +6,15 @@ from pathlib import Path
 
 import pandas as pd
 
-from experiments.stats import holm_bonferroni, mcnemar
+from experiments.stats import holm_bonferroni, mcnemar, paired_bootstrap
+
+# Phase 5 §5 planned comparisons: (RQ, baseline, proposed, metric, direction that supports the RQ).
+PLANNED_COMPARISONS = (
+    ("RQ1", "S1", "S2", "accuracy", "higher"),
+    ("RQ2", "S2", "S3", "accuracy", "higher"),
+    ("RQ3", "S0", "S2", "hallucination_rate", "lower"),
+    ("RQ3_ablation", "A1", "S2", "hallucination_rate", "lower"),
+)
 
 
 def _markdown_table(frame: pd.DataFrame) -> str:
@@ -34,16 +42,41 @@ def generate_report(results_dir: str | Path = "results") -> Path:
     predictions = pd.read_csv(predictions_path)
     comparisons = []
     p_values = {}
-    if {"S0", "S2"} <= set(predictions["system"]):
-        paired = predictions[predictions["system"].isin(["S0", "S2"])].pivot(index="query_id", columns="system", values="correct").dropna()
-        b = int(((paired["S0"] == True) & (paired["S2"] == False)).sum())
-        c = int(((paired["S0"] == False) & (paired["S2"] == True)).sum())
-        result = mcnemar(b, c)
-        p_values["S0_vs_S2_accuracy"] = float(result["p_value"])
-        comparisons.append({"comparison": "S0_vs_S2_accuracy", "b": b, "c": c, **result})
+    available = set(predictions["system"])
+    for rq, baseline, proposed, metric, better in PLANNED_COMPARISONS:
+        if not {baseline, proposed} <= available:
+            continue
+        name = f"{rq}:{baseline}_vs_{proposed}_{metric}"
+        if metric == "accuracy":
+            paired = (
+                predictions[predictions["system"].isin([baseline, proposed])]
+                .pivot(index="query_id", columns="system", values="correct").dropna()
+            )
+            if paired.empty:
+                continue
+            b = int(((paired[baseline] == True) & (paired[proposed] == False)).sum())
+            c = int(((paired[baseline] == False) & (paired[proposed] == True)).sum())
+            result = mcnemar(b, c)
+            effect = float(paired[proposed].astype(float).mean() - paired[baseline].astype(float).mean())
+            row = {"comparison": name, "test": "McNemar", "b": b, "c": c, "effect": effect, **result}
+        else:
+            paired = (
+                predictions[predictions["system"].isin([baseline, proposed])]
+                .pivot(index="query_id", columns="system", values=metric).dropna()
+            )
+            if paired.empty:
+                continue
+            result = paired_bootstrap(paired[proposed].astype(float), paired[baseline].astype(float))
+            row = {"comparison": name, "test": "paired_bootstrap", "effect": result["mean_difference"], **result}
+        row["direction_needed"] = better
+        p_values[name] = float(row["p_value"])
+        comparisons.append(row)
     adjusted = holm_bonferroni(p_values)
     for row in comparisons:
         row["holm_adjusted_p"] = adjusted.get(row["comparison"], row["p_value"])
+        right_direction = row["effect"] > 0 if row["direction_needed"] == "higher" else row["effect"] < 0
+        # Pre-registered decision rule (Phase 5 §5): supported iff right direction AND Holm-adjusted p < 0.05.
+        row["verdict"] = "supported" if right_direction and row["holm_adjusted_p"] < 0.05 else "not supported"
     pd.DataFrame(comparisons).to_csv(results_dir / "stats_tests.csv", index=False)
 
     lines = [

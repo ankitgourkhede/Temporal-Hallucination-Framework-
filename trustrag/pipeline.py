@@ -31,6 +31,12 @@ class TrustRAGPipeline:
         "S1": "Standard Trust RAG (static weights)",
         "S2": "TrustRAG (policy weights)",
         "S3": "TrustRAG (learned weights)",
+        "A1": "Ablation: TrustRAG (policy weights) without verification",
+    }
+    PRIMARY_SOURCE_TYPES = {"government", "embassy", "intl_body", "foreign_gov_advisory"}
+    NATIONALITY_LABELS = {
+        "India": "Indian", "United Kingdom": "British", "United States": "American",
+        "Canada": "Canadian", "Australia": "Australian", "Singapore": "Singaporean",
     }
 
     def __init__(self, config_path: str | Path, llm: LLM | None = None):
@@ -49,7 +55,7 @@ class TrustRAGPipeline:
         live_check: bool = False,
     ) -> dict[str, Any]:
         started = time.perf_counter()
-        if system not in {"S0", "S1", "S2", "S3"}:
+        if system not in self.SYSTEM_NAMES:
             raise ValueError(f"Unsupported system: {system}")
         active_llm = self.llm or build_llm(llm, self.config)
         trace: dict[str, Any] = {
@@ -85,7 +91,7 @@ class TrustRAGPipeline:
                 started=started,
             )
 
-        weight_mode = {"S1": "static", "S2": "policy", "S3": "learned"}.get(system)
+        weight_mode = {"S1": "static", "S2": "policy", "S3": "learned", "A1": "policy"}.get(system)
         if weight_mode is not None:
             try:
                 weights, weights_source = load_weights(self.config_path, policy["category"], weight_mode)
@@ -97,22 +103,33 @@ class TrustRAGPipeline:
                     policy,
                     answer=(
                         "Learned Trust RAG is unavailable because learned weights for this category have not been fitted. "
+                        "Run `make fit` on the benchmark train split first."
                     ),
                     verification_status="SYSTEM_UNAVAILABLE",
                     confidence=0.0,
-                        source = next(
-                            (item for item in retrieval.get("evidence", []) if item.get("live") or item.get("search_fallback")),
-                            None,
-                        )
+                    faithfulness=None,
+                    sources=[],
+                    unsupported_claims=[],
+                    flags=list(policy.get("flags", [])) + ["learned_weights_missing"],
+                    trace=trace,
+                    started=started,
+                )
+            # S1/S2/S3 differ ONLY in this weight vector (Phase 5 §0 variable isolation).
+            policy = {**policy, "weights": weights, "weights_source": weights_source, "weight_mode": weight_mode}
+            trace["weights_source"] = weights_source
+            trace["weight_mode"] = weight_mode
+
+        index_started = time.perf_counter()
+        query_vector = encode_query_vector(query, self.config_path)
         with KnowledgeStore.from_config(self.config_path) as store:
             if system == "S0":
-                retrieval = self._retrieve_with_fallback(store, query, query_vector, policy, mode, live_check)
-                raw_evidence = retrieval["evidence"]
+                # Phase 5 §2: S0 is plain RAG - top-k from BOTH collections, no policy routing,
+                # no relevance gate, no nationality filter, no trust, no verification, no live fetch.
+                raw_evidence = self._baseline_retrieve(store, query_vector, policy)
                 trace["retrieval_calls"] = 1
-                trace["flags"] = retrieval["flags"]
-                trace["live_enabled"] = bool(retrieval["trace"].get("live_documents", 0))
-                trace["live_documents"] = retrieval["trace"].get("live_documents", 0)
-                trace["retrieval_fallback_stages"] = retrieval["trace"].get("fallback_stages", ["offline"])
+                trace["flags"] = list(policy.get("flags", []))
+                trace["live_documents"] = 0
+                trace["retrieval_fallback_stages"] = ["offline_baseline"]
                 trace["layers_ms"]["L3_retrieval"] = (time.perf_counter() - index_started) * 1000
                 trust_result: dict[str, Any] = {"evidence": [], "fusion": [], "sources": [], "flags": []}
                 generation_payload, context_evidence = build_generation_payload(
@@ -123,11 +140,19 @@ class TrustRAGPipeline:
                     for item in context_evidence
                 ]
                 trace["resolved_slots"] = self._baseline_resolutions(raw_evidence)
+                trace["retrieved_evidence"] = self._evidence_summary(raw_evidence)
                 generation_started = time.perf_counter()
                 result = generate_answer(active_llm, generation_payload, baseline=True)
                 trace["generations"] = 1
                 trace["layers_ms"]["L4_generation"] = (time.perf_counter() - generation_started) * 1000
                 answer_text = result.text
+                if mode == "benchmark":
+                    # Phase 5 §4: the SAME verifier is applied offline to S0 answers so the hallucination rate
+                    # is measured identically for every system. It does not change S0's runtime behaviour.
+                    # No fused value exists for S0, so the slot check is skipped (fusion=[]).
+                    offline = self._verify(answer_text, context_evidence, [])
+                    trace["offline_claim_checks"] = offline["claims"]
+                    trace["offline_verifier"] = offline["verifier"]
                 response_sources = self._response_sources(context_evidence, answer_text)
                 return self._finish(
                     query, policy, answer=answer_text, verification_status="UNVERIFIED",
@@ -159,66 +184,16 @@ class TrustRAGPipeline:
                 trace["trust_calls"] += 1
                 trace["layers_ms"]["L4_trust"] = trace["layers_ms"].get("L4_trust", 0.0) + (time.perf_counter() - trust_started) * 1000
 
-                if (
-                    not trust_result.get("fusion")
-                    and trace.get("live_documents")
-                    and policy.get("category") == "visa_policy"
-                    and policy.get("entities", {}).get("destination") == "United Kingdom"
-                ):
-                    source = next((item for item in final_context if item.get("live")), None)
-                    if source is None:
-                        source = next(
-                            (item for item in retrieval.get("evidence", []) if item.get("live")), None
-                        )
-                    if source is None:
-                        source = type("LiveSourceView", (), {
-                            "title": "GOV.UK Check if you need a UK visa",
-                            "url": "https://www.gov.uk/check-uk-visa",
-                            "source_type": "government",
-                            "fetched_at": None,
-                            "content_date": None,
-                            "nationality_scope": "ALL",
-                        })()
-                    citation = "E1"
-                    nationality = policy.get("entities", {}).get("nationality", "India")
-                    nationality_label = {"India": "Indian", "United Kingdom": "British", "United States": "American"}.get(nationality, nationality)
-                    fallback_answer = (
-                        f"Assuming an {nationality_label} passport, I couldn’t determine the exact visa outcome "
-                        f"for your travel purpose from the retrieved page. Check the official UK visa checker [{citation}]."
-                    )
-                    source_row = {
-                        "evidence_id": citation,
-                        "title": source.get("title", "GOV.UK Check if you need a UK visa") if source else "GOV.UK Check if you need a UK visa",
-                        "url": source.get("url", "https://www.gov.uk/check-uk-visa") if source else "https://www.gov.uk/check-uk-visa",
-                        "source_type": source.get("source_type", "government") if source else "government",
-                        "trust": 0.0,
-                        "trust_scored": False,
-                        "cited": True,
-                        "live": bool(source and source.get("live")),
-                        "search_fallback": bool(source and source.get("search_fallback")),
-                        "fetched_at": source.get("fetched_at") if source else None,
-                        "nationality_scope": source.get("nationality_scope", "UNKNOWN") if source else "UNKNOWN",
-                    }
-                    trace["live_enabled"] = True
-                    trace["live_fallback"] = trace.get("retrieval_fallback_stages", [])
-                    trace["live_fallback"] = "official_interactive_visa_checker"
-                    flags = list(dict.fromkeys(policy.get("flags", []) + retrieval.get("flags", []) + ["verification_required"]))
-                    return self._finish(
-                        query,
-                        policy,
-                        answer=fallback_answer,
-                        verification_status="VERIFICATION_REQUIRED",
-                        confidence=0.0,
-                        faithfulness=0.0,
-                        freshness={"most_recent_source": source.content_date, "age_days": None},
-                        agreement="Low",
-                        conflicts=[],
-                        sources=[source_row],
-                        unsupported_claims=[],
-                        flags=flags,
-                        trace=trace,
-                        started=started,
-                        verification_required=True,
+                official_sources = [
+                    source for source in retrieval.get("trace", {}).get("fetched_sources", [])
+                    if source.get("source_type") in self.PRIMARY_SOURCE_TYPES and not source.get("search_fallback")
+                ]
+                if not trust_result.get("fusion") and official_sources:
+                    # Phase 4 §2/§5: the evidence does not answer the question, so say so plainly and point
+                    # to the official source instead of generating an unsupported answer. Generic for any
+                    # destination/category (replaces the former United-Kingdom-only special case).
+                    return self._official_source_only_response(
+                        query, policy, retrieval, official_sources[:3], trace, started
                     )
 
                 generation_payload, context_evidence = build_generation_payload(query, pass_policy, trust_result)
@@ -227,8 +202,15 @@ class TrustRAGPipeline:
                 trace["generations"] += 1
                 trace["layers_ms"]["L5_generation"] = trace["layers_ms"].get("L5_generation", 0.0) + (time.perf_counter() - generation_started) * 1000
 
+                trace["retrieved_evidence"] = self._evidence_summary(retrieval.get("evidence", []))
+                if system == "A1":
+                    # Ablation A1 (RQ3): identical to S2 but WITHOUT runtime verification or retry.
+                    return self._unverified_trust_response(
+                        query, policy, generated.text, context_evidence, trust_result, trace, started, mode, as_of
+                    )
+
                 verify_started = time.perf_counter()
-                verification = verify_answer(generated.text, context_evidence, trust_result["fusion"])
+                verification = self._verify(generated.text, context_evidence, trust_result["fusion"])
                 trace["verifications"] += 1
                 trace["layers_ms"]["L5_verification"] = trace["layers_ms"].get("L5_verification", 0.0) + (time.perf_counter() - verify_started) * 1000
 
@@ -295,6 +277,140 @@ class TrustRAGPipeline:
                 verification_required=status == "VERIFICATION_REQUIRED",
             )
 
+    def _verify(self, answer: str, context: list[dict[str, Any]], fusion: list[dict[str, Any]]) -> dict[str, Any]:
+        verify_config = self.config.get("verify", {})
+        return verify_answer(
+            answer,
+            context,
+            fusion,
+            mode=str(verify_config.get("mode", "nli")),
+            entailment_threshold=float(verify_config.get("entailment_threshold", 0.50)),
+            contradiction_threshold=float(verify_config.get("contradiction_threshold", 0.50)),
+            model_name=str(verify_config.get("nli_model", "cross-encoder/nli-deberta-v3-small")),
+            allow_download=bool(verify_config.get("allow_download", False)),
+        )
+
+    @staticmethod
+    def _evidence_summary(evidence: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        """Compact list of every retrieved evidence object; Phase 5 uses it for evidence precision/recall."""
+        return [
+            {
+                "slot": item.get("slot"),
+                "value": item.get("value_norm"),
+                "document_id": item.get("document_id"),
+                "source_domain": item.get("source_domain"),
+                "is_primary": item.get("is_primary"),
+            }
+            for item in evidence
+        ]
+
+    def _unverified_trust_response(
+        self,
+        query: str,
+        policy: dict[str, Any],
+        answer_text: str,
+        context: list[dict[str, Any]],
+        trust_result: dict[str, Any],
+        trace: dict[str, Any],
+        started: float,
+        mode: str,
+        as_of: str | None,
+    ) -> dict[str, Any]:
+        fusion = trust_result.get("fusion", [])
+        main_slot = self._main_slot(query, fusion)
+        confidence = next(
+            (float(item.get("confidence", 0.0)) for item in fusion if item["slot"] == main_slot),
+            max((item.get("confidence", 0.0) for item in fusion), default=0.0),
+        )
+        if mode == "benchmark":
+            offline = self._verify(answer_text, context, fusion)
+            trace["offline_claim_checks"] = offline["claims"]
+            trace["offline_verifier"] = offline["verifier"]
+        freshness, agreement, conflicts = self._response_signals(trust_result, context, answer_text, as_of)
+        trace["context_evidence"] = [
+            {"slot": item.get("slot"), "value": item.get("value_norm"), "evidence_id": item.get("citation_id"),
+             "trust": item.get("Trust"), "url": item.get("url"), "document_id": item.get("document_id")}
+            for item in context
+        ]
+        trace["resolved_slots"] = fusion
+        trace["policy"] = policy
+        trace["trust"] = trust_result.get("trace", {})
+        return self._finish(
+            query,
+            policy,
+            answer=answer_text,
+            verification_status="UNVERIFIED",
+            confidence=confidence,
+            faithfulness=None,
+            freshness=freshness,
+            agreement=agreement,
+            conflicts=conflicts,
+            sources=self._response_sources(context, answer_text),
+            unsupported_claims=[],
+            flags=list(dict.fromkeys(policy.get("flags", []) + trust_result.get("flags", []))),
+            trace=trace,
+            started=started,
+        )
+
+    def _official_source_only_response(
+        self,
+        query: str,
+        policy: dict[str, Any],
+        retrieval: dict[str, Any],
+        official_sources: list[dict[str, Any]],
+        trace: dict[str, Any],
+        started: float,
+    ) -> dict[str, Any]:
+        entities = policy.get("entities", {})
+        flags = list(policy.get("flags", [])) + list(retrieval.get("flags", []))
+        assumption = ""
+        if "nationality_defaulted" in flags:
+            nationality = str(entities.get("nationality", "India"))
+            label = self.NATIONALITY_LABELS.get(nationality, nationality)
+            article = "an" if label[:1].lower() in "aeiou" else "a"
+            assumption = f"Assuming {article} {label} passport, "
+        topic = str(policy.get("category", "travel")).replace("_", " ")
+        citations = " ".join(f"[E{index}]" for index in range(1, len(official_sources) + 1))
+        lead = f"{assumption}I" if assumption else "I"
+        answer = (
+            f"{lead} couldn't determine the exact {topic} rule for {entities.get('destination', 'this destination')} "
+            f"from the retrieved official page. Please check the official source {citations}."
+        )
+        source_rows = []
+        for index, source in enumerate(official_sources, start=1):
+            source_rows.append({
+                "evidence_id": f"E{index}",
+                "title": source.get("title", ""),
+                "url": source.get("url", ""),
+                "source_type": source.get("source_type", "unknown"),
+                "trust": 0.0,
+                "trust_scored": False,
+                "cited": True,
+                "live": bool(source.get("live")),
+                "origin": "Live official source" if source.get("live") else "Offline index",
+                "search_fallback": False,
+                "fetched_at": source.get("fetched_at"),
+                "nationality_scope": source.get("nationality_scope", "UNKNOWN"),
+            })
+        trace["no_slot_evidence"] = True
+        return self._finish(
+            query,
+            policy,
+            answer=answer,
+            verification_status="VERIFICATION_REQUIRED",
+            confidence=0.0,
+            faithfulness=0.0,
+            freshness={"most_recent_source": official_sources[0].get("content_date"), "age_days": None},
+            agreement="Low",
+            conflicts=[],
+            sources=source_rows,
+            unsupported_claims=[],
+            flags=flags + ["no_answer_found", "verification_required"],
+            trace=trace,
+            started=started,
+            verification_required=True,
+        )
+
     def _fetch_live(
         self, policy: dict[str, Any], mode: str, live_check: bool
     ) -> tuple[list[Any], list[str]]:
@@ -354,10 +470,27 @@ class TrustRAGPipeline:
                 combined["flags"] = list(dict.fromkeys(combined.get("flags", []) + google_flags))
 
         combined.setdefault("trace", {})["fallback_stages"] = fallback_stages
+        combined["trace"]["fetched_sources"] = [
+            self._source_descriptor(document, search_fallback=False) for document in live_documents
+        ] + [self._source_descriptor(document, search_fallback=True) for document in google_documents]
         combined["trace"]["live_documents"] = len(live_documents)
         combined["trace"]["google_documents"] = len(google_documents)
         combined["trace"]["requested_slot"] = required_slot
         return combined
+
+    @staticmethod
+    def _source_descriptor(document: Any, *, search_fallback: bool) -> dict[str, Any]:
+        data = document.as_dict() if hasattr(document, "as_dict") else dict(document)
+        return {
+            "title": data.get("title", ""),
+            "url": data.get("url", ""),
+            "source_type": data.get("source_type", "unknown"),
+            "nationality_scope": data.get("nationality_scope", "UNKNOWN"),
+            "content_date": data.get("content_date"),
+            "fetched_at": data.get("fetched_at"),
+            "live": not search_fallback,
+            "search_fallback": search_fallback,
+        }
 
     @staticmethod
     def _retrieve_documents_only(

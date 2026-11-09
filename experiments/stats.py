@@ -31,10 +31,15 @@ def paired_bootstrap(
     rng = np.random.default_rng(seed)
     draws = rng.integers(0, differences.size, size=(resamples, differences.size))
     means = differences[draws].mean(axis=1)
+    # Two-sided bootstrap p-value for H0: mean difference = 0 (share of resampled means on the far side of 0).
+    p_value = min(1.0, 2.0 * min(float((means <= 0).mean()), float((means >= 0).mean())))
+    if not differences.any():
+        p_value = 1.0
     return {
         "mean_difference": float(differences.mean()),
         "ci_low": float(np.quantile(means, 0.025)),
         "ci_high": float(np.quantile(means, 0.975)),
+        "p_value": p_value,
     }
 
 

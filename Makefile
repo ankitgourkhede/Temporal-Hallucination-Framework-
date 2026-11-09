@@ -1,7 +1,10 @@
-.PHONY: setup index search train-classifiers benchmark-check fit experiments report api demo-mock demo test
+.PHONY: setup models index search train-classifiers benchmark-check fit experiments report api demo-mock demo test
 
 setup:
 	python -m pip install -r requirements.txt
+
+models:
+	python -c "from sentence_transformers import SentenceTransformer, CrossEncoder; SentenceTransformer('BAAI/bge-small-en-v1.5'); CrossEncoder('cross-encoder/nli-deberta-v3-small')"
 
 index:
 	PYTHONPATH=. python -m trustrag.cli index --corpus data/corpus --config trustrag/config.yaml
@@ -23,7 +26,7 @@ experiments:
 	PYTHONPATH=. python -m experiments.run_all --smoke --config trustrag/config.yaml
 
 benchmark-experiments:
-	PYTHONPATH=. python -m experiments.run_all --benchmark data/benchmark/benchmark.csv --config trustrag/config.yaml
+	PYTHONPATH=. python -m experiments.run_all --benchmark data/benchmark/benchmark.csv --config trustrag/config.yaml --llm $(or $(LLM),ollama)
 
 report:
 	PYTHONPATH=. python -m experiments.report

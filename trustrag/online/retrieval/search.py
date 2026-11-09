@@ -61,10 +61,15 @@ class OnlineRetriever:
 
         for live_document in live_documents or []:
             live = live_document.as_dict() if hasattr(live_document, "as_dict") else dict(live_document)
-            source_type = str(live.get("source_type", "unknown"))
+            source_type = str(live.get("source_type") or "unknown")
             scope = live.get("nationality_scope", "UNKNOWN")
-            is_primary = source_type in {"government", "embassy", "intl_body"} or (
-                source_type == "foreign_gov_advisory" and scope == "ALL"
+            search_snippet = live.get("section") == "google_search_snippet"
+            # A search-result snippet is not a verified official page: it is truncated, undated and
+            # out of context. It keeps its domain's Authority tier, but is never treated as primary, so
+            # Freshness falls back to the capped no-date rule and Severity treats it as secondary.
+            is_primary = not search_snippet and (
+                source_type in {"government", "embassy", "intl_body"}
+                or (source_type == "foreign_gov_advisory" and scope == "ALL")
             )
             document = {
                 "document_id": f"live-{live['raw_hash'][:16]}",

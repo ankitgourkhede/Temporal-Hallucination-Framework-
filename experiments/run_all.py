@@ -74,10 +74,13 @@ def _equal(left: Any, right: Any) -> bool:
         return str(left).strip().casefold() == str(right).strip().casefold()
 
 
-def _run_query(row: dict[str, Any], system: str, config_path: str) -> dict[str, Any]:
+def _run_query(row: dict[str, Any], system: str, config_path: str, llm: str = "mock") -> dict[str, Any]:
     response = TrustRAGPipeline(config_path).answer(
-        str(row["query"]), system=system, llm="mock", as_of=str(row["as_of_date"]), mode="benchmark"
+        str(row["query"]), system=system, llm=llm, as_of=str(row["as_of_date"]), mode="benchmark"
     )
+    if response["verification_status"] == "SYSTEM_UNAVAILABLE":
+        # e.g. S3 before `make fit`: report as skipped, never score it as a wrong answer.
+        raise FileNotFoundError(response["answer"])
     trace = response["trace"]
     resolved = next(
         (item.get("value") for item in trace.get("resolved_slots", []) if item.get("slot") == row["gold_slot"]),
@@ -95,7 +98,8 @@ def _run_query(row: dict[str, Any], system: str, config_path: str) -> dict[str, 
         item.get("slot") == row["gold_slot"] and float(item.get("severity", 0.0)) > 0
         for item in conflict_evidence
     )
-    claims = trace.get("claim_checks", [])
+    # Runtime checks for verifying systems; offline checks (same verifier) for S0 and ablation A1 (Phase 5 §4).
+    claims = trace.get("claim_checks") or trace.get("offline_claim_checks", [])
     return {
         "query_id": row["query_id"],
         "system": system,
@@ -106,6 +110,8 @@ def _run_query(row: dict[str, Any], system: str, config_path: str) -> dict[str, 
         "confidence": response["confidence"],
         "faithfulness": response["faithfulness"],
         "hallucination_rate": hallucination_rate(claims),
+        "claims_checked": len(claims),
+        "verifier": trace.get("faithfulness_verifier") or trace.get("offline_verifier"),
         "latency_ms": response["latency_ms"],
         "retry": bool(trace.get("retried", False)),
         "evidence_precision": precision,
@@ -168,7 +174,7 @@ def _plot_results(metrics: pd.DataFrame, output: Path) -> None:
         plt.close(fig)
 
 
-def run_experiments(*, smoke: bool = False, benchmark_path: str | None = None, config_path: str = "trustrag/config.yaml") -> tuple[pd.DataFrame, pd.DataFrame]:
+def run_experiments(*, smoke: bool = False, benchmark_path: str | None = None, config_path: str = "trustrag/config.yaml", llm: str = "mock") -> tuple[pd.DataFrame, pd.DataFrame]:
     experiment_config_path = Path("experiments/config.yaml")
     experiment_config = yaml.safe_load(experiment_config_path.read_text(encoding="utf-8")) or {}
     if smoke:
@@ -191,7 +197,7 @@ def run_experiments(*, smoke: bool = False, benchmark_path: str | None = None, c
         for row in benchmark.to_dict("records"):
             for system in experiment_config.get("systems", ["S0", "S1", "S2", "S3"]):
                 try:
-                    predictions.append(_run_query(row, system, config_path))
+                    predictions.append(_run_query(row, system, config_path, llm))
                 except FileNotFoundError as error:
                     if system != "S3":
                         raise
@@ -210,7 +216,7 @@ def run_experiments(*, smoke: bool = False, benchmark_path: str | None = None, c
                 "git_hash": subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip(),
                 "config_sha256": hashlib.sha256(Path(config_path).read_bytes()).hexdigest(),
                 "model": yaml.safe_load(Path(config_path).read_text(encoding="utf-8"))["embedding"]["model_name"],
-                "llm": "mock",
+                "llm": llm,
                 "seed": experiment_config.get("seed", 42),
                 "as_of_date": experiment_config.get("as_of_date", "2026-11-09"),
                 "benchmark_mode": True,
@@ -230,8 +236,12 @@ def main() -> None:
     parser.add_argument("--smoke", action="store_true", help="Run the one-query synthetic smoke benchmark")
     parser.add_argument("--benchmark", default=None)
     parser.add_argument("--config", default="trustrag/config.yaml")
+    parser.add_argument("--llm", default="mock", choices=["mock", "ollama", "openai", "anthropic"],
+                        help="mock = fast smoke run; use ollama (or another real LLM) for thesis numbers")
     args = parser.parse_args()
-    predictions, metrics = run_experiments(smoke=args.smoke, benchmark_path=args.benchmark, config_path=args.config)
+    predictions, metrics = run_experiments(
+        smoke=args.smoke, benchmark_path=args.benchmark, config_path=args.config, llm=args.llm
+    )
     print(metrics.to_string(index=False) if not metrics.empty else "No systems produced metrics")
     print(f"Wrote {len(predictions)} prediction row(s) to results/predictions.csv")
 

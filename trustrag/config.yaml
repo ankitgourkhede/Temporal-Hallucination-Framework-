@@ -76,8 +76,13 @@ generation:
   partial_threshold: 0.90
 
 verify:
-  mode: rule_slot_fallback
+  # nli = cross-encoder NLI (Phase 4 spec); falls back to the rule verifier when the model is not cached.
+  # Run `make models` once to download it. The verifier used is reported in every response trace.
+  mode: nli
+  nli_model: cross-encoder/nli-deberta-v3-small
+  allow_download: false
   entailment_threshold: 0.50
+  contradiction_threshold: 0.50
 
 llm:
   default: ollama
