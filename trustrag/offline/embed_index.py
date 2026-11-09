@@ -10,7 +10,9 @@ from __future__ import annotations
 
 import json
 import hashlib
+import logging
 import math
+import re
 from pathlib import Path
 from typing import Any
 
@@ -27,23 +29,34 @@ from trustrag.offline.ingest import ingest_corpus
 from trustrag.offline.metadata import DocumentMetadata, fetch_chunk_rows, fetch_document_rows, init_metadata_store, upsert_chunk, upsert_document
 
 
+LOGGER = logging.getLogger(__name__)
+
 class _FallbackEncoder:
     """Deterministic fallback encoder used when sentence-transformers is unavailable."""
 
     def __init__(self, dimension: int = 384):
         self.dimension = dimension
+        LOGGER.warning(
+            "sentence-transformers model unavailable: using the lexical fallback encoder. "
+            "Retrieval quality is reduced - run `make models` before producing thesis results."
+        )
 
-    def encode(self, texts: list[str]) -> np.ndarray:
+    def encode(self, texts: list[str], **_: object) -> np.ndarray:
+        """Hashed bag-of-words: each token maps to a fixed signed dimension, so texts sharing words are similar.
+
+        (The previous version hashed token *positions*, which made similarity essentially random.)
+        """
         vectors = []
         for text in texts:
             vector = np.zeros(self.dimension, dtype="float32")
-            tokens = [token.lower() for token in text.replace("\n", " ").split()]
+            tokens = [token for token in re.findall(r"[a-z0-9]+", text.lower()) if len(token) > 1]
             if not tokens:
                 vectors.append(vector)
                 continue
-            for idx, token in enumerate(tokens[: self.dimension]):
-                value = int.from_bytes(hashlib.sha256(token.encode("utf-8")).digest()[:4], "big") % 1000
-                vector[(idx * 7) % self.dimension] += value / 1000.0
+            for token in tokens:
+                digest = hashlib.sha256(token.encode("utf-8")).digest()
+                index = int.from_bytes(digest[:4], "big") % self.dimension
+                vector[index] += 1.0 if digest[4] % 2 == 0 else -1.0
             norm = np.linalg.norm(vector)
             if norm > 0:
                 vector = vector / norm

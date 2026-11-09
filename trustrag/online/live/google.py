@@ -93,10 +93,13 @@ class GoogleSearchFallback:
     @staticmethod
     def _source_type(domain: str) -> str:
         domain = domain.lower()
-        if domain.endswith((".gov", ".gov.uk", ".gov.sg", ".gov.vn", ".gov.in", ".go.jp")):
+        official_suffixes = (".gov", ".gov.uk", ".gov.sg", ".gov.vn", ".gov.in", ".go.jp", ".gc.ca", ".gov.au", ".nic.in")
+        if domain.endswith(official_suffixes):
+            if "embassy" in domain or "consulate" in domain:
+                return "embassy"
             return "government"
-        if "embassy" in domain or "consulate" in domain:
-            return "embassy"
         if domain.endswith(".who.int") or domain.endswith(".iata.org"):
             return "intl_body"
+        # Open web search: a domain merely *containing* "embassy"/"consulate" (e.g. a commercial
+        # visa agency) must not inherit embassy-level authority.
         return "unknown"
