@@ -194,6 +194,9 @@ def chips_html(response: dict[str, Any]) -> str:
         volatility = (response.get("volatility") or "").lower()
         suffix = f" · {volatility} volatility" if volatility else ""
         second.append(f'<span class="tr-chip tr-plain">{esc(category + suffix)}</span>')
+    latency = response.get("latency_ms")
+    if isinstance(latency, (int, float)):
+        second.append(f'<span class="tr-chip tr-plain">Answered in {latency / 1000:.1f} s</span>')
     rows = f'<div class="tr-chips">{"".join(chips)}</div>'
     if second:
         rows += f'<div class="tr-chips">{"".join(second)}</div>'
@@ -335,6 +338,11 @@ def render_user(text: str) -> None:
     st.markdown(f'<div class="tr-user"><span>{esc(text)}</span></div>', unsafe_allow_html=True)
 
 
+@st.cache_resource(show_spinner=False)
+def get_pipeline(path: str) -> TrustRAGPipeline:
+    return TrustRAGPipeline(path)
+
+
 # ----------------------------------------------------------------------------- sidebar
 
 with st.sidebar:
@@ -397,9 +405,10 @@ question = st.chat_input("Ask about visa, health-entry, or customs rules")
 if question:
     st.session_state.messages.append({"role": "user", "content": question})
     render_user(question)
-    with st.spinner("Checking sources..."):
+    spinner = "Checking sources..." if backend == "mock" else f"Checking sources and writing the answer with {backend}..."
+    with st.spinner(spinner):
         try:
-            response = TrustRAGPipeline(config_path).answer(question, system=system, llm=backend, live_check=live_check)
+            response = get_pipeline(config_path).answer(question, system=system, llm=backend, live_check=live_check)
         except EmbeddingModelUnavailable as error:
             st.error(str(error))
             st.stop()
@@ -407,13 +416,15 @@ if question:
     st.session_state.messages.append({"role": "assistant", "response": response, "backend": backend})
 
 if st.session_state.messages:
+    if backend != "mock":
+        st.caption(f"Compare runs the question through all four systems, so it takes about four times as long with {backend}.")
     if st.button("Compare RAG systems"):
         last_query = next(m["content"] for m in reversed(st.session_state.messages) if m["role"] == "user")
         results = []
         with st.spinner("Running the same question through each system..."):
             for selected in SYSTEM_LABELS:
                 try:
-                    result = TrustRAGPipeline(config_path).answer(last_query, system=selected, llm=backend, live_check=live_check)
+                    result = get_pipeline(config_path).answer(last_query, system=selected, llm=backend, live_check=live_check)
                 except Exception as error:  # show the failure in that column instead of breaking the page
                     result = {"answer": f"System could not run: {error}", "verification_status": "SYSTEM_UNAVAILABLE",
                               "confidence": 0.0, "sources": []}

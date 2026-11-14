@@ -19,6 +19,11 @@ BASELINE_PROMPT = (
 )
 
 
+def _clip(text: str, limit: int = 280) -> str:
+    text = " ".join(text.split())
+    return text if len(text) <= limit else text[:limit].rsplit(" ", 1)[0] + " ..."
+
+
 def build_generation_payload(
     query: str,
     policy: dict[str, Any],
@@ -76,24 +81,25 @@ def build_generation_payload(
                 seen.add(key)
                 facts.append({"slot": item["slot"], "value": item["value_norm"], "evidence_id": item["citation_id"]})
 
+    # Keep the prompt small: on CPU every prompt token costs time. The verifier works from the
+    # full evidence list returned below, not from this payload, so trimming it is safe.
     payload = {
         "query": query,
         "nationality": policy.get("entities", {}).get("nationality"),
         "destination": policy.get("entities", {}).get("destination"),
         "facts": facts,
-        "conflicts": [slot for slot in trust_result.get("fusion", []) if slot.get("conflicting_view")],
+        "conflicts": [
+            {"slot": slot["slot"], "chosen": slot["value"], "other": (slot.get("conflicting_view") or {}).get("value")}
+            for slot in trust_result.get("fusion", [])
+            if slot.get("conflicting_view")
+        ],
         "evidence": [
             {
                 "evidence_id": item["citation_id"],
-                "title": item.get("title", ""),
                 "source_type": item.get("source_type", "unknown"),
-                "trust": item.get("Trust", item.get("relevance", 0.0)),
-                "text": item.get("chunk_text", item.get("text", "")),
                 "slot": item.get("slot"),
                 "value": item.get("value_norm"),
-                "document_id": item.get("document_id"),
-                "source_domain": item.get("source_domain"),
-                "url": item.get("url", ""),
+                "text": _clip(str(item.get("chunk_text", item.get("text", "")))),
             }
             for item in evidence
         ],
@@ -111,5 +117,5 @@ def generate_answer(
         BASELINE_PROMPT if baseline else SYSTEM_PROMPT,
         json.dumps(payload, ensure_ascii=True),
         temperature=0.0,
-        max_tokens=512,
+        max_tokens=256,  # answers are limited to ~120 words
     )

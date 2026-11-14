@@ -4,7 +4,7 @@
 #   scripts/ollama_local.sh serve   start the server on 127.0.0.1:11434 (foreground)
 set -euo pipefail
 OLLAMA_HOME="${OLLAMA_HOME:-$HOME/.local/ollama}"
-MODEL="${OLLAMA_MODEL:-llama3.2:3b}"
+MODEL="${OLLAMA_MODEL:-llama3.2:1b}"
 BIN="$OLLAMA_HOME/bin/ollama"
 
 case "${1:-}" in

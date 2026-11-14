@@ -41,7 +41,7 @@ can Indian tourists stay in Thailand?"* and press **Compare RAG systems**.
 make reproduce
 ```
 
-Close the demo and unload the local LLM first (`~/.local/ollama/bin/ollama stop llama3.2:3b`):
+Close the demo and unload the local LLM first (`~/.local/ollama/bin/ollama stop llama3.2:1b`):
 on an 8 GB codespace the benchmark run and a loaded LLM do not fit in memory together, and the
 system then kills the run. This rebuilds everything from `data/benchmark/facts.yaml` in order: corpus and benchmark CSV,
 FAISS index, query classifiers, benchmark checks, freshness ablation, reputation and S3 fitting
@@ -83,7 +83,7 @@ tests/            unit tests
 - `trustrag/config.yaml`: the 4-document demo corpus used by the unit tests.
 
 LLM backends: `mock` (deterministic template writer, used for all benchmark runs), `ollama`
-(llama3.2:3b running locally on the CPU), `ollama_cloud` (ollama.com, `OLLAMA_API_KEY`, needs
+(llama3.2:1b running locally on the CPU), `ollama_cloud` (ollama.com, `OLLAMA_API_KEY`, needs
 account credits), `openai` (gpt-4o-mini, `OPENAI_API_KEY`), `anthropic` (claude-haiku-5-5,
 `ANTHROPIC_API_KEY`). If a backend is unavailable the answer falls back to the template writer
 and the UI says so. Keys are read from environment variables only; store them as Codespaces
@@ -92,13 +92,16 @@ secrets, never in files.
 ### Using a real LLM locally (free)
 
 ```bash
-make ollama-setup     # once: installs Ollama in ~/.local/ollama (no sudo) and downloads llama3.2:3b (2 GB)
+make ollama-setup     # once: installs Ollama in ~/.local/ollama (no sudo) and downloads llama3.2:1b (1.3 GB)
 make ollama           # in its own terminal; keep it running
 make demo             # in another terminal; choose LLM -> ollama in the sidebar
 ```
 
-On a 2-core codespace an answer takes roughly 20-70 seconds (the first one also loads the
-model). The codespace has 8 GB of memory, so avoid running other heavy processes at the same time.
+On a 2-core, 8 GB codespace an answer takes roughly 15-35 seconds (the first one also loads the
+model); each answer shows its time. The 3B model needs about 4 GB while loading and does not fit
+next to VS Code and the UI in 8 GB; on a machine with 16 GB or more, set `llm.ollama.model:
+llama3.2:3b` and run `OLLAMA_MODEL=llama3.2:3b make ollama-setup`. Smaller models sometimes leave out
+citations; verification then refuses the answer ("needs checking") instead of showing it unchecked.
 
 The benchmark content is **synthetic**: modelled on real policy changes, but not verified against
 live government pages. Do not use it as travel advice.

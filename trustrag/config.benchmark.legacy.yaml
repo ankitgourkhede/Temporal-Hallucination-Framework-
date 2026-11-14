@@ -91,8 +91,8 @@ verify:
 llm:
   default: ollama
   ollama:
-    # Local CPU model; start the server with `make ollama` (see README).
-    model: llama3.2:3b
+    # Local CPU model (fits an 8 GB codespace; use llama3.2:3b with >= 16 GB). Start with `make ollama`.
+    model: llama3.2:1b
     base_url: http://localhost:11434
     timeout_s: 240
   ollama_cloud:

@@ -143,7 +143,8 @@ class OllamaLLM:
                      **({"Authorization": f"Bearer {self.api_key}"} if self.api_key else {})},
         )
         started = time.perf_counter()
-        for attempt in range(3):
+        attempts = 2  # a failed model load costs ~13 s on CPU; retry once, then let the caller fall back
+        for attempt in range(attempts):
             try:
                 with urllib.request.urlopen(request, timeout=self.timeout_s) as response:
                     result = json.loads(response.read().decode("utf-8"))
@@ -158,11 +159,11 @@ class OllamaLLM:
                 if 400 <= error.code < 500 and error.code != 429:
                     detail = error.read().decode("utf-8", errors="replace")[:200]
                     raise RuntimeError(f"Ollama returned HTTP {error.code}: {detail}") from error
-                if attempt == 2:
+                if attempt == attempts - 1:
                     raise
                 time.sleep(0.1 * (attempt + 1))
             except (urllib.error.URLError, TimeoutError):
-                if attempt == 2:
+                if attempt == attempts - 1:
                     raise
                 time.sleep(0.1 * (attempt + 1))
         raise RuntimeError("Ollama request failed")
@@ -216,7 +217,7 @@ def build_llm(name: str, config: dict[str, Any]) -> LLM:
         return MockLLM()
     if name == "ollama":
         return OllamaLLM(
-            str(backend.get("model", "llama3.2:3b")),
+            str(backend.get("model", "llama3.2:1b")),
             str(backend.get("base_url", "http://localhost:11434")),
             timeout_s=float(backend.get("timeout_s", 240)),
         )
