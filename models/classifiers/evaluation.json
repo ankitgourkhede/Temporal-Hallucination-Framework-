@@ -1,0 +1,64 @@
+{
+  "intent": {
+    "macro_f1": 0.9929453262786596,
+    "confusion_matrix": [
+      [
+        32,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        31,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        32,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        40
+      ]
+    ],
+    "labels": [
+      "customs_regulations",
+      "health_safety",
+      "out_of_scope",
+      "travel_entry"
+    ],
+    "ece": 0.27181748751470153
+  },
+  "category": {
+    "macro_f1": 0.9905937683715461,
+    "confusion_matrix": [
+      [
+        32,
+        0,
+        0
+      ],
+      [
+        0,
+        31,
+        1
+      ],
+      [
+        0,
+        0,
+        40
+      ]
+    ],
+    "labels": [
+      "customs_regulation",
+      "vaccination_requirement",
+      "visa_policy"
+    ],
+    "ece": 0.247179459157047
+  }
+}

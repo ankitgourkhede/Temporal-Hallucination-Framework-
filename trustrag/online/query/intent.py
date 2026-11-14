@@ -197,6 +197,11 @@ class QueryUnderstanding:
             live_requested=live_check,
             mode=mode,
         )
+        if decision.get("category") and decision["category"] != result["category"]:
+            # The policy engine may switch to a category alternate; report the category whose
+            # slots and weights were actually used, and keep the classifier's label for audit.
+            result["classified_category"] = result["category"]
+            result["category"] = decision["category"]
         result.update(
             {
                 "tvs": decision["tvs"],
@@ -212,7 +217,8 @@ class QueryUnderstanding:
                 "weights": decision["weights"],
                 "weight_mode": decision["weight_mode"],
                 "weights_source": decision["weights_source"],
-                "flags": decision["flags"],
+                "flags": decision["flags"]
+                + (["category_alternate_selected"] if "classified_category" in result else []),
                 "trace": {**result["trace"], **decision["trace"]},
             }
         )

@@ -34,13 +34,22 @@ def generate_report(results_dir: str | Path = "results") -> Path:
     predictions = pd.read_csv(predictions_path)
     comparisons = []
     p_values = {}
-    if {"S0", "S2"} <= set(predictions["system"]):
-        paired = predictions[predictions["system"].isin(["S0", "S2"])].pivot(index="query_id", columns="system", values="correct").dropna()
-        b = int(((paired["S0"] == True) & (paired["S2"] == False)).sum())
-        c = int(((paired["S0"] == False) & (paired["S2"] == True)).sum())
+    # Paired McNemar tests for the thesis comparisons, Holm-corrected together.
+    for left, right in (("S0", "S1"), ("S0", "S2"), ("S1", "S2"), ("S2", "S3")):
+        if not {left, right} <= set(predictions["system"]):
+            continue
+        pair = predictions[predictions["system"].isin([left, right])]
+        if "skipped" in pair:
+            pair = pair[pair["skipped"].isna()]
+        paired = pair.pivot(index="query_id", columns="system", values="correct").dropna()
+        if paired.empty or {left, right} - set(paired.columns):
+            continue
+        b = int(((paired[left] == True) & (paired[right] == False)).sum())
+        c = int(((paired[left] == False) & (paired[right] == True)).sum())
         result = mcnemar(b, c)
-        p_values["S0_vs_S2_accuracy"] = float(result["p_value"])
-        comparisons.append({"comparison": "S0_vs_S2_accuracy", "b": b, "c": c, **result})
+        name = f"{left}_vs_{right}_accuracy"
+        p_values[name] = float(result["p_value"])
+        comparisons.append({"comparison": name, "b": b, "c": c, **result})
     adjusted = holm_bonferroni(p_values)
     for row in comparisons:
         row["holm_adjusted_p"] = adjusted.get(row["comparison"], row["p_value"])

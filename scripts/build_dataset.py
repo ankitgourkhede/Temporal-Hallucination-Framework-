@@ -276,6 +276,10 @@ def validate_queries(questions: list[Question]) -> list[str]:
     from trustrag.pipeline import TrustRAGPipeline
 
     analyzer = QueryUnderstanding.from_config(CONFIG)
+    # Validate query *authoring* against the deterministic keyword rules only. Trained
+    # classifiers are a system under test: their mistakes belong in the results, and
+    # rewording benchmark queries to suit them would tune the benchmark to the model.
+    analyzer.classifier_models.models.clear()
     errors = []
     for q in questions:
         for text in q.queries:

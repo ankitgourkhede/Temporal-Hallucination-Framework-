@@ -216,3 +216,15 @@ def test_uk_visa_query_links_official_checker_without_guessing(monkeypatch) -> N
     assert "https://www.gov.uk/check-uk-visa" == response["sources"][0]["url"]
     assert response["sources"][0]["live"] is True
     assert "nationality_defaulted" in response["flags"]
+
+def test_each_trust_system_scores_with_its_own_weight_vector() -> None:
+    pipeline = TrustRAGPipeline("trustrag/config.yaml", llm=MockLLM())
+    used = {}
+    for system, expected in (("S1", "weights_static.yaml:default"), ("S2", "weights_policy.yaml:visa_policy")):
+        response = pipeline.answer(
+            "How long can Indian travellers stay in Vietnam?", system=system, llm="mock", as_of="2026-11-09"
+        )
+        evidence = response["trace"]["trust"]["evidence"]
+        assert response["trace"]["weights_source"] == expected
+        used[system] = evidence[0]["weights"]
+    assert used["S1"] != used["S2"]

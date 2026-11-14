@@ -110,7 +110,22 @@ def fit_all(features_csv: str | Path, output_dir: str | Path = "trustrag/policie
     output.mkdir(parents=True, exist_ok=True)
     results = {}
     for category, category_frame in frame.groupby("category"):
-        result = fit_category(category_frame)
+        try:
+            result = fit_category(category_frame)
+        except ValueError as error:
+            # Not enough signal to fit (e.g. PRIMARY_ONLY customs retrieval yields no
+            # incorrect evidence). Fall back to the policy vector and say so explicitly,
+            # so S3 equals S2 for this category rather than silently disappearing.
+            policy = yaml.safe_load(
+                (Path(__file__).resolve().parents[1] / "trustrag/policies/weights_policy.yaml").read_text(encoding="utf-8")
+            )[str(category)]
+            result = {
+                "weights": {key: float(value) for key, value in policy.items()},
+                "fallback": "weights_policy.yaml",
+                "fallback_reason": str(error),
+                "n_rows": int(len(category_frame)),
+                "n_correct": int(category_frame["correct"].sum()),
+            }
         results[str(category)] = result
         with (output / f"{category}.yaml").open("w", encoding="utf-8") as handle:
             yaml.safe_dump(result, handle, sort_keys=False)

@@ -82,6 +82,7 @@ class TrustPipeline:
                     "G": item.get("G"),
                     "G_voters": item.get("G_voters"),
                     "qe_components": item.get("qe_components"),
+                    "QE": item.get("QE"),
                     "SR": item.get("SR"),
                     "SR_n": item.get("SR_n"),
                     "SR_correct": item.get("SR_correct"),

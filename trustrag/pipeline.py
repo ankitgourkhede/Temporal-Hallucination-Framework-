@@ -107,6 +107,9 @@ class TrustRAGPipeline:
                     trace=trace,
                     started=started,
                 )
+            # The system's weight vector must reach trust scoring, which reads policy["weights"];
+            # otherwise S1-S3 silently share the policy engine's default vector.
+            policy = {**policy, "weights": weights, "weight_mode": weight_mode, "weights_source": weights_source}
             trace["weights_source"] = weights_source
 
         index_started = time.perf_counter()
