@@ -63,14 +63,17 @@ verified against live government pages; URLs use the reserved `.example` TLD.
   primary freshness uses `last_verified_ts`, so it looks fresh. Gold comes from a newer primary notice
   (often an embassy), so authority alone can favour the outdated page.
 - `stale_secondary`: a secondary source older than the gold source disagrees (classic temporal hallucination trap).
+- `proposed_change`: a recent official page announces a change that is not in force yet
+  (`in_force: false` in facts.yaml); the long-standing rule is still the gold answer.
 - `wrong_secondary`: a secondary source at least as recent as the gold source disagrees (misinformation, not staleness).
-- `scope_mismatch`: a source for other nationalities disagrees; S1-S3 filter it by nationality scope, S0 does not.
+- `scope_mismatch`: a source for other nationalities disagrees; every system (S0 included) removes it
+  with the nationality-scope filter, so this tests the filter, not trust scoring.
 
 Difficulty: `easy` = no conflicting source; `medium` = one in-scope conflict or only scope conflicts;
 `hard` = a stale or unrevised primary source, or two or more in-scope conflicting sources.
 
-Customs questions use the PRIMARY_ONLY retrieval strategy (low volatility), so S1-S3 never see
-secondary customs sources; secondary customs conflicts only test the S0 baseline.
+Customs questions use the PRIMARY_ONLY retrieval strategy (low volatility), so no system (S0
+included) retrieves secondary customs sources; secondary customs conflicts are inert.
 
 ## Known limitations
 

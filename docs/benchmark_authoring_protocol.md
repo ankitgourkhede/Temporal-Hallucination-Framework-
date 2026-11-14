@@ -39,8 +39,8 @@ topic. Write down your reasoning in the `pattern:` notes; don't adjust the mix l
 
 Notes:
 - Customs questions retrieve **official sources only**, so customs cases need their conflict
-  between official pages (types A and B). Blogs and forums in customs only affect the vanilla
-  baseline.
+  between official pages (types A and B). Blogs and forums in customs are never retrieved by
+  any system.
 - The gold answer must be stated by an in-force official source (government, embassy or
   international body) that is in scope for the traveller's nationality. The validator enforces this.
 

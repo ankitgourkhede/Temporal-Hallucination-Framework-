@@ -22,8 +22,10 @@ st.markdown(
     unsafe_allow_html=True,
 )
 st.title("Travel Advisory")
-APP_CONFIG = yaml.safe_load(open("trustrag/config.yaml", encoding="utf-8")) or {}
-LIVE_AVAILABLE = bool(APP_CONFIG.get("live", {}).get("enabled", False))
+KNOWLEDGE_BASES = {
+    "trustrag/config.benchmark.yaml": "Benchmark corpus (75 docs, 15 countries)",
+    "trustrag/config.yaml": "Demo corpus (4 docs)",
+}
 SYSTEM_LABELS = {
     "S0": "Vanilla RAG",
     "S1": "Standard Trust RAG (static)",
@@ -32,6 +34,15 @@ SYSTEM_LABELS = {
 }
 
 with st.sidebar:
+    config_path = st.selectbox(
+        "Knowledge base",
+        list(KNOWLEDGE_BASES),
+        format_func=KNOWLEDGE_BASES.get,
+        help="The benchmark corpus covers visa, vaccination and customs rules for 15 destinations.",
+    )
+    APP_CONFIG = yaml.safe_load(open(config_path, encoding="utf-8")) or {}
+    LIVE_AVAILABLE = bool(APP_CONFIG.get("live", {}).get("enabled", False))
+    st.caption(f"Freshness rule: {APP_CONFIG.get('trust', {}).get('freshness_mode', 'last_verified')}")
     system = st.selectbox(
         "System",
         list(SYSTEM_LABELS),
@@ -97,7 +108,7 @@ if question:
     with st.chat_message("user"):
         st.markdown(question)
     with st.chat_message("assistant"):
-        response = TrustRAGPipeline("trustrag/config.yaml").answer(
+        response = TrustRAGPipeline(config_path).answer(
             question, system=system, llm=backend, live_check=live_check
         )
         st.markdown(response["answer"])
@@ -153,7 +164,7 @@ if st.button("Compare RAG systems", disabled=not st.session_state.messages):
     with st.spinner("Running the same question through each available system..."):
         for selected_system in SYSTEM_LABELS:
             try:
-                result = TrustRAGPipeline("trustrag/config.yaml").answer(
+                result = TrustRAGPipeline(config_path).answer(
                     last_query, system=selected_system, llm=backend, live_check=live_check
                 )
             except Exception as error:

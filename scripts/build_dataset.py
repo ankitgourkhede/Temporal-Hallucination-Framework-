@@ -19,8 +19,8 @@ Conflict type and difficulty are derived from the corpus rather than hand-labell
                    last_verified_ts looks fresh even though its content was never revised
   stale_secondary  a secondary source older than the gold source disagrees
   wrong_secondary  a secondary source at least as recent as the gold source disagrees
-  scope_mismatch   a source scoped to other nationalities disagrees (filtered by S1-S3,
-                   visible to the S0 baseline)
+  scope_mismatch   a source scoped to other nationalities disagrees (removed by the
+                   nationality-scope filter that every system, S0 included, applies)
 """
 
 from __future__ import annotations
@@ -543,13 +543,14 @@ def datasheet(docs: list[Doc], questions: list[Question], rows: list[dict[str, s
         "- `proposed_change`: a recent official page announces a change that is not in force yet",
         "  (`in_force: false` in facts.yaml); the long-standing rule is still the gold answer.",
         "- `wrong_secondary`: a secondary source at least as recent as the gold source disagrees (misinformation, not staleness).",
-        "- `scope_mismatch`: a source for other nationalities disagrees; S1-S3 filter it by nationality scope, S0 does not.",
+        "- `scope_mismatch`: a source for other nationalities disagrees; every system (S0 included) removes it",
+        "  with the nationality-scope filter, so this tests the filter, not trust scoring.",
         "",
         "Difficulty: `easy` = no conflicting source; `medium` = one in-scope conflict or only scope conflicts;",
         "`hard` = a stale or unrevised primary source, or two or more in-scope conflicting sources.",
         "",
-        "Customs questions use the PRIMARY_ONLY retrieval strategy (low volatility), so S1-S3 never see",
-        "secondary customs sources; secondary customs conflicts only test the S0 baseline.",
+        "Customs questions use the PRIMARY_ONLY retrieval strategy (low volatility), so no system (S0",
+        "included) retrieves secondary customs sources; secondary customs conflicts are inert.",
         "",
         "## Known limitations",
         "",
