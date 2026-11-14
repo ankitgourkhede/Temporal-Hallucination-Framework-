@@ -69,6 +69,20 @@ def generate_report(results_dir: str | Path = "results") -> Path:
         _markdown_table(pd.DataFrame(comparisons)) if comparisons else "No paired comparisons were available.",
         "",
     ]
+    benchmark_path = Path("data/benchmark/benchmark.csv")
+    if benchmark_path.exists() and "correct" in predictions:
+        benchmark = pd.read_csv(benchmark_path, dtype=str)
+        if "batch" in benchmark and benchmark["batch"].nunique() > 0:
+            merged = predictions.merge(benchmark[["query_id", "batch"]], on="query_id", how="left")
+            merged = merged[merged["correct"].notna()]
+            by_batch = (
+                merged.assign(correct=merged["correct"].astype(bool))
+                .pivot_table(index="batch", columns="system", values="correct", aggfunc="mean")
+                .round(3)
+                .reset_index()
+            )
+            counts = merged.groupby("batch")["query_id"].nunique().rename("queries").reset_index()
+            lines.extend(["## Accuracy by Batch", "", _markdown_table(by_batch.merge(counts, on="batch")), ""])
     manifest_path = results_dir / "run_manifest.json"
     if manifest_path.exists():
         import json

@@ -20,6 +20,12 @@ This report was generated from the saved experiment outputs.
 | S1_vs_S2_accuracy | 0 | 0  | exact  | 0.0       | 1.0                 | 1.0               |
 | S2_vs_S3_accuracy | 0 | 0  | exact  | 0.0       | 1.0                 | 1.0               |
 
+## Accuracy by Batch
+
+| batch   | S0    | S1    | S2    | S3    | queries |
+| ------- | ----- | ----- | ----- | ----- | ------- |
+| core_v1 | 0.731 | 0.987 | 0.987 | 0.987 | 78      |
+
 ## Run Manifest
 
 ```json

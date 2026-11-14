@@ -123,6 +123,7 @@ class Doc:
     title: str
     text: str
     claims: dict[str, Any]          # slot -> value (item_allowed -> {item: value})
+    in_force: bool = True           # False for official proposals / announced-but-future rules
 
     @property
     def is_primary(self) -> bool:
@@ -152,6 +153,8 @@ class Question:
     item: str | None
     gold: Any
     queries: list[str]
+    split: str | None = None        # fixed split (e.g. blind batches are always "test")
+    batch: str = "core_v1"
     gold_doc: Doc | None = None
     conflicts: list[tuple[str, Doc]] = field(default_factory=list)
 
@@ -174,6 +177,7 @@ def load(path: Path) -> tuple[dict[str, Any], list[Doc], list[Question]]:
                 source_type=raw["source_type"], domain=raw["domain"], scope=str(raw.get("scope", "ALL")),
                 content_date=str(raw["content_date"]), snapshot_date=str(raw.get("snapshot_date", snapshot)),
                 title=raw["title"], text=" ".join(str(raw["text"]).split()), claims=claims,
+                in_force=bool(raw.get("in_force", True)),
             ))
         for fact in block.get("facts", []):
             truth = {slot: parse_value(slot, value) for slot, value in (fact.get("truth") or {}).items()}
@@ -186,6 +190,7 @@ def load(path: Path) -> tuple[dict[str, Any], list[Doc], list[Question]]:
                     qid=f"{fact['id']}__{suffix}".replace("-", "_"), fact_id=fact["id"],
                     destination=destination, nationality=fact["nationality"], category=fact["category"],
                     slot=slot, item=item, gold=gold, queries=list(q["queries"]),
+                    split=fact.get("split"), batch=str(fact.get("batch", "core_v1")),
                 ))
     ids = [doc.id for doc in docs]
     duplicates = [key for key, count in Counter(ids).items() if count > 1]
@@ -234,7 +239,7 @@ def analyse_conflicts(questions: list[Question], docs: list[Doc]) -> list[str]:
     errors = []
     for q in questions:
         relevant = [d for d in docs if d.destination == q.destination and d.category == q.category]
-        supporting = [d for d in relevant if d.is_primary and d.in_scope_for(q.slot, q.nationality)
+        supporting = [d for d in relevant if d.is_primary and d.in_force and d.in_scope_for(q.slot, q.nationality)
                       and d.claim_for(q.slot, q.item) is not None
                       and same_value(d.claim_for(q.slot, q.item), q.gold)]
         if not supporting:
@@ -247,6 +252,8 @@ def analyse_conflicts(questions: list[Question], docs: list[Doc]) -> list[str]:
                 continue
             if not doc.in_scope_for(q.slot, q.nationality):
                 kind = "scope_mismatch"
+            elif doc.is_primary and not doc.in_force:
+                kind = "proposed_change"
             elif doc.is_primary:
                 if doc.content_date >= q.gold_doc.content_date:
                     errors.append(f"{q.qid}: current primary {doc.id} contradicts the gold value")
@@ -266,7 +273,7 @@ def difficulty(q: Question) -> str:
     in_scope = [doc for kind, doc in q.conflicts if kind != "scope_mismatch"]
     if not kinds:
         return "easy"
-    if kinds & {"stale_primary", "unrevised_primary"} or len(in_scope) >= 2:
+    if kinds & {"stale_primary", "unrevised_primary", "proposed_change"} or len(in_scope) >= 2:
         return "hard"
     return "medium"
 
@@ -310,9 +317,14 @@ def assign_splits(questions: list[Question], seed: int) -> dict[str, str]:
     """Stratified by category and difficulty; one split per paraphrase group."""
     rng = random.Random(seed)
     strata: dict[tuple[str, str], list[Question]] = defaultdict(list)
-    for q in questions:
-        strata[(q.category, difficulty(q))].append(q)
     splits = {}
+    for q in questions:
+        if q.split:
+            if q.split not in {"train", "dev", "test"}:
+                raise SystemExit(f"{q.qid}: split must be train, dev or test")
+            splits[q.qid] = q.split
+        else:
+            strata[(q.category, difficulty(q))].append(q)
     for key in sorted(strata):
         group = sorted(strata[key], key=lambda q: q.qid)
         rng.shuffle(group)
@@ -379,6 +391,7 @@ def benchmark_rows(questions: list[Question], spec: dict[str, Any], seed: int) -
                 "paraphrase_group": q.qid,
                 "split": splits[q.qid],
                 "item": q.item or "",
+                "batch": q.batch,
                 "conflicting_sources": ";".join(f"{kind}:{doc.id}" for kind, doc in q.conflicts),
             })
     return rows
@@ -527,6 +540,8 @@ def datasheet(docs: list[Doc], questions: list[Question], rows: list[dict[str, s
         "  primary freshness uses `last_verified_ts`, so it looks fresh. Gold comes from a newer primary notice",
         "  (often an embassy), so authority alone can favour the outdated page.",
         "- `stale_secondary`: a secondary source older than the gold source disagrees (classic temporal hallucination trap).",
+        "- `proposed_change`: a recent official page announces a change that is not in force yet",
+        "  (`in_force: false` in facts.yaml); the long-standing rule is still the gold answer.",
         "- `wrong_secondary`: a secondary source at least as recent as the gold source disagrees (misinformation, not staleness).",
         "- `scope_mismatch`: a source for other nationalities disagrees; S1-S3 filter it by nationality scope, S0 does not.",
         "",

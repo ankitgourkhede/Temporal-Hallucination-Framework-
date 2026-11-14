@@ -1,4 +1,4 @@
-.PHONY: setup dataset index-benchmark ablation-freshness index search train-classifiers benchmark-check fit experiments report api demo-mock demo test
+.PHONY: setup dataset index-benchmark ablation-freshness sensitivity index search train-classifiers benchmark-check fit experiments report api demo-mock demo test
 
 setup:
 	python -m pip install -r requirements.txt
@@ -39,6 +39,10 @@ ablation-freshness:
 	PYTHONPATH=. python -m experiments.report
 	rm -rf results/ablation_last_verified && mkdir -p results/ablation_last_verified
 	cp -r results/main_results.csv results/predictions.csv results/stats_tests.csv results/run_manifest.json results/REPORT.md results/figures results/ablation_last_verified/
+
+# Freshness-weight sensitivity on train+dev only (never reads the test split).
+sensitivity:
+	PYTHONPATH=. python -m experiments.sensitivity --config trustrag/config.benchmark.yaml --label content_relative
 
 report:
 	PYTHONPATH=. python -m experiments.report

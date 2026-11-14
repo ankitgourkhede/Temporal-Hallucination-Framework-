@@ -1,0 +1,12 @@
+{
+  "replay_mismatches": {
+    "S1": 0,
+    "S2": 0
+  },
+  "queries_with_evidence": 119,
+  "best_w_F_by_gold_share": {
+    "customs_regulation": 0.0,
+    "vaccination_requirement": 0.6,
+    "visa_policy": 0.6
+  }
+}
