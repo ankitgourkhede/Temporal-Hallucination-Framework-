@@ -1,4 +1,4 @@
-.PHONY: reproduce sensitivity-legacy setup dataset index-benchmark ablation-freshness sensitivity index search train-classifiers benchmark-check fit experiments report api demo-mock demo test
+.PHONY: ollama-setup ollama reproduce sensitivity-legacy setup dataset index-benchmark ablation-freshness sensitivity index search train-classifiers benchmark-check fit experiments report api demo-mock demo test
 
 setup:
 	python -m pip install -r requirements.txt
@@ -52,6 +52,13 @@ report:
 
 api:
 	PYTHONPATH=. uvicorn trustrag.api:app --host 127.0.0.1 --port 8000
+
+# Local LLM for the demo (CPU, no sudo): one-time setup, then keep `make ollama` running in a terminal.
+ollama-setup:
+	scripts/ollama_local.sh setup
+
+ollama:
+	scripts/ollama_local.sh serve
 
 demo-mock:
 	PYTHONPATH=. streamlit run ui/app.py

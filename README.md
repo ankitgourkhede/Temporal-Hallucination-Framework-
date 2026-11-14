@@ -41,7 +41,9 @@ can Indian tourists stay in Thailand?"* and press **Compare RAG systems**.
 make reproduce
 ```
 
-This rebuilds everything from `data/benchmark/facts.yaml` in order: corpus and benchmark CSV,
+Close the demo and unload the local LLM first (`~/.local/ollama/bin/ollama stop llama3.2:3b`):
+on an 8 GB codespace the benchmark run and a loaded LLM do not fit in memory together, and the
+system then kills the run. This rebuilds everything from `data/benchmark/facts.yaml` in order: corpus and benchmark CSV,
 FAISS index, query classifiers, benchmark checks, freshness ablation, reputation and S3 fitting
 (train split only), the S0–S3 run on the test split, the report, the weight-sensitivity study
 (train and dev only), and the unit tests. Individual steps are Makefile targets (`dataset`,
@@ -81,8 +83,22 @@ tests/            unit tests
 - `trustrag/config.yaml`: the 4-document demo corpus used by the unit tests.
 
 LLM backends: `mock` (deterministic template writer, used for all benchmark runs), `ollama`
-(llama3.1:8b, local), `openai` (gpt-4o-mini, `OPENAI_API_KEY`), `anthropic` (claude-haiku-5-5,
-`ANTHROPIC_API_KEY`). If a backend is unavailable the answer falls back to the template writer.
+(llama3.2:3b running locally on the CPU), `ollama_cloud` (ollama.com, `OLLAMA_API_KEY`, needs
+account credits), `openai` (gpt-4o-mini, `OPENAI_API_KEY`), `anthropic` (claude-haiku-5-5,
+`ANTHROPIC_API_KEY`). If a backend is unavailable the answer falls back to the template writer
+and the UI says so. Keys are read from environment variables only; store them as Codespaces
+secrets, never in files.
+
+### Using a real LLM locally (free)
+
+```bash
+make ollama-setup     # once: installs Ollama in ~/.local/ollama (no sudo) and downloads llama3.2:3b (2 GB)
+make ollama           # in its own terminal; keep it running
+make demo             # in another terminal; choose LLM -> ollama in the sidebar
+```
+
+On a 2-core codespace an answer takes roughly 20-70 seconds (the first one also loads the
+model). The codespace has 8 GB of memory, so avoid running other heavy processes at the same time.
 
 The benchmark content is **synthetic**: modelled on real policy changes, but not verified against
 live government pages. Do not use it as travel advice.

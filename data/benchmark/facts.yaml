@@ -654,7 +654,7 @@ destinations:
         text: >-
           For Indians, Japan needs an embassy visa: you submit your passport at a visa centre and
           wait about a week. The tourist visa I got for Japan allowed a stay of 15 days.
-        claims: {visa_type: embassy_visa, max_stay_days: 15}
+        claims: {visa_required: true, visa_type: embassy_visa, max_stay_days: 15}
       - id: jp_health_gov_2026
         category: vaccination_requirement
         source_type: government

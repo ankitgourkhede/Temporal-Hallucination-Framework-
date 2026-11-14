@@ -87,8 +87,10 @@ verify:
 llm:
   default: ollama
   ollama:
-    model: llama3.1:8b
+    # Local CPU model; start the server with `make ollama` (see README).
+    model: llama3.2:3b
     base_url: http://localhost:11434
+    timeout_s: 240
   ollama_cloud:
     # Hosted models on ollama.com; the key comes from the OLLAMA_API_KEY environment variable.
     model: gpt-oss:20b

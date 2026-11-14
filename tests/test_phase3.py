@@ -139,3 +139,13 @@ def test_content_relative_freshness_exposes_unrevised_primary_page() -> None:
     assert relative["new"]["F"] == pytest.approx(1.0)
     assert relative["old"]["F"] < 0.01
     assert relative["new"]["Trust"] > relative["old"]["Trust"]
+
+
+def test_yes_no_reader_handles_llm_phrasing_but_not_hedges() -> None:
+    from trustrag.online.retrieval.evidence import normalize_bool
+
+    assert normalize_bool("They do not require a visa for tourism purposes") is False
+    assert normalize_bool("Indian citizens don’t need a visa") is False
+    assert normalize_bool("Indian citizens need a visa to visit Japan") is True
+    assert normalize_bool("Thailand requires an e-visa") is True
+    assert normalize_bool("You may need a visa depending on your nationality") is None

@@ -218,7 +218,8 @@ Current weight vectors:
 plus the asked slot's winning evidence if it fell below the threshold.
 The prompt holds the fused facts and the evidence, and asks the model to cite every factual
 sentence ([E1], …) and use only the evidence. LLM backends: `mock` (deterministic templates,
-used for all benchmark runs), `ollama` (llama3.1:8b, local), `openai` (gpt-4o-mini),
+used for all benchmark runs), `ollama` (llama3.2:3b, local CPU; `make ollama-setup`, `make ollama`),
+`ollama_cloud` (ollama.com, `OLLAMA_API_KEY`), `openai` (gpt-4o-mini),
 `anthropic` (claude-haiku-5-5). If the chosen backend can't be built or reached, the
 template writer answers instead and the response is flagged `llm_fallback`.
 
@@ -229,6 +230,10 @@ their citations. For each sentence:
   evidence asserts.
 - **CONTRADICTED** if the stated values disagree with both the cited evidence and the fused answer.
 - Otherwise, fall back to day / visa-type / item checks and 60% word overlap with the cited text.
+
+Yes/no values are read from common phrasings, so free-form LLM wording verifies too: "is (not)
+required", "visa-free", "exempt", "must obtain/have", "do(es) not need/require", "don't need",
+"needs a visa", "requires an e-visa".
 
 `faithfulness = supported sentences / all sentences`.
 

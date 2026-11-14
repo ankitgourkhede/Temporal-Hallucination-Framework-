@@ -128,6 +128,7 @@ class OllamaLLM:
         body = {
             "model": self.model,
             "stream": False,
+            "keep_alive": "30m",  # avoid reloading the model between questions (slow on CPU)
             "format": json_schema,
             "options": {"temperature": temperature, "num_predict": max_tokens, "seed": 42},
             "messages": [
@@ -214,7 +215,11 @@ def build_llm(name: str, config: dict[str, Any]) -> LLM:
     if name == "mock":
         return MockLLM()
     if name == "ollama":
-        return OllamaLLM(str(backend.get("model", "llama3.1:8b")), str(backend.get("base_url", "http://localhost:11434")))
+        return OllamaLLM(
+            str(backend.get("model", "llama3.2:3b")),
+            str(backend.get("base_url", "http://localhost:11434")),
+            timeout_s=float(backend.get("timeout_s", 240)),
+        )
     if name == "ollama_cloud":
         api_key = os.environ.get("OLLAMA_API_KEY", "")
         if not api_key:
@@ -222,6 +227,7 @@ def build_llm(name: str, config: dict[str, Any]) -> LLM:
         return OllamaLLM(
             str(backend.get("model", "gpt-oss:20b")),
             str(backend.get("base_url", "https://ollama.com")),
+            timeout_s=float(backend.get("timeout_s", 120)),
             api_key=api_key,
         )
     if name == "openai":

@@ -46,10 +46,21 @@ def normalize_days(text: str) -> int | None:
 
 
 def normalize_bool(text: str) -> bool | None:
-    value = text.lower()
-    if re.search(r"\b(not required|not generally required|no visa required|visa-free|exempt)\b", value):
+    value = text.lower().replace("\u2019", "'")
+    # Negative phrasings first: "not required" contains "required".
+    if re.search(
+        r"\b(not required|not generally required|no visa required|visa-free|exempt"
+        r"|(?:do|does|did) not (?:need|require)|(?:don't|doesn't|didn't) (?:need|require)"
+        r"|no (?:visa|vaccination|vaccine|certificate|declaration) (?:is )?(?:needed|required))\b",
+        value,
+    ):
         return False
-    if re.search(r"\b(required|mandatory|must obtain|must have)\b", value):
+    if re.search(
+        r"\b(required|mandatory|must obtain|must have"
+        # "need/require a visa" counts only when definite: "may need a visa" is not an answer.
+        r"|(?<!may )(?<!might )(?<!could )(?:need|needs|require|requires) (?:a|an) (?:[a-z-]+ )?(?:visa|e-?visa|certificate|vaccination|declaration))\b",
+        value,
+    ):
         return True
     return None
 
