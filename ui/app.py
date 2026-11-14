@@ -17,7 +17,11 @@ from trustrag.pipeline import TrustRAGPipeline
 st.set_page_config(page_title="TrustRAG Travel Advisory", page_icon="🛡", layout="wide")
 _css = Path(__file__).resolve().parent.parent / "travel_theme.css"
 if _css.exists():
-    st.markdown(f"<style>{_css.read_text()}</style>", unsafe_allow_html=True)
+    # Strip comments (one contains a literal "</style>") and blank lines (Markdown ends an HTML
+    # block at a blank line); otherwise the rest of the stylesheet renders as page text.
+    _css_text = re.sub(r"/\*.*?\*/", "", _css.read_text(encoding="utf-8"), flags=re.S)
+    _css_text = "\n".join(line for line in _css_text.splitlines() if line.strip())
+    st.markdown(f"<style>{_css_text}</style>", unsafe_allow_html=True)
 
 SYSTEM_LABELS = {
     "S0": "Vanilla RAG",
@@ -82,7 +86,6 @@ st.markdown(
     .tr-brand small { display: block; font-family: var(--db-mono) !important; color: var(--db-amber) !important; font-size: .72rem !important; letter-spacing: .1em; }
     .tr-side-note { font-family: var(--db-mono); color: var(--db-green) !important; font-size: .78rem; margin-top: -.3rem; }
     .tr-side-note.plain { color: var(--db-dim) !important; font-family: 'Inter', sans-serif; }
-
     .tr-legend { color: var(--db-muted); font-size: .95rem; margin: -.4rem 0 1.2rem; line-height: 1.55; }
     .tr-user { display: flex; justify-content: flex-end; margin: .4rem 0 .9rem; }
     .tr-user span { background: var(--db-amber); color: #121211; font-weight: 500; border-radius: 16px 16px 4px 16px; padding: .6rem 1.1rem; max-width: 75%; font-size: 1rem; }
@@ -98,7 +101,6 @@ st.markdown(
     .tr-answer { font-size: 1.05rem; line-height: 1.65; margin: 0 0 .9rem; color: var(--db-text) !important; }
     .tr-answer strong { color: var(--db-amber-soft); font-weight: 600; }
     .tr-cite { color: var(--db-dim); font-size: .88em; white-space: nowrap; }
-
     .tr-chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-bottom: .5rem; }
     .tr-chip { display: inline-flex; align-items: center; gap: .35rem; border-radius: 4px; border: 1px solid; padding: .22rem .6rem; font-size: 12px; font-weight: 500; line-height: 1.4; }
     .tr-chip svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
@@ -107,7 +109,6 @@ st.markdown(
     .tr-vol, .tr-warn { background: #2A2416; color: #FAC775; border-color: #BA7517; }
     .tr-bad { background: #2E1514; color: #F09492; border-color: #A33231; }
     .tr-plain { background: #262624; color: #B4B2A9; border-color: #3A3A37; }
-
     .tr-section { font-family: var(--db-mono); text-transform: uppercase; letter-spacing: .08em; font-size: .72rem; color: var(--db-dim); margin: 1.1rem 0 .3rem; }
     table.tr-sources { width: 100%; border-collapse: collapse; font-size: .93rem; }
     table.tr-sources th { text-align: left; font-family: var(--db-mono); text-transform: uppercase; letter-spacing: .06em; font-size: .7rem; font-weight: 400; color: var(--db-dim); padding: .45rem .35rem; border-bottom: 1px solid var(--db-line-2); }
@@ -121,19 +122,16 @@ st.markdown(
     .tr-tag { font-family: var(--db-mono); font-size: .66rem; letter-spacing: .06em; text-transform: uppercase; color: var(--db-green); margin-left: .35rem; }
     .tr-bar { width: 7rem; height: 6px; border-radius: 99px; }
     .tr-bar span { display: block; height: 6px; border-radius: 99px; min-width: 10px; }
-
     .tr-callout { display: flex; gap: .55rem; align-items: flex-start; padding: .7rem .9rem; margin-top: .9rem; font-size: .93rem; line-height: 1.5; border-left: 4px solid; }
     .tr-callout svg { width: 16px; height: 16px; flex: none; margin-top: .2rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .tr-callout.tr-warn { background: var(--db-amber-bg); color: var(--db-amber-soft); border-color: var(--db-amber); }
     .tr-callout.tr-plain { background: #1F1F1D; color: var(--db-muted); border-color: var(--db-line-2); }
     .tr-callout strong { color: inherit; }
-
     details.tr-breakdown { margin-top: .9rem; color: var(--db-muted); font-size: .9rem; }
     details.tr-breakdown summary { cursor: pointer; line-height: 1.5; }
     details.tr-breakdown table { width: 100%; border-collapse: collapse; margin-top: .5rem; font-size: .82rem; }
     details.tr-breakdown th, details.tr-breakdown td { text-align: left; padding: .3rem .35rem; border-bottom: 1px solid var(--db-line); font-family: var(--db-mono); font-variant-numeric: tabular-nums; color: var(--db-muted); }
     details.tr-breakdown th { font-weight: 400; color: var(--db-dim); }
-
     .tr-compare { background: var(--db-panel); border: 1px solid var(--db-line); border-radius: 10px; padding: .9rem 1rem; height: 100%; color: var(--db-text); }
     .tr-compare h4 { font-family: var(--db-mono); font-size: .8rem; letter-spacing: .05em; text-transform: uppercase; color: var(--db-amber-soft); margin: 0 0 .5rem; font-weight: 600; }
     .tr-compare p { font-size: .9rem; line-height: 1.5; margin: 0 0 .6rem; color: var(--db-text) !important; }
