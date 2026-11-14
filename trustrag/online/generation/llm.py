@@ -114,8 +114,15 @@ class MockLLM:
 
 
 class OllamaLLM:
-    def __init__(self, model: str = "llama3.1:8b", base_url: str = "http://localhost:11434", timeout_s: float = 60.0):
-        self.model, self.base_url, self.timeout_s = model, base_url.rstrip("/"), timeout_s
+    def __init__(
+        self,
+        model: str = "llama3.1:8b",
+        base_url: str = "http://localhost:11434",
+        timeout_s: float = 60.0,
+        api_key: str | None = None,
+    ):
+        """Local Ollama (no key) or Ollama Cloud (base_url https://ollama.com plus an API key)."""
+        self.model, self.base_url, self.timeout_s, self.api_key = model, base_url.rstrip("/"), timeout_s, api_key
 
     def generate(self, system: str, user: Any, *, temperature: float = 0.0, max_tokens: int = 512, json_schema: dict[str, Any] | None = None) -> LLMResult:
         body = {
@@ -131,7 +138,8 @@ class OllamaLLM:
         request = urllib.request.Request(
             f"{self.base_url}/api/chat",
             data=json.dumps(body).encode("utf-8"),
-            headers={"Content-Type": "application/json"},
+            headers={"Content-Type": "application/json",
+                     **({"Authorization": f"Bearer {self.api_key}"} if self.api_key else {})},
         )
         started = time.perf_counter()
         for attempt in range(3):
@@ -144,6 +152,14 @@ class OllamaLLM:
                     tokens_out=int(result.get("eval_count", 0)),
                     latency_ms=(time.perf_counter() - started) * 1000,
                 )
+            except urllib.error.HTTPError as error:
+                # 4xx (bad key, no credits, unknown model) will not succeed on retry.
+                if 400 <= error.code < 500 and error.code != 429:
+                    detail = error.read().decode("utf-8", errors="replace")[:200]
+                    raise RuntimeError(f"Ollama returned HTTP {error.code}: {detail}") from error
+                if attempt == 2:
+                    raise
+                time.sleep(0.1 * (attempt + 1))
             except (urllib.error.URLError, TimeoutError):
                 if attempt == 2:
                     raise
@@ -199,6 +215,15 @@ def build_llm(name: str, config: dict[str, Any]) -> LLM:
         return MockLLM()
     if name == "ollama":
         return OllamaLLM(str(backend.get("model", "llama3.1:8b")), str(backend.get("base_url", "http://localhost:11434")))
+    if name == "ollama_cloud":
+        api_key = os.environ.get("OLLAMA_API_KEY", "")
+        if not api_key:
+            raise RuntimeError("Set OLLAMA_API_KEY to use Ollama Cloud")
+        return OllamaLLM(
+            str(backend.get("model", "gpt-oss:20b")),
+            str(backend.get("base_url", "https://ollama.com")),
+            api_key=api_key,
+        )
     if name == "openai":
         return OpenAILLM(str(backend.get("model", "gpt-4o-mini")))
     if name == "anthropic":

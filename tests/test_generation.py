@@ -1,4 +1,5 @@
 from trustrag.online.generation.llm import MockLLM
+import pytest
 from trustrag.online.live.models import LiveDocument
 from trustrag.pipeline import TrustRAGPipeline
 from trustrag.online.generation.verify import verify_answer
@@ -265,3 +266,22 @@ def test_high_volatility_answers_found_offline_are_rechecked_live(monkeypatch) -
     )
     assert calls == ["visa_policy"]  # max_stay_days was found offline, yet visa is High volatility
     assert "live_verify" in response["trace"]["retrieval_fallback_stages"]
+
+
+def test_ollama_client_errors_fail_fast_without_retry(monkeypatch) -> None:
+    import io
+    import urllib.error
+
+    from trustrag.online.generation import llm as llm_module
+
+    calls = []
+
+    def payment_required(request, timeout):
+        calls.append(request.get_header("Authorization"))
+        raise urllib.error.HTTPError(request.full_url, 402, "Payment Required", {}, io.BytesIO(b'{"error":"credits"}'))
+
+    monkeypatch.setattr(llm_module.urllib.request, "urlopen", payment_required)
+    client = llm_module.OllamaLLM("gpt-oss:20b", "https://ollama.com", api_key="test-key")
+    with pytest.raises(RuntimeError, match="HTTP 402"):
+        client.generate("system", "user")
+    assert calls == ["Bearer test-key"]  # sent the key, and did not retry

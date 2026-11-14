@@ -52,7 +52,7 @@ with st.sidebar:
     )
     if system == "S0":
         st.caption("S0 is the unverified baseline; it may surface conflicting sources. Choose S2 for trust ranking and verification.")
-    backend = st.selectbox("LLM", ["mock", "ollama", "openai", "anthropic"], index=0)
+    backend = st.selectbox("LLM", ["mock", "ollama", "ollama_cloud", "openai", "anthropic"], index=0)
     show_trace = st.toggle("Show trace", value=False)
     st.button("Clear chat", on_click=lambda: st.session_state.update(messages=[]), icon="🗑")
     live_check = st.toggle(
