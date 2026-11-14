@@ -33,3 +33,6 @@ cache/
 # Logs
 logs/
 *.log
+
+# Local downloadable snapshots (zip + git bundle)
+exports/
