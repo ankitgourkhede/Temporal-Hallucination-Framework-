@@ -5,6 +5,7 @@ from __future__ import annotations
 import html
 import re
 from datetime import date
+from pathlib import Path
 from typing import Any
 
 import streamlit as st
@@ -14,6 +15,9 @@ from trustrag.offline.embed_index import EmbeddingModelUnavailable
 from trustrag.pipeline import TrustRAGPipeline
 
 st.set_page_config(page_title="TrustRAG Travel Advisory", page_icon="🛡", layout="wide")
+_css = Path(__file__).resolve().parent.parent / "travel_theme.css"
+if _css.exists():
+    st.markdown(f"<style>{_css.read_text()}</style>", unsafe_allow_html=True)
 
 SYSTEM_LABELS = {
     "S0": "Vanilla RAG",
@@ -47,79 +51,92 @@ ICON_CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12
 ICON_CLOCK = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'
 ICON_WARN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5 2.5 20h19z"/><path d="M12 10v4.5M12 17.2v.3"/></svg>'
 ICON_INFO = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.8v.3"/></svg>'
+ICON_PLANE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h18"/><path d="m4.5 13.5 3 1.2 4.6-2.1-6-4.6 1.8-.8 7.6 3.3 3.7-1.7a1.6 1.6 0 0 1 1.3 2.9l-12.4 5.6-3.6-1.5z"/></svg>'
+ICON_COMPASS = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>'
+ISO3 = {
+    "India": "IND", "Vietnam": "VNM", "Thailand": "THA", "Singapore": "SGP", "Malaysia": "MYS", "Indonesia": "IDN",
+    "Japan": "JPN", "Nepal": "NPL", "Kenya": "KEN", "United Kingdom": "GBR", "United States": "USA",
+    "Australia": "AUS", "Canada": "CAN", "China": "CHN", "Sri Lanka": "LKA", "Philippines": "PHL",
+}
+FACT_SLOTS = {
+    "visa_policy": ["max_stay_days", "passport_validity_months", "visa_type", "visa_required"],
+    "vaccination_requirement": ["vaccine_required", "certificate_required", "vaccine_name"],
+    "customs_regulation": ["duty_free_limit", "item_allowed", "declaration_required"],
+}
+FACT_LABELS = {
+    "max_stay_days": "MAX STAY", "passport_validity_months": "PASSPORT", "visa_type": "VISA TYPE",
+    "visa_required": "VISA NEEDED", "vaccine_required": "VACCINE NEEDED", "certificate_required": "CERTIFICATE",
+    "vaccine_name": "VACCINE", "duty_free_limit": "DUTY-FREE", "item_allowed": "ITEM RULE",
+    "declaration_required": "DECLARE",
+}
 ICON_SHIELD = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.2 7.5 9.5 4.4-1.3 7.5-4.9 7.5-9.5V6z"/></svg>'
 
 st.markdown(
     """
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-    :root {
-      --tr-ink: #1d2330; --tr-ink-2: #5b6474; --tr-rule: #e4e7ec; --tr-bg: #f6f7f9; --tr-card: #ffffff;
-      --tr-accent: #2f6fdb; --tr-accent-soft: #dfe9fb;
-      --tr-good: #2c7a3f; --tr-good-soft: #d9f0de; --tr-warn: #8a5a00; --tr-warn-soft: #f6e3b4;
-      --tr-bad: #a33a2b; --tr-bad-soft: #f8dcd6; --tr-muted-soft: #f0f2f5;
-    }
-    html, body, .stApp, [data-testid="stSidebar"], .stMarkdown, button, input, textarea {
-      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-    }
-    .stApp { background: var(--tr-bg); }
-    [data-testid="stHeader"] { background: transparent; }
-    .block-container { max-width: 980px; padding-top: 2.2rem; }
+    /* Custom answer-card components, styled with the departure-board palette from travel_theme.css. */
+    .tr-brand { display: flex; align-items: center; gap: .65rem; margin: .1rem 0 1rem; }
+    .tr-brand .tr-logo { width: 40px; height: 40px; border-radius: 9px; background: var(--db-amber); display: grid; place-items: center; flex: none; }
+    .tr-brand .tr-logo svg { width: 24px; height: 24px; fill: none; stroke: #121211; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .tr-brand b { display: block; color: var(--db-text) !important; font-size: 1.2rem; font-weight: 600; line-height: 1.2; }
+    .tr-brand small { display: block; font-family: var(--db-mono) !important; color: var(--db-amber) !important; font-size: .72rem !important; letter-spacing: .1em; }
+    .tr-side-note { font-family: var(--db-mono); color: var(--db-green) !important; font-size: .78rem; margin-top: -.3rem; }
+    .tr-side-note.plain { color: var(--db-dim) !important; font-family: 'Inter', sans-serif; }
 
-    /* Sidebar */
-    [data-testid="stSidebar"] { background: var(--tr-card); border-right: 1px solid var(--tr-rule); }
-    [data-testid="stSidebar"] .tr-brand { display: flex; align-items: center; gap: .5rem; font-size: 1.35rem; font-weight: 700; color: var(--tr-ink); margin: .2rem 0 .9rem; }
-    .tr-brand svg { width: 22px; height: 22px; fill: none; stroke: var(--tr-ink); stroke-width: 2; }
-    [data-testid="stSidebar"] label p, [data-testid="stSidebar"] .stWidgetLabel p { color: var(--tr-ink-2); font-size: .95rem; font-weight: 500; }
-    [data-testid="stSidebar"] div[role="radiogroup"] { gap: .2rem; }
-    [data-testid="stSidebar"] div[role="radiogroup"] label { width: 100%; padding: .45rem .7rem; border-radius: 8px; margin: 0; cursor: pointer; }
-    [data-testid="stSidebar"] div[role="radiogroup"] label > div:first-child { display: none; }
-    [data-testid="stSidebar"] div[role="radiogroup"] label:hover { background: var(--tr-muted-soft); }
-    [data-testid="stSidebar"] div[role="radiogroup"] label:has(input:checked) { background: var(--tr-accent-soft); }
-    [data-testid="stSidebar"] div[role="radiogroup"] label:has(input:checked) p { color: var(--tr-accent); font-weight: 600; }
-    [data-testid="stSidebar"] div[role="radiogroup"] label p { color: var(--tr-ink); font-size: .98rem; }
-    .tr-side-note { color: var(--tr-ink-2); font-size: .82rem; margin-top: -.4rem; }
+    .tr-legend { color: var(--db-muted); font-size: .95rem; margin: -.4rem 0 1.2rem; line-height: 1.55; }
+    .tr-user { display: flex; justify-content: flex-end; margin: .4rem 0 .9rem; }
+    .tr-user span { background: var(--db-amber); color: #121211; font-weight: 500; border-radius: 16px 16px 4px 16px; padding: .6rem 1.1rem; max-width: 75%; font-size: 1rem; }
+    .tr-turn { display: flex; gap: .8rem; align-items: flex-start; margin-bottom: 1.3rem; }
+    .tr-avatar { width: 36px; height: 36px; flex: none; border-radius: 50%; background: var(--db-amber-bg); display: grid; place-items: center; margin-top: .2rem; }
+    .tr-avatar svg { width: 18px; height: 18px; fill: none; stroke: var(--db-amber); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .tr-card { flex: 1; min-width: 0; background: var(--db-panel); border: 1px solid var(--db-line); border-radius: 4px 16px 16px 16px; padding: 1.1rem 1.25rem 1rem; color: var(--db-text); animation: db-in .35s ease-out; }
+    .tr-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); background: var(--db-board); border: 1px solid var(--db-line); border-radius: 8px; margin-bottom: 1rem; overflow: hidden; }
+    .tr-facts div { padding: .6rem .85rem; border-right: 1px solid var(--db-line); }
+    .tr-facts div:last-child { border-right: 0; }
+    .tr-facts span { display: block; font-family: var(--db-mono); font-size: .68rem; letter-spacing: .08em; color: var(--db-dim); }
+    .tr-facts b { display: block; font-family: var(--db-mono); font-size: 1rem; font-weight: 600; letter-spacing: .04em; color: var(--db-amber-soft); text-transform: uppercase; }
+    .tr-answer { font-size: 1.05rem; line-height: 1.65; margin: 0 0 .9rem; color: var(--db-text) !important; }
+    .tr-answer strong { color: var(--db-amber-soft); font-weight: 600; }
+    .tr-cite { color: var(--db-dim); font-size: .88em; white-space: nowrap; }
 
-    /* Chat */
-    .tr-user { display: flex; justify-content: flex-end; margin: .4rem 0 .8rem; }
-    .tr-user span { background: var(--tr-card); border: 1px solid var(--tr-rule); border-radius: 18px; padding: .6rem 1.1rem; color: var(--tr-ink); font-size: 1.02rem; max-width: 80%; }
-    .tr-card { background: var(--tr-card); border: 1px solid var(--tr-rule); border-radius: 16px; padding: 1.3rem 1.4rem 1.1rem; margin-bottom: 1.4rem; color: var(--tr-ink); }
-    .tr-answer { font-size: 1.12rem; line-height: 1.6; margin: 0 0 .9rem; }
-    .tr-answer strong { font-weight: 700; }
-    .tr-cite { color: var(--tr-ink-2); font-size: .9em; white-space: nowrap; }
-    .tr-chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-bottom: .55rem; }
-    .tr-chip { display: inline-flex; align-items: center; gap: .35rem; border-radius: 9px; padding: .28rem .7rem; font-size: .9rem; font-weight: 500; line-height: 1.3; }
-    .tr-chip svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .tr-good { background: var(--tr-good-soft); color: var(--tr-good); }
-    .tr-warn { background: var(--tr-warn-soft); color: var(--tr-warn); }
-    .tr-bad { background: var(--tr-bad-soft); color: var(--tr-bad); }
-    .tr-blue { background: var(--tr-accent-soft); color: var(--tr-accent); }
-    .tr-plain { background: var(--tr-muted-soft); color: var(--tr-ink-2); }
-    .tr-section { color: var(--tr-ink-2); font-size: .95rem; font-weight: 500; margin: 1rem 0 .3rem; }
-    table.tr-sources { width: 100%; border-collapse: collapse; font-size: .95rem; }
-    table.tr-sources th { text-align: left; color: var(--tr-ink-2); font-weight: 500; padding: .45rem .3rem; border-bottom: 1px solid var(--tr-rule); }
-    table.tr-sources td { padding: .55rem .3rem; border-bottom: 1px solid var(--tr-rule); vertical-align: middle; }
+    .tr-chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-bottom: .5rem; }
+    .tr-chip { display: inline-flex; align-items: center; gap: .35rem; border-radius: 4px; border: 1px solid; padding: .22rem .6rem; font-size: 12px; font-weight: 500; line-height: 1.4; }
+    .tr-chip svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .tr-good { background: #0F2E24; color: #5DCAA5; border-color: #1D9E75; }
+    .tr-blue { background: #13253A; color: #85B7EB; border-color: #185FA5; }
+    .tr-vol, .tr-warn { background: #2A2416; color: #FAC775; border-color: #BA7517; }
+    .tr-bad { background: #2E1514; color: #F09492; border-color: #A33231; }
+    .tr-plain { background: #262624; color: #B4B2A9; border-color: #3A3A37; }
+
+    .tr-section { font-family: var(--db-mono); text-transform: uppercase; letter-spacing: .08em; font-size: .72rem; color: var(--db-dim); margin: 1.1rem 0 .3rem; }
+    table.tr-sources { width: 100%; border-collapse: collapse; font-size: .93rem; }
+    table.tr-sources th { text-align: left; font-family: var(--db-mono); text-transform: uppercase; letter-spacing: .06em; font-size: .7rem; font-weight: 400; color: var(--db-dim); padding: .45rem .35rem; border-bottom: 1px solid var(--db-line-2); }
+    table.tr-sources td { padding: .55rem .35rem; border-bottom: 1px solid var(--db-line); vertical-align: middle; color: var(--db-text); }
+    table.tr-sources tr:hover td { background: #222220; }
     table.tr-sources tr:last-child td { border-bottom: 0; }
-    table.tr-sources td.num { font-variant-numeric: tabular-nums; width: 4.5rem; }
-    table.tr-sources a { color: var(--tr-ink); text-decoration: none; }
-    table.tr-sources a:hover { text-decoration: underline; }
-    table.tr-sources tr.uncited td { color: var(--tr-ink-2); }
-    .tr-tag { font-size: .72rem; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; color: var(--tr-accent); margin-left: .35rem; }
-    .tr-bar { width: 8rem; height: 8px; background: transparent; border-radius: 99px; }
-    .tr-bar span { display: block; height: 8px; border-radius: 99px; background: var(--tr-accent); min-width: 12px; }
-    .tr-bar span.low { background: #8d96a5; }
-    .tr-callout { display: flex; gap: .55rem; align-items: flex-start; border-radius: 10px; padding: .7rem .9rem; margin-top: .9rem; font-size: .95rem; line-height: 1.45; }
-    .tr-callout svg { width: 18px; height: 18px; flex: none; margin-top: .12rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    details.tr-breakdown { margin-top: .9rem; color: var(--tr-ink-2); font-size: .93rem; }
+    table.tr-sources td.num { font-family: var(--db-mono); font-variant-numeric: tabular-nums; width: 4rem; }
+    table.tr-sources a { color: var(--db-text); text-decoration: none; }
+    table.tr-sources a:hover { color: var(--db-amber-soft); text-decoration: underline; }
+    table.tr-sources tr.uncited td { color: var(--db-muted); }
+    .tr-tag { font-family: var(--db-mono); font-size: .66rem; letter-spacing: .06em; text-transform: uppercase; color: var(--db-green); margin-left: .35rem; }
+    .tr-bar { width: 7rem; height: 6px; border-radius: 99px; }
+    .tr-bar span { display: block; height: 6px; border-radius: 99px; min-width: 10px; }
+
+    .tr-callout { display: flex; gap: .55rem; align-items: flex-start; padding: .7rem .9rem; margin-top: .9rem; font-size: .93rem; line-height: 1.5; border-left: 4px solid; }
+    .tr-callout svg { width: 16px; height: 16px; flex: none; margin-top: .2rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .tr-callout.tr-warn { background: var(--db-amber-bg); color: var(--db-amber-soft); border-color: var(--db-amber); }
+    .tr-callout.tr-plain { background: #1F1F1D; color: var(--db-muted); border-color: var(--db-line-2); }
+    .tr-callout strong { color: inherit; }
+
+    details.tr-breakdown { margin-top: .9rem; color: var(--db-muted); font-size: .9rem; }
     details.tr-breakdown summary { cursor: pointer; line-height: 1.5; }
-    details.tr-breakdown table { width: 100%; border-collapse: collapse; margin-top: .5rem; font-size: .85rem; }
-    details.tr-breakdown th, details.tr-breakdown td { text-align: left; padding: .3rem .35rem; border-bottom: 1px solid var(--tr-rule); font-variant-numeric: tabular-nums; }
-    details.tr-breakdown th { font-weight: 500; }
-    .tr-compare { background: var(--tr-card); border: 1px solid var(--tr-rule); border-radius: 12px; padding: .9rem 1rem; height: 100%; color: var(--tr-ink); }
-    .tr-compare h4 { font-size: .95rem; margin: 0 0 .5rem; font-weight: 600; }
-    .tr-compare p { font-size: .9rem; line-height: 1.5; margin: 0 0 .6rem; }
-    .tr-legend { color: var(--tr-ink-2); font-size: .85rem; margin: .2rem 0 1rem; }
-    [data-testid="stChatInput"] { border-radius: 14px; }
+    details.tr-breakdown table { width: 100%; border-collapse: collapse; margin-top: .5rem; font-size: .82rem; }
+    details.tr-breakdown th, details.tr-breakdown td { text-align: left; padding: .3rem .35rem; border-bottom: 1px solid var(--db-line); font-family: var(--db-mono); font-variant-numeric: tabular-nums; color: var(--db-muted); }
+    details.tr-breakdown th { font-weight: 400; color: var(--db-dim); }
+
+    .tr-compare { background: var(--db-panel); border: 1px solid var(--db-line); border-radius: 10px; padding: .9rem 1rem; height: 100%; color: var(--db-text); }
+    .tr-compare h4 { font-family: var(--db-mono); font-size: .8rem; letter-spacing: .05em; text-transform: uppercase; color: var(--db-amber-soft); margin: 0 0 .5rem; font-weight: 600; }
+    .tr-compare p { font-size: .9rem; line-height: 1.5; margin: 0 0 .6rem; color: var(--db-text) !important; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -193,14 +210,22 @@ def chips_html(response: dict[str, Any]) -> str:
     if category:
         volatility = (response.get("volatility") or "").lower()
         suffix = f" · {volatility} volatility" if volatility else ""
-        second.append(f'<span class="tr-chip tr-plain">{esc(category + suffix)}</span>')
+        second.append(f'<span class="tr-chip tr-vol">{ICON_WARN}{esc(category + suffix)}</span>')
     latency = response.get("latency_ms")
     if isinstance(latency, (int, float)):
-        second.append(f'<span class="tr-chip tr-plain">Answered in {latency / 1000:.1f} s</span>')
+        second.append(f'<span class="tr-chip tr-plain">{ICON_CLOCK}Answered in {latency / 1000:.1f} s</span>')
     rows = f'<div class="tr-chips">{"".join(chips)}</div>'
     if second:
         rows += f'<div class="tr-chips">{"".join(second)}</div>'
     return rows
+
+
+def trust_colour(trust: float) -> str:
+    if trust >= 0.75:
+        return "#5DCAA5"
+    if trust >= 0.50:
+        return "#EF9F27"
+    return "#E24B4A"
 
 
 def sources_html(response: dict[str, Any]) -> str:
@@ -220,12 +245,12 @@ def sources_html(response: dict[str, Any]) -> str:
         elif source.get("search_fallback"):
             origin = '<span class="tr-tag">web</span>'
         width = max(4, min(100, round(trust * 100)))
-        bar_class = "" if trust >= 0.5 else "low"
+        colour = trust_colour(trust)
         rows.append(
             f'<tr class="{"" if source.get("cited", True) else "uncited"}"><td>{link}{origin}</td>'
             f'<td>{esc(SOURCE_TYPES.get(source.get("source_type", "unknown"), source.get("source_type", "")))}</td>'
-            f'<td class="num">{trust:.2f}</td>'
-            f'<td><div class="tr-bar"><span class="{bar_class}" style="width:{width}%"></span></div></td></tr>'
+            f'<td class="num" style="color:{colour}">{trust:.2f}</td>'
+            f'<td><div class="tr-bar"><span style="width:{width}%;background:{colour}"></span></div></td></tr>'
         )
     heading = "Sources ranked by trust" if response.get("system") != "S0" else "Sources ranked by similarity"
     return (
@@ -322,11 +347,31 @@ def breakdown_html(response: dict[str, Any]) -> str:
     )
 
 
+def facts_html(response: dict[str, Any]) -> str:
+    """Display-only strip built from fields the pipeline already returns (entities, resolved slots)."""
+    if response.get("verification_status") in {"CLARIFICATION", "OUT_OF_SCOPE", "SYSTEM_UNAVAILABLE", "VERIFICATION_REQUIRED"}:
+        return ""
+    trace = response.get("trace") or {}
+    entities = (trace.get("policy") or {}).get("entities") or {}
+    resolved = {item.get("slot"): item.get("value") for item in trace.get("resolved_slots", []) or []}
+    cells = []
+    origin, destination = entities.get("nationality"), entities.get("destination")
+    if origin and destination:
+        cells.append(("ROUTE", f"{ISO3.get(origin, origin)} \u2192 {ISO3.get(destination, destination)}"))
+    for slot in FACT_SLOTS.get(response.get("category") or "", []):
+        if slot in resolved and resolved[slot] is not None and len(cells) < 3:
+            cells.append((FACT_LABELS[slot], format_value(slot, resolved[slot])))
+    if len(cells) < 2:
+        return ""
+    return '<div class="tr-facts">' + "".join(f"<div><span>{esc(k)}</span><b>{esc(v)}</b></div>" for k, v in cells) + "</div>"
+
+
 def render_answer(response: dict[str, Any], backend: str, show_trace: bool) -> None:
     card = (
-        f'<div class="tr-card"><p class="tr-answer">{answer_html(response.get("answer", ""))}</p>'
+        f'<div class="tr-turn"><div class="tr-avatar">{ICON_COMPASS}</div>'
+        f'<div class="tr-card">{facts_html(response)}<p class="tr-answer">{answer_html(response.get("answer", ""))}</p>'
         f"{chips_html(response)}{sources_html(response)}{conflicts_html(response)}"
-        f"{notices_html(response, backend)}{breakdown_html(response)}</div>"
+        f"{notices_html(response, backend)}{breakdown_html(response)}</div></div>"
     )
     st.markdown(card, unsafe_allow_html=True)
     if show_trace:
@@ -346,7 +391,10 @@ def get_pipeline(path: str) -> TrustRAGPipeline:
 # ----------------------------------------------------------------------------- sidebar
 
 with st.sidebar:
-    st.markdown(f'<div class="tr-brand">{ICON_SHIELD}TrustRAG</div>', unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="tr-brand"><div class="tr-logo">{ICON_PLANE}</div><div><b>TrustRAG</b><small>TRAVEL ADVISORY</small></div></div>',
+        unsafe_allow_html=True,
+    )
     system = st.radio(
         "System",
         list(SYSTEM_LABELS),
@@ -354,7 +402,7 @@ with st.sidebar:
         format_func=lambda value: f"{value}  {SYSTEM_LABELS[value]}",
     )
     if system == "S0":
-        st.markdown('<p class="tr-side-note">Baseline: no trust ranking or verification.</p>', unsafe_allow_html=True)
+        st.markdown('<p class="tr-side-note plain">Baseline: no trust ranking or verification.</p>', unsafe_allow_html=True)
     config_path = st.selectbox(
         "Knowledge base",
         list(KNOWLEDGE_BASES),
@@ -366,7 +414,7 @@ with st.sidebar:
     backend = st.selectbox("LLM", LLM_BACKENDS, index=0)
     model_name = (APP_CONFIG.get("llm", {}).get(backend, {}) or {}).get("model")
     st.markdown(
-        f'<p class="tr-side-note">{esc(backend)}{" · " + esc(model_name) if model_name else " · template writer"}</p>',
+        f'<p class="tr-side-note">\u25cf {esc(backend)}{" · " + esc(model_name) if model_name else " · template writer"}</p>',
         unsafe_allow_html=True,
     )
     show_trace = st.toggle("Show trace", value=False)
@@ -386,14 +434,13 @@ if "messages" not in st.session_state:
 if "compare_results" not in st.session_state:
     st.session_state.compare_results = None
 
-if not st.session_state.messages:
-    st.markdown("### Travel advisory")
-    st.markdown(
-        '<p class="tr-legend">Ask about visa, health-entry or customs rules. <strong>Verified</strong> means every '
-        "sentence is backed by the cited evidence; <strong>confidence</strong> is how sure the system is about the value "
-        "itself, and drops when sources disagree.</p>",
-        unsafe_allow_html=True,
-    )
+st.markdown("# Travel advisory")
+st.markdown(
+    '<p class="tr-legend">Ask about visa, health-entry or customs rules. <strong>Verified</strong> means every '
+    "sentence is backed by the cited evidence; <strong>confidence</strong> is how sure the system is about the value "
+    "itself, and drops when sources disagree.</p>",
+    unsafe_allow_html=True,
+)
 
 for message in st.session_state.messages:
     if message["role"] == "user":

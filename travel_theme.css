@@ -1,0 +1,186 @@
+/* TrustRAG - "Departure board" theme. Styling only, no layout or logic changes.
+   Load once near the top of app.py:
+       from pathlib import Path
+       st.markdown(f"<style>{Path('travel_theme.css').read_text()}</style>", unsafe_allow_html=True)
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+  --db-bg: #121211;
+  --db-panel: #1C1C1A;
+  --db-field: #262624;
+  --db-board: #0B0B0A;
+  --db-line: #2E2E2B;
+  --db-line-2: #3A3A37;
+  --db-text: #E8E6DF;
+  --db-muted: #B4B2A9;
+  --db-dim: #888780;
+  --db-amber: #EF9F27;
+  --db-amber-soft: #FAC775;
+  --db-amber-bg: #2A2416;
+  --db-green: #5DCAA5;
+  --db-red: #E24B4A;
+  --db-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+html, body, [class*="css"], .stMarkdown, .stChatMessage, button, input, textarea {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Hide Streamlit chrome */
+[data-testid="stToolbar"], [data-testid="stDecoration"], footer { visibility: hidden; height: 0; }
+header[data-testid="stHeader"] { background: transparent; }
+
+.stApp { background: var(--db-bg); color: var(--db-text); }
+.block-container { max-width: 980px; padding-top: 2rem; }
+
+/* ---------- Sidebar ---------- */
+section[data-testid="stSidebar"] {
+  background: var(--db-panel);
+  border-right: 1px solid var(--db-line);
+}
+section[data-testid="stSidebar"] * { color: var(--db-muted); }
+section[data-testid="stSidebar"] h1,
+section[data-testid="stSidebar"] h2,
+section[data-testid="stSidebar"] h3 { color: var(--db-text) !important; font-weight: 600; }
+
+/* Section labels in split-flap mono caps */
+section[data-testid="stSidebar"] label p,
+section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p {
+  font-family: var(--db-mono) !important;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  font-size: 0.72rem !important; color: var(--db-dim) !important;
+}
+section[data-testid="stSidebar"] .stCaption,
+section[data-testid="stSidebar"] small,
+section[data-testid="stSidebar"] [data-testid="stCaptionContainer"] {
+  font-family: var(--db-mono); color: var(--db-green) !important; font-size: 0.75rem;
+}
+
+/* System radio list: selected = amber bar */
+section[data-testid="stSidebar"] [role="radiogroup"] label {
+  padding: 7px 10px; margin-bottom: 2px; border-radius: 6px;
+  border-left: 3px solid transparent;
+}
+section[data-testid="stSidebar"] [role="radiogroup"] label p {
+  font-family: 'Inter', sans-serif !important; text-transform: none; letter-spacing: 0;
+  font-size: 0.95rem !important; color: var(--db-muted) !important;
+}
+section[data-testid="stSidebar"] [role="radiogroup"] label:hover { background: var(--db-field); }
+section[data-testid="stSidebar"] [role="radiogroup"] label:has(input:checked) {
+  background: var(--db-amber-bg); border-left-color: var(--db-amber); border-radius: 0;
+}
+section[data-testid="stSidebar"] [role="radiogroup"] label:has(input:checked) p {
+  color: var(--db-amber-soft) !important; font-weight: 500;
+}
+
+/* Selectboxes */
+section[data-testid="stSidebar"] [data-baseweb="select"] > div {
+  background: var(--db-field) !important;
+  border: 1px solid var(--db-line-2) !important;
+  border-radius: 8px !important;
+}
+section[data-testid="stSidebar"] [data-baseweb="select"] * { color: var(--db-text) !important; }
+
+/* Toggles on = amber */
+[data-testid="stToggle"] div[role="switch"][aria-checked="true"],
+section[data-testid="stSidebar"] [data-baseweb="checkbox"] input:checked + div { background: var(--db-amber) !important; }
+
+/* Clear chat: amber outline */
+section[data-testid="stSidebar"] .stButton > button {
+  background: transparent; color: var(--db-amber-soft);
+  border: 1px solid var(--db-amber); border-radius: 8px; width: 100%;
+}
+section[data-testid="stSidebar"] .stButton > button:hover { background: var(--db-amber-bg); }
+
+/* ---------- Title as a departure board ---------- */
+.block-container h1 {
+  background: var(--db-board);
+  border: 1px solid var(--db-line);
+  border-radius: 10px;
+  padding: 16px 22px;
+  font-family: var(--db-mono);
+  font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--db-amber-soft);
+  position: relative;
+}
+.block-container h1::after {
+  content: "● LIVE";
+  position: absolute; right: 22px; top: 50%; transform: translateY(-50%);
+  font-size: 0.8rem; letter-spacing: 0.08em; color: var(--db-green);
+  animation: db-blink 2s ease-in-out infinite;
+}
+@keyframes db-blink { 50% { opacity: 0.35; } }
+.block-container p { color: var(--db-muted); }
+
+/* ---------- Chat ---------- */
+[data-testid="stChatMessage"] { background: transparent; padding: 4px 0; }
+
+/* User: amber bubble on the right */
+[data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) { flex-direction: row-reverse; }
+[data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) [data-testid="stChatMessageContent"] {
+  background: var(--db-amber);
+  border-radius: 16px 16px 4px 16px;
+  padding: 10px 16px; max-width: 70%; margin-left: auto;
+}
+[data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) p { color: #121211 !important; font-weight: 500; }
+[data-testid="stChatMessageAvatarUser"] { background: var(--db-amber) !important; color: #121211 !important; }
+
+/* Assistant: dark card */
+[data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) [data-testid="stChatMessageContent"] {
+  background: var(--db-panel);
+  border: 1px solid var(--db-line);
+  border-radius: 4px 16px 16px 16px;
+  padding: 16px 20px;
+  animation: db-in .35s ease-out;
+}
+@keyframes db-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+[data-testid="stChatMessageAvatarAssistant"] { background: var(--db-amber-bg) !important; color: var(--db-amber) !important; }
+[data-testid="stChatMessageContent"] p { color: var(--db-text); }
+
+/* Key facts glow amber like board text */
+[data-testid="stChatMessageContent"] strong {
+  color: var(--db-amber-soft); font-weight: 600;
+}
+
+/* Badges */
+[data-testid="stChatMessageContent"] [data-testid="stBadge"],
+[data-testid="stChatMessageContent"] code {
+  border-radius: 4px !important; font-weight: 500;
+  background: var(--db-field); color: var(--db-text); border: 1px solid var(--db-line-2);
+}
+
+/* Sources table */
+[data-testid="stChatMessageContent"] table { border-collapse: collapse; width: 100%; }
+[data-testid="stChatMessageContent"] thead th {
+  background: transparent; border-bottom: 1px solid var(--db-line-2);
+  font-family: var(--db-mono); text-transform: uppercase; letter-spacing: 0.06em;
+  font-size: 0.72rem; color: var(--db-dim); font-weight: 400;
+}
+[data-testid="stChatMessageContent"] tbody td { border-bottom: 1px solid var(--db-line); color: var(--db-text); }
+[data-testid="stChatMessageContent"] tbody tr:hover { background: #222220; }
+[data-testid="stDataFrame"] { border: 1px solid var(--db-line); border-radius: 8px; }
+[data-testid="stProgress"] > div > div > div { background: var(--db-amber) !important; }
+[data-testid="stChatMessageContent"] a { color: var(--db-amber-soft); }
+
+/* Warning callout */
+[data-testid="stAlert"] {
+  background: var(--db-amber-bg) !important;
+  border: none !important; border-left: 4px solid var(--db-amber) !important;
+  border-radius: 0 !important; color: var(--db-amber-soft) !important;
+}
+[data-testid="stAlert"] p { color: var(--db-amber-soft) !important; }
+
+/* ---------- Chat input ---------- */
+[data-testid="stBottom"] > div { background: var(--db-bg); }
+[data-testid="stChatInput"] {
+  background: var(--db-panel) !important;
+  border: 1px solid var(--db-line-2) !important;
+  border-radius: 999px !important; padding-left: 8px;
+}
+[data-testid="stChatInput"]:focus-within { border-color: var(--db-amber) !important; }
+[data-testid="stChatInput"] textarea { color: var(--db-text) !important; }
+[data-testid="stChatInput"] textarea::placeholder { color: var(--db-dim) !important; }
+[data-testid="stChatInputSubmitButton"] { background: var(--db-amber) !important; border-radius: 50% !important; }
+[data-testid="stChatInputSubmitButton"] svg { fill: #121211 !important; color: #121211 !important; }
