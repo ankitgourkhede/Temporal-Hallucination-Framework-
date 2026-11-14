@@ -1,6 +1,6 @@
 # Benchmark configuration: identical to config.yaml except that it reads the
-# generated temporal benchmark corpus and keeps its own index, so building it never
-# touches the demo/test index in data/store.
+# generated temporal benchmark corpus, keeps its own index (never touching data/store),
+# and uses content_relative freshness. config.benchmark.legacy.yaml is the ablation baseline.
 
 project:
   name: trustrag
@@ -71,6 +71,9 @@ reputation:
 
 trust:
   conflict_mode: both
+  # last_verified: legacy freshness from crawl/verification date (ablation baseline)
+  # content_relative: freshness from content date relative to the newest primary source
+  freshness_mode: content_relative
 
 generation:
   max_ctx_evidence: 6

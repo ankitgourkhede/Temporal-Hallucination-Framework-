@@ -26,7 +26,19 @@ def test_accuracy_counts_verification_required_as_wrong_and_abstention() -> None
         {"correct": True, "verification_status": "VERIFIED"},
         {"correct": True, "verification_status": "VERIFICATION_REQUIRED"},
     ])
-    assert result == {"accuracy": 0.5, "abstention_rate": 0.5, "selective_accuracy": 1.0}
+    assert result == {"accuracy": 0.5, "abstention_rate": 0.5, "selective_accuracy": 1.0, "wrong_answer_rate": 0.0}
+
+
+def test_clarification_is_an_abstention_not_a_wrong_answer() -> None:
+    result = answer_accuracy([
+        {"correct": True, "verification_status": "VERIFIED"},
+        {"correct": False, "verification_status": "VERIFIED"},
+        {"correct": False, "verification_status": "CLARIFICATION"},
+    ])
+    assert result["accuracy"] == pytest.approx(1 / 3)
+    assert result["abstention_rate"] == pytest.approx(1 / 3)
+    assert result["wrong_answer_rate"] == pytest.approx(1 / 3)
+    assert result["selective_accuracy"] == pytest.approx(0.5)
 
 
 def test_evidence_precision_recall_fixture() -> None:

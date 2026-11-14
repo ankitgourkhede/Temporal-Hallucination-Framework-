@@ -50,15 +50,22 @@ def expected_calibration_error(confidences: Iterable[float], correct: Iterable[b
     return ece
 
 
+# Outcomes where the system declined to give an answer. They are never counted as
+# correct, but they are kept apart from confident wrong answers (hallucinations).
+ABSTENTION_STATUSES = {"VERIFICATION_REQUIRED", "CLARIFICATION"}
+
+
 def answer_accuracy(records: list[dict[str, Any]]) -> dict[str, float]:
     if not records:
-        return {"accuracy": 0.0, "abstention_rate": 0.0, "selective_accuracy": 0.0}
-    answered = [item for item in records if item.get("verification_status") != "VERIFICATION_REQUIRED"]
-    correct = [bool(item.get("correct", False)) and item.get("verification_status") != "VERIFICATION_REQUIRED" for item in records]
+        return {"accuracy": 0.0, "abstention_rate": 0.0, "selective_accuracy": 0.0, "wrong_answer_rate": 0.0}
+    answered = [item for item in records if item.get("verification_status") not in ABSTENTION_STATUSES]
+    correct = [bool(item.get("correct", False)) and item.get("verification_status") not in ABSTENTION_STATUSES for item in records]
+    wrong = [item for item in answered if not bool(item.get("correct", False))]
     return {
         "accuracy": sum(correct) / len(records),
         "abstention_rate": 1.0 - len(answered) / len(records),
         "selective_accuracy": sum(bool(item.get("correct", False)) for item in answered) / len(answered) if answered else 0.0,
+        "wrong_answer_rate": len(wrong) / len(records),
     }
 
 

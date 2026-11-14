@@ -1,5 +1,5 @@
 comparison,b,c,method,statistic,p_value,holm_adjusted_p
-S0_vs_S1_accuracy,0,17,exact,0.0,1.52587890625e-05,6.103515625e-05
-S0_vs_S2_accuracy,0,17,exact,0.0,1.52587890625e-05,6.103515625e-05
+S0_vs_S1_accuracy,0,20,exact,0.0,1.9073486328125e-06,7.62939453125e-06
+S0_vs_S2_accuracy,0,20,exact,0.0,1.9073486328125e-06,7.62939453125e-06
 S1_vs_S2_accuracy,0,0,exact,0.0,1.0,1.0
 S2_vs_S3_accuracy,0,0,exact,0.0,1.0,1.0

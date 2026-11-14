@@ -87,3 +87,19 @@ def test_tvs_matches_spec_example_and_expert_fallback() -> None:
     assert measured["tvs"] == 0.66
     assert fallback["tvs_source"] == "expert"
     assert fallback["tvs"] == 0.8
+
+
+def test_near_tied_categories_ask_the_user_to_clarify(monkeypatch) -> None:
+    from trustrag.online.query import classifier as classifier_module
+
+    def tied(self, query, task):
+        if task == "intent":
+            return [("customs_regulations", 0.50), ("health_safety", 0.45)]
+        return [("customs_regulation", 0.48), ("vaccination_requirement", 0.42), ("visa_policy", 0.10)]
+
+    monkeypatch.setattr(classifier_module.CalibratedQueryModels, "predict", tied)
+    analyzer = QueryUnderstanding.from_config("trustrag/config.yaml")
+    result = analyzer.analyze("How much is the duty free GST relief for travellers in Singapore?")
+    assert result["action"] == "CLARIFY"
+    assert "ambiguous_category" in result["flags"]
+    assert "customs rules or health and vaccination requirements for Singapore" in result["clarification_question"]

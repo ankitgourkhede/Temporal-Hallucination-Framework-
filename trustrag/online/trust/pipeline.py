@@ -51,6 +51,7 @@ class TrustPipeline:
             alpha=float(reputation_config.get("alpha", 2.0)),
             beta=float(reputation_config.get("beta", 2.0)),
             conflict_mode=str(trust_config.get("conflict_mode", "both")),
+            freshness_mode=str(trust_config.get("freshness_mode", "last_verified")),
         )
         flags = list(retrieval_result.get("flags", []))
         primary_conflict_slots = {
@@ -93,6 +94,7 @@ class TrustPipeline:
                     "weights": item.get("weights"),
                     "weight_mode": policy.get("weight_mode"),
                     "conflict_mode": item.get("conflict_mode"),
+                    "freshness_mode": item.get("freshness_mode"),
                 }
                 for item in scored
             ],

@@ -1,0 +1,138 @@
+# Ablation baseline: config.benchmark.yaml with the legacy last_verified freshness rule.
+# Shares the benchmark corpus and index.
+#
+
+project:
+  name: trustrag
+  seed: 42
+  as_of_date: "2026-11-09"
+  device: cpu
+
+paths:
+  root: .
+  corpus_dir: data/benchmark_corpus
+  index_dir: data/store_benchmark
+  primary_faiss_path: data/store_benchmark/primary.faiss
+  secondary_faiss_path: data/store_benchmark/secondary.faiss
+  metadata_db: data/store_benchmark/trustrag.sqlite
+  response_log: logs/responses.jsonl
+
+embedding:
+  model_name: BAAI/bge-small-en-v1.5
+  normalize: true
+  dimension: 384
+  batch_size: 32
+  query_prefix: "Represent this sentence for searching relevant passages: "
+  chunk_size: 180
+  chunk_overlap: 30
+
+offline:
+  primary_collections: [government, embassy, intl_body]
+  secondary_collections: [airline, news, travel_blog, forum_social, unknown]
+  min_results: 5
+  max_results: 10
+
+crawler:
+  enabled: false
+  urls: []
+  cron: "30 2 * * *"
+
+default_nationality: India
+
+query_classifier:
+  model_dir: models/classifiers
+  intent_threshold_high: 0.60
+  intent_threshold_clarify: 0.40
+  tie_margin: 0.05
+
+retrieval:
+  primary_top_k: 8
+  validation_top_k: 5
+  use_secondary_validation: true
+
+policy:
+  categories_file: policies/categories.yaml
+  query_file: policies/query.yaml
+  strategy_rules_file: policies/strategy_rules.yaml
+  tau_rel: 0.45
+  weight_mode: policy
+  volatility_thresholds:
+    low_below: 0.35
+    high_from: 0.65
+
+change_detection:
+  use_content_hash: true
+  diff_threshold: 0.02
+
+reputation:
+  prior: 0.5
+  alpha: 2.0
+  beta: 2.0
+
+trust:
+  conflict_mode: both
+  # last_verified: legacy freshness from crawl/verification date (ablation baseline)
+  # content_relative: freshness from content date relative to the newest primary source
+  freshness_mode: last_verified
+
+generation:
+  max_ctx_evidence: 6
+  min_ctx_trust: 0.20
+  max_words: 120
+  retry_threshold: 0.70
+  partial_threshold: 0.90
+
+verify:
+  mode: rule_slot_fallback
+  entailment_threshold: 0.50
+
+llm:
+  default: ollama
+  ollama:
+    model: llama3.1:8b
+    base_url: http://localhost:11434
+  openai:
+    model: gpt-4o-mini
+  anthropic:
+    model: claude-3-5-haiku-latest
+
+live:
+  enabled: true
+  demo_auto_check: true
+  auto_on_high_volatility: false
+  total_timeout_s: 6.0
+  per_adapter_timeout_s: 5.0
+  cache_ttl_s:
+    visa: 43200
+    other: 86400
+  govuk:
+    enabled: true
+  whitelist:
+    Singapore:
+      customs_regulation:
+        - url: https://www.customs.gov.sg/doing-business/import-operations/import-procedures/controlled-and-prohibited-goods-for-imports/
+          title: Singapore Customs controlled and prohibited imports
+          source_type: government
+          nationality_scope: ALL
+    Vietnam:
+      visa_policy:
+        - url: https://evisa.xuatnhapcanh.gov.vn/vi_VN/web/guest/trang-chu-ttdt
+          title: Vietnam Immigration eVisa portal
+          source_type: government
+          nationality_scope: ALL
+    "United Kingdom":
+      visa_policy:
+        - url: "https://www.gov.uk/check-uk-visa"
+          title: GOV.UK Check if you need a UK visa
+          source_type: government
+          nationality_scope: ALL
+        - url: "https://www.gov.uk/standard-visitor/visa"
+          title: GOV.UK Visit the UK as a Standard Visitor
+          source_type: government
+          nationality_scope: ALL
+
+search_fallback:
+  google:
+    enabled: true
+    results: 5
+    timeout_s: 5.0

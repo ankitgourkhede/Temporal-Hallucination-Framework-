@@ -103,6 +103,17 @@ class QueryUnderstanding:
         )
 
     @staticmethod
+    def _ambiguous_category_question(categories: list[str], entities: dict[str, str | None]) -> str:
+        labels = {
+            "visa_policy": "visa and entry rules",
+            "vaccination_requirement": "health and vaccination requirements",
+            "customs_regulation": "customs rules",
+        }
+        options = " or ".join(labels.get(category, category.replace("_", " ")) for category in categories)
+        destination = entities.get("destination")
+        return f"Are you asking about {options}{f' for {destination}' if destination else ''}?"
+
+    @staticmethod
     def _clarification_question(category: str, entities: dict[str, str | None]) -> str:
         if category != "unknown" and entities.get("destination") is None:
             return "Which country are you travelling to?"
@@ -150,10 +161,19 @@ class QueryUnderstanding:
             action = "OUT_OF_SCOPE"
         elif intent_confidence < clarify_threshold or category == "unknown" or entities["destination"] is None:
             action = "CLARIFY"
+        elif category_alternates:
+            # Two categories are near-tied: ask instead of guessing, since answering from the
+            # wrong category returns confident facts about a different question.
+            action = "CLARIFY"
         else:
             action = "RETRIEVE"
         if action == "CLARIFY":
-            flags.append("destination_missing" if entities["destination"] is None else "low_intent_confidence")
+            if entities["destination"] is None:
+                flags.append("destination_missing")
+            elif category_alternates and intent_confidence >= clarify_threshold and category != "unknown":
+                flags.append("ambiguous_category")
+            else:
+                flags.append("low_intent_confidence")
 
         result = {
             "query": query,
@@ -169,7 +189,12 @@ class QueryUnderstanding:
             "as_of": as_of or self.config.get("project", {}).get("as_of_date"),
         }
         if action == "CLARIFY":
-            result["clarification_question"] = self._clarification_question(category, entities)
+            if "ambiguous_category" in flags:
+                result["clarification_question"] = self._ambiguous_category_question(
+                    [category, *category_alternates], entities
+                )
+            else:
+                result["clarification_question"] = self._clarification_question(category, entities)
         return result
 
     def summary(

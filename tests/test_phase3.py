@@ -117,3 +117,25 @@ def test_real_query_trust_pipeline_prefers_official_claim() -> None:
         item for item in result["sources"] if item["source_type"] == "travel_blog"
     )["trust"]
     indexer.metadata_store.close()
+
+def test_content_relative_freshness_exposes_unrevised_primary_page() -> None:
+    """A recrawled but never-revised official page must lose freshness to a newer notice."""
+    base = {"slot": "visa_required", "destination": "Sri Lanka", "is_primary": True,
+            "last_verified_ts": "2026-11-01", "crawl_timestamp": "2026-11-01",
+            "extraction_confidence": 1.0, "chunk_text": "", "nationality_scope": "IN"}
+    unrevised = {**base, "evidence_id": "old", "value_norm": True, "source_type": "government",
+                 "source_domain": "eta.gov.lk.example", "content_date": "2023-04-01"}
+    current = {**base, "evidence_id": "new", "value_norm": False, "source_type": "embassy",
+               "source_domain": "highcommission.lk.example", "content_date": "2026-02-10"}
+    weights = {"w_A": 0.30, "w_F": 0.30, "w_G": 0.15, "w_E": 0.10, "w_SR": 0.15, "w_C": 0.40}
+
+    legacy = {i["evidence_id"]: i for i in score_evidence([unrevised, current], weights, as_of="2026-11-09",
+                                                          freshness_half_life_days=60)}
+    assert legacy["old"]["F"] == pytest.approx(legacy["new"]["F"])
+
+    relative = {i["evidence_id"]: i for i in score_evidence([unrevised, current], weights, as_of="2026-11-09",
+                                                            freshness_half_life_days=60,
+                                                            freshness_mode="content_relative")}
+    assert relative["new"]["F"] == pytest.approx(1.0)
+    assert relative["old"]["F"] < 0.01
+    assert relative["new"]["Trust"] > relative["old"]["Trust"]

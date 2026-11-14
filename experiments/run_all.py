@@ -20,7 +20,7 @@ import yaml
 from sklearn.metrics import roc_auc_score
 
 from experiments.benchmark import check_nationality_coverage, validate_benchmark
-from experiments.metrics import answer_accuracy, expected_calibration_error, hallucination_rate, values_match
+from experiments.metrics import ABSTENTION_STATUSES, answer_accuracy, expected_calibration_error, hallucination_rate, values_match
 from experiments.stats import bootstrap_ci, mcnemar
 from trustrag.pipeline import TrustRAGPipeline
 
@@ -97,7 +97,7 @@ def _run_query(row: dict[str, Any], system: str, config_path: str) -> dict[str, 
         "system": system,
         "gold_value": row["gold_value"],
         "predicted_value": resolved,
-        "correct": bool(_equal(resolved, row["gold_value"])) and response["verification_status"] != "VERIFICATION_REQUIRED",
+        "correct": bool(_equal(resolved, row["gold_value"])) and response["verification_status"] not in ABSTENTION_STATUSES,
         "verification_status": response["verification_status"],
         "confidence": response["confidence"],
         "faithfulness": response["faithfulness"],

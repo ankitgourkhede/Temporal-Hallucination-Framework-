@@ -67,6 +67,9 @@ reputation:
 
 trust:
   conflict_mode: both
+  # last_verified: legacy freshness from crawl/verification date (ablation baseline)
+  # content_relative: freshness from content date relative to the newest primary source
+  freshness_mode: last_verified
 
 generation:
   max_ctx_evidence: 6

@@ -69,6 +69,45 @@ def _freshness(evidence: dict[str, Any], as_of: date, half_life_days: int) -> tu
     return freshness, ref_date.isoformat(), ref_rule
 
 
+def _content_relative_anchors(evidence: list[dict[str, Any]], as_of: date) -> dict[tuple[str, str], date | None]:
+    """Newest content date per (slot, destination), taken from primary sources when any have one.
+
+    Only primary sources set the anchor, so a recent forum post cannot make an official page
+    look superseded; secondary sources still compete against the anchor like everyone else.
+    """
+    anchors: dict[tuple[str, str], date | None] = {}
+    groups: dict[tuple[str, str], list[dict[str, Any]]] = {}
+    for item in evidence:
+        groups.setdefault((str(item.get("slot", "")), str(item.get("destination", ""))), []).append(item)
+    for key, items in groups.items():
+        def dated(candidates: list[dict[str, Any]]) -> list[date]:
+            values = [_as_date(item.get("content_date")) for item in candidates]
+            return [value for value in values if value is not None and value <= as_of]
+
+        primary_dates = dated([item for item in items if item.get("is_primary")])
+        all_dates = primary_dates or dated(items)
+        anchors[key] = max(all_dates) if all_dates else None
+    return anchors
+
+
+def _freshness_content_relative(
+    evidence: dict[str, Any], anchor: date | None, as_of: date, half_life_days: int
+) -> tuple[float, str, str]:
+    """Freshness as supersession: how much older this content is than the newest official content.
+
+    An unrevised page keeps a recent crawl date, so last_verified_ts cannot reveal that it is
+    outdated; its content_date can. Sources without a content date fall back to the legacy
+    rule, capped at 0.5 because their age is unknown.
+    """
+    ref_date = _as_date(evidence.get("content_date"))
+    if ref_date is None or ref_date > as_of:
+        legacy, legacy_ref, _ = _freshness(evidence, as_of, half_life_days)
+        return min(legacy, 0.5), legacy_ref, "no_content_date_capped"
+    reference = anchor or ref_date
+    age_days = max(0, (reference - ref_date).days)
+    return math.exp(-math.log(2) * age_days / half_life_days), ref_date.isoformat(), "content_date_vs_newest_primary"
+
+
 def _evidence_quality(evidence: dict[str, Any], destination: str, slot: str) -> dict[str, float]:
     q_date = 1.0 if evidence.get("content_date") else 0.5 if evidence.get("crawl_timestamp") else 0.0
     text = str(evidence.get("chunk_text", ""))
@@ -172,6 +211,7 @@ def score_evidence(
     alpha: float = 2.0,
     beta: float = 2.0,
     conflict_mode: str = "both",
+    freshness_mode: str = "last_verified",
 ) -> list[dict[str, Any]]:
     as_of_date = date.fromisoformat(as_of) if isinstance(as_of, str) else as_of
     levels = _authority_levels(authority_path)
@@ -179,6 +219,24 @@ def score_evidence(
     grouped: dict[tuple[str, str], list[dict[str, Any]]] = {}
     for item in evidence:
         grouped.setdefault((str(item.get("slot", "")), str(item.get("destination", ""))), []).append(item)
+
+    if freshness_mode not in {"last_verified", "content_relative"}:
+        raise ValueError(f"Unsupported freshness mode: {freshness_mode}")
+    anchors = _content_relative_anchors(evidence, as_of_date) if freshness_mode == "content_relative" else {}
+
+    def freshness_of(item: dict[str, Any]) -> tuple[float, str, str]:
+        if freshness_mode == "content_relative":
+            key = (str(item.get("slot", "")), str(item.get("destination", "")))
+            return _freshness_content_relative(item, anchors.get(key), as_of_date, freshness_half_life_days)
+        return _freshness(item, as_of_date, freshness_half_life_days)
+
+    def vote_weight(peer: dict[str, Any]) -> float:
+        # In content_relative mode a superseded source's agreement counts for less, so outdated
+        # pages echoing each other cannot outvote a newer official statement.
+        weight = _authority(peer, levels)
+        if freshness_mode == "content_relative":
+            weight *= freshness_of(peer)[0]
+        return weight
 
     results = []
     for item in evidence:
@@ -189,17 +247,16 @@ def score_evidence(
             peer for peer in other_domains
             if _value_family(peer.get("value_norm")) == _value_family(item.get("value_norm"))
         ]
-        denominator = sum(_authority(peer, levels) for peer in comparable_peers)
+        denominator = sum(vote_weight(peer) for peer in comparable_peers)
         numerator = sum(
-            _authority(peer, levels)
+            vote_weight(peer)
             for peer in comparable_peers
             if _same_value(peer.get("value_norm"), item.get("value_norm"))
         )
-        agreement = numerator / denominator if denominator else 0.5
+        agreement = numerator / denominator if denominator > 1e-9 else 0.5
         current["A"] = _authority(item, levels)
-        current["F"], current["freshness_ref_date"], current["freshness_ref_rule"] = _freshness(
-            item, as_of_date, freshness_half_life_days
-        )
+        current["F"], current["freshness_ref_date"], current["freshness_ref_rule"] = freshness_of(item)
+        current["freshness_mode"] = freshness_mode
         current["G"] = agreement
         current["G_voters"] = [
             {

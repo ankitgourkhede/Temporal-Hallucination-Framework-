@@ -1,4 +1,4 @@
-.PHONY: setup dataset index-benchmark index search train-classifiers benchmark-check fit experiments report api demo-mock demo test
+.PHONY: setup dataset index-benchmark ablation-freshness index search train-classifiers benchmark-check fit experiments report api demo-mock demo test
 
 setup:
 	python -m pip install -r requirements.txt
@@ -30,6 +30,15 @@ experiments:
 
 benchmark-experiments:
 	PYTHONPATH=. python -m experiments.run_all --benchmark data/benchmark/benchmark.csv --config trustrag/config.benchmark.yaml
+
+# Old (last_verified) freshness rule: refit on train, run S0-S3, save to results/ablation_last_verified.
+# Run before `make fit benchmark-experiments report`, which use the main content_relative config.
+ablation-freshness:
+	PYTHONPATH=. python -m experiments.fit --benchmark data/benchmark/benchmark.csv --config trustrag/config.benchmark.legacy.yaml
+	PYTHONPATH=. python -m experiments.run_all --benchmark data/benchmark/benchmark.csv --config trustrag/config.benchmark.legacy.yaml
+	PYTHONPATH=. python -m experiments.report
+	rm -rf results/ablation_last_verified && mkdir -p results/ablation_last_verified
+	cp -r results/main_results.csv results/predictions.csv results/stats_tests.csv results/run_manifest.json results/REPORT.md results/figures results/ablation_last_verified/
 
 report:
 	PYTHONPATH=. python -m experiments.report
