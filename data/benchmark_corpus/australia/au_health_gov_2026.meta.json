@@ -1,0 +1,13 @@
+{
+  "doc_key": "au_health_gov_2026",
+  "title": "Australia international arrivals health information",
+  "url": "https://health.gov.au.example/au-health-gov-2026",
+  "source_domain": "health.gov.au.example",
+  "source_type": "government",
+  "country": "Australia",
+  "category": "vaccination_requirement",
+  "nationality_scope": "ALL",
+  "content_date": "2026-01-20",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

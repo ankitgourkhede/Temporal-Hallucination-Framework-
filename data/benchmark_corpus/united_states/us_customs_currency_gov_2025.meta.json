@@ -1,0 +1,13 @@
+{
+  "doc_key": "us_customs_currency_gov_2025",
+  "title": "Declaring currency when entering the United States",
+  "url": "https://cbp.gov.example/us-customs-currency-gov-2025",
+  "source_domain": "cbp.gov.example",
+  "source_type": "government",
+  "country": "United States",
+  "category": "customs_regulation",
+  "nationality_scope": "ALL",
+  "content_date": "2025-08-01",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

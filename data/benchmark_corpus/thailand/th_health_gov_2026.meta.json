@@ -1,0 +1,13 @@
+{
+  "doc_key": "th_health_gov_2026",
+  "title": "Thailand health entry requirements",
+  "url": "https://ddc.moph.go.th.example/th-health-gov-2026",
+  "source_domain": "ddc.moph.go.th.example",
+  "source_type": "government",
+  "country": "Thailand",
+  "category": "vaccination_requirement",
+  "nationality_scope": "ALL",
+  "content_date": "2026-03-01",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

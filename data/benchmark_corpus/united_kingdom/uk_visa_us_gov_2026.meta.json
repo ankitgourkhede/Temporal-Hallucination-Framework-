@@ -1,0 +1,13 @@
+{
+  "doc_key": "uk_visa_us_gov_2026",
+  "title": "Visiting the United Kingdom with an ETA",
+  "url": "https://gov.uk.example/uk-visa-us-gov-2026",
+  "source_domain": "gov.uk.example",
+  "source_type": "government",
+  "country": "United Kingdom",
+  "category": "visa_policy",
+  "nationality_scope": "US,AU,CA",
+  "content_date": "2026-05-01",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

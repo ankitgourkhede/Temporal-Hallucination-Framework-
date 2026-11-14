@@ -1,0 +1,13 @@
+{
+  "doc_key": "id_visa_in_gov_2026",
+  "title": "Indonesia visa on arrival for Indian passport holders",
+  "url": "https://imigrasi.go.id.example/id-visa-in-gov-2026",
+  "source_domain": "imigrasi.go.id.example",
+  "source_type": "government",
+  "country": "Indonesia",
+  "category": "visa_policy",
+  "nationality_scope": "IN",
+  "content_date": "2026-02-20",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

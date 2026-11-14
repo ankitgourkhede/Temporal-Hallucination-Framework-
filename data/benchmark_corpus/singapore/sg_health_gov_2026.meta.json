@@ -1,0 +1,13 @@
+{
+  "doc_key": "sg_health_gov_2026",
+  "title": "Singapore health entry requirements",
+  "url": "https://moh.gov.sg.example/sg-health-gov-2026",
+  "source_domain": "moh.gov.sg.example",
+  "source_type": "government",
+  "country": "Singapore",
+  "category": "vaccination_requirement",
+  "nationality_scope": "ALL",
+  "content_date": "2026-02-14",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

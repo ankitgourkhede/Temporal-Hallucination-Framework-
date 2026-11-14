@@ -1,0 +1,13 @@
+{
+  "doc_key": "ke_visa_gov_2026",
+  "title": "Kenya Electronic Travel Authorisation",
+  "url": "https://immigration.go.ke.example/ke-visa-gov-2026",
+  "source_domain": "immigration.go.ke.example",
+  "source_type": "government",
+  "country": "Kenya",
+  "category": "visa_policy",
+  "nationality_scope": "ALL",
+  "content_date": "2026-01-15",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

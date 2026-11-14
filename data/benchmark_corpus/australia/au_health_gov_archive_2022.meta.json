@@ -1,0 +1,13 @@
+{
+  "doc_key": "au_health_gov_archive_2022",
+  "title": "Australia border reopening for vaccinated travellers (archived notice)",
+  "url": "https://health.gov.au.example/au-health-gov-archive-2022",
+  "source_domain": "health.gov.au.example",
+  "source_type": "government",
+  "country": "Australia",
+  "category": "vaccination_requirement",
+  "nationality_scope": "ALL",
+  "content_date": "2022-02-21",
+  "snapshot_date": "2022-06-30",
+  "synthetic": true
+}

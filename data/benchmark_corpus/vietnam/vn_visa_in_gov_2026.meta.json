@@ -1,0 +1,13 @@
+{
+  "doc_key": "vn_visa_in_gov_2026",
+  "title": "Vietnam e-visa for Indian passport holders",
+  "url": "https://immigration.gov.vn.example/vn-visa-in-gov-2026",
+  "source_domain": "immigration.gov.vn.example",
+  "source_type": "government",
+  "country": "Vietnam",
+  "category": "visa_policy",
+  "nationality_scope": "IN",
+  "content_date": "2026-07-01",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

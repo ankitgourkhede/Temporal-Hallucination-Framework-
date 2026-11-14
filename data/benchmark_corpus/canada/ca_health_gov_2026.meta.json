@@ -1,0 +1,13 @@
+{
+  "doc_key": "ca_health_gov_2026",
+  "title": "Canada border health measures",
+  "url": "https://canada.ca.example/ca-health-gov-2026",
+  "source_domain": "canada.ca.example",
+  "source_type": "government",
+  "country": "Canada",
+  "category": "vaccination_requirement",
+  "nationality_scope": "ALL",
+  "content_date": "2026-01-10",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

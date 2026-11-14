@@ -1,0 +1,13 @@
+{
+  "doc_key": "np_visa_foreign_gov_2026",
+  "title": "Nepal tourist visa for foreign nationals",
+  "url": "https://immigration.gov.np.example/np-visa-foreign-gov-2026",
+  "source_domain": "immigration.gov.np.example",
+  "source_type": "government",
+  "country": "Nepal",
+  "category": "visa_policy",
+  "nationality_scope": "GB,US,AU,CA",
+  "content_date": "2026-03-10",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

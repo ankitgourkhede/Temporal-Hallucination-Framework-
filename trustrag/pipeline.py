@@ -100,10 +100,17 @@ class TrustRAGPipeline:
                     ),
                     verification_status="SYSTEM_UNAVAILABLE",
                     confidence=0.0,
-                        source = next(
-                            (item for item in retrieval.get("evidence", []) if item.get("live") or item.get("search_fallback")),
-                            None,
-                        )
+                    faithfulness=None,
+                    sources=[],
+                    unsupported_claims=[],
+                    flags=policy.get("flags", []),
+                    trace=trace,
+                    started=started,
+                )
+            trace["weights_source"] = weights_source
+
+        index_started = time.perf_counter()
+        query_vector = encode_query_vector(query, self.config_path)
         with KnowledgeStore.from_config(self.config_path) as store:
             if system == "S0":
                 retrieval = self._retrieve_with_fallback(store, query, query_vector, policy, mode, live_check)
@@ -168,17 +175,20 @@ class TrustRAGPipeline:
                     source = next((item for item in final_context if item.get("live")), None)
                     if source is None:
                         source = next(
-                            (item for item in retrieval.get("evidence", []) if item.get("live")), None
+                            (item for item in retrieval.get("evidence", []) if item.get("live") or item.get("search_fallback")),
+                            None,
                         )
                     if source is None:
-                        source = type("LiveSourceView", (), {
+                        source = next(iter(retrieval.get("trace", {}).get("live_sources", [])), None)
+                    if source is None:
+                        source = {
                             "title": "GOV.UK Check if you need a UK visa",
                             "url": "https://www.gov.uk/check-uk-visa",
                             "source_type": "government",
                             "fetched_at": None,
                             "content_date": None,
                             "nationality_scope": "ALL",
-                        })()
+                        }
                     citation = "E1"
                     nationality = policy.get("entities", {}).get("nationality", "India")
                     nationality_label = {"India": "Indian", "United Kingdom": "British", "United States": "American"}.get(nationality, nationality)
@@ -210,7 +220,7 @@ class TrustRAGPipeline:
                         verification_status="VERIFICATION_REQUIRED",
                         confidence=0.0,
                         faithfulness=0.0,
-                        freshness={"most_recent_source": source.content_date, "age_days": None},
+                        freshness={"most_recent_source": source.get("content_date"), "age_days": None},
                         agreement="Low",
                         conflicts=[],
                         sources=[source_row],
@@ -240,7 +250,7 @@ class TrustRAGPipeline:
                     max((item.get("confidence", 0.0) for item in trust_result["fusion"]), default=0.0),
                 )
                 faithfulness = float(verification["faithfulness"])
-                if faithfulness >= 0.70:
+                if faithfulness >= 0.70 and not verification.get("blocking"):
                     break
                 if attempt == 0:
                     pass_policy = self._widen_policy(policy)
@@ -251,10 +261,14 @@ class TrustRAGPipeline:
             flags = list(dict.fromkeys(policy.get("flags", []) + final_trust.get("flags", []) + final_verification.get("flags", [])))
             if trace.get("retried"):
                 flags.append("retried")
-            if faithfulness >= 0.90:
+            if final_verification.get("blocking"):
+                faithfulness_gate = 0.0
+            else:
+                faithfulness_gate = faithfulness
+            if faithfulness_gate >= 0.90:
                 status = "VERIFIED"
                 confidence = original_confidence
-            elif faithfulness >= 0.70:
+            elif faithfulness_gate >= 0.70:
                 status = "PARTIAL"
                 confidence = original_confidence * 0.85
             else:
@@ -355,9 +369,16 @@ class TrustRAGPipeline:
 
         combined.setdefault("trace", {})["fallback_stages"] = fallback_stages
         combined["trace"]["live_documents"] = len(live_documents)
+        combined["trace"]["live_sources"] = [self._live_source_meta(doc) for doc in live_documents]
         combined["trace"]["google_documents"] = len(google_documents)
         combined["trace"]["requested_slot"] = required_slot
         return combined
+
+    @staticmethod
+    def _live_source_meta(document: Any) -> dict[str, Any]:
+        data = document.as_dict() if hasattr(document, "as_dict") else dict(document)
+        keys = ("title", "url", "source_type", "fetched_at", "content_date", "nationality_scope")
+        return {key: data.get(key) for key in keys} | {"live": True}
 
     @staticmethod
     def _retrieve_documents_only(

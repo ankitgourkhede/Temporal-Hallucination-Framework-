@@ -7,6 +7,30 @@ from typing import Any, Iterable
 import numpy as np
 
 
+def values_match(predicted: Any, gold: Any) -> bool:
+    """Compare a normalized slot value with a benchmark gold string.
+
+    Handles numbers ("90" vs 90), booleans ("true" vs True), enums, and money values,
+    which the extractor emits as (amount, currency) and the benchmark stores as "50000 INR".
+    """
+    if predicted is None:
+        return False
+    if isinstance(predicted, (tuple, list)) and len(predicted) == 2:
+        parts = str(gold).split()
+        if len(parts) != 2:
+            return False
+        try:
+            return float(predicted[0]) == float(parts[0]) and str(predicted[1]).upper() == parts[1].upper()
+        except (TypeError, ValueError):
+            return False
+    if isinstance(predicted, bool):
+        return str(predicted).casefold() == str(gold).strip().casefold()
+    try:
+        return float(predicted) == float(gold)
+    except (TypeError, ValueError):
+        return str(predicted).strip().casefold() == str(gold).strip().casefold()
+
+
 def expected_calibration_error(confidences: Iterable[float], correct: Iterable[bool], bins: int = 10) -> float:
     confidence_values = np.asarray(list(confidences), dtype=float)
     correct_values = np.asarray(list(correct), dtype=float)

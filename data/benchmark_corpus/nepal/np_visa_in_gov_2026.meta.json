@@ -1,0 +1,13 @@
+{
+  "doc_key": "np_visa_in_gov_2026",
+  "title": "Entry to Nepal for Indian citizens",
+  "url": "https://immigration.gov.np.example/np-visa-in-gov-2026",
+  "source_domain": "immigration.gov.np.example",
+  "source_type": "government",
+  "country": "Nepal",
+  "category": "visa_policy",
+  "nationality_scope": "IN",
+  "content_date": "2026-03-10",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

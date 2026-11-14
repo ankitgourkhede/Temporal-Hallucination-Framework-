@@ -20,7 +20,7 @@ import yaml
 from sklearn.metrics import roc_auc_score
 
 from experiments.benchmark import check_nationality_coverage, validate_benchmark
-from experiments.metrics import answer_accuracy, expected_calibration_error, hallucination_rate
+from experiments.metrics import answer_accuracy, expected_calibration_error, hallucination_rate, values_match
 from experiments.stats import bootstrap_ci, mcnemar
 from trustrag.pipeline import TrustRAGPipeline
 
@@ -67,11 +67,7 @@ def benchmark_network_guard() -> Iterator[None]:
         socket.socket.connect = original_connect
 
 
-def _equal(left: Any, right: Any) -> bool:
-    try:
-        return float(left) == float(right)
-    except (TypeError, ValueError):
-        return str(left).strip().casefold() == str(right).strip().casefold()
+_equal = values_match
 
 
 def _run_query(row: dict[str, Any], system: str, config_path: str) -> dict[str, Any]:
@@ -112,7 +108,7 @@ def _run_query(row: dict[str, Any], system: str, config_path: str) -> dict[str, 
         "evidence_recall": recall,
         "has_conflict": str(row["has_conflict"]) == "1",
         "predicted_conflict": predicted_conflict,
-        "trust_labels": [item.get("value_norm") == row["gold_value"] for item in conflict_evidence if item.get("slot") == row["gold_slot"]],
+        "trust_labels": [_equal(item.get("value_norm"), row["gold_value"]) for item in conflict_evidence if item.get("slot") == row["gold_slot"]],
         "trust_scores": [item.get("Trust") for item in conflict_evidence if item.get("slot") == row["gold_slot"]],
     }
 

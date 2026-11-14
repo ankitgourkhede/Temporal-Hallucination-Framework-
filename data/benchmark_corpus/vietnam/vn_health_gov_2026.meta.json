@@ -1,0 +1,13 @@
+{
+  "doc_key": "vn_health_gov_2026",
+  "title": "Vietnam health entry requirements",
+  "url": "https://moh.gov.vn.example/vn-health-gov-2026",
+  "source_domain": "moh.gov.vn.example",
+  "source_type": "government",
+  "country": "Vietnam",
+  "category": "vaccination_requirement",
+  "nationality_scope": "ALL",
+  "content_date": "2026-05-10",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

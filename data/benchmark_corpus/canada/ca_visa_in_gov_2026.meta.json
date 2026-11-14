@@ -1,0 +1,13 @@
+{
+  "doc_key": "ca_visa_in_gov_2026",
+  "title": "Visitor visa for Indian citizens",
+  "url": "https://canada.ca.example/ca-visa-in-gov-2026",
+  "source_domain": "canada.ca.example",
+  "source_type": "government",
+  "country": "Canada",
+  "category": "visa_policy",
+  "nationality_scope": "IN",
+  "content_date": "2026-04-01",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

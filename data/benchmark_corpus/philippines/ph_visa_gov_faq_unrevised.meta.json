@@ -1,0 +1,13 @@
+{
+  "doc_key": "ph_visa_gov_faq_unrevised",
+  "title": "Philippine e-visa for Indian nationals (page not revised)",
+  "url": "https://immigration.gov.ph.example/ph-visa-gov-faq-unrevised",
+  "source_domain": "immigration.gov.ph.example",
+  "source_type": "government",
+  "country": "Philippines",
+  "category": "visa_policy",
+  "nationality_scope": "IN",
+  "content_date": "2023-08-01",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

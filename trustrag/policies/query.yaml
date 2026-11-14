@@ -71,6 +71,8 @@ entities:
     China: [china]
     Nepal: [nepal]
     Kenya: [kenya]
+    "Sri Lanka": ["sri lanka"]
+    Philippines: [philippines]
     Australia: [australia]
     Canada: [canada]
     "United Kingdom": ["united kingdom", uk, britain]

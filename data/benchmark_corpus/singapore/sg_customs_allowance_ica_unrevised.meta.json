@@ -1,0 +1,13 @@
+{
+  "doc_key": "sg_customs_allowance_ica_unrevised",
+  "title": "Singapore arrival guide (page not revised)",
+  "url": "https://ica.gov.sg.example/sg-customs-allowance-ica-unrevised",
+  "source_domain": "ica.gov.sg.example",
+  "source_type": "government",
+  "country": "Singapore",
+  "category": "customs_regulation",
+  "nationality_scope": "ALL",
+  "content_date": "2021-03-01",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

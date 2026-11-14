@@ -1,0 +1,13 @@
+{
+  "doc_key": "vn_visa_gb_gov_archive_2022",
+  "title": "Vietnam visa exemption for British citizens (archived notice)",
+  "url": "https://immigration.gov.vn.example/vn-visa-gb-gov-archive-2022",
+  "source_domain": "immigration.gov.vn.example",
+  "source_type": "government",
+  "country": "Vietnam",
+  "category": "visa_policy",
+  "nationality_scope": "GB",
+  "content_date": "2022-03-15",
+  "snapshot_date": "2023-01-10",
+  "synthetic": true
+}

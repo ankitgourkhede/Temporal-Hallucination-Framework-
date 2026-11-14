@@ -1,0 +1,13 @@
+{
+  "doc_key": "my_visa_in_gov_2026",
+  "title": "Malaysia visa exemption for Indian citizens",
+  "url": "https://imi.gov.my.example/my-visa-in-gov-2026",
+  "source_domain": "imi.gov.my.example",
+  "source_type": "government",
+  "country": "Malaysia",
+  "category": "visa_policy",
+  "nationality_scope": "IN",
+  "content_date": "2026-01-05",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

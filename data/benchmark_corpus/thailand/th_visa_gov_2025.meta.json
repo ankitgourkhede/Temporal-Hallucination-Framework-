@@ -1,0 +1,13 @@
+{
+  "doc_key": "th_visa_gov_2025",
+  "title": "Thailand visa exemption scheme",
+  "url": "https://mfa.go.th.example/th-visa-gov-2025",
+  "source_domain": "mfa.go.th.example",
+  "source_type": "government",
+  "country": "Thailand",
+  "category": "visa_policy",
+  "nationality_scope": "IN,GB,US",
+  "content_date": "2025-01-10",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

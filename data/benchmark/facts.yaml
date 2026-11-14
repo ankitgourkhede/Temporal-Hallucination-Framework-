@@ -1,0 +1,1506 @@
+# TrustRAG temporal benchmark: source of truth.
+#
+# Everything in data/benchmark_corpus/, data/benchmark/benchmark.csv and
+# data/train/queries_labeled.csv is generated from this file by
+#   python -m scripts.build_dataset
+#
+# CONTENT IS SYNTHETIC. Documents are modelled on the shape and history of real
+# public travel-policy pages (for example Vietnam's 2023 move from 30- to 90-day
+# e-visas, the UK allowance rising from GBP 145 to GBP 390, India's
+# duty-free limit going from INR 35,000 to INR 50,000), but the values were not
+# verified against live government sources and must not be used as travel advice.
+# Every URL uses the reserved ".example" TLD so nothing points at a real agency.
+#
+# Each document declares `claims`: the slot values it is written to assert. The
+# generator runs the project's own claim extractor (trustrag.online.retrieval.evidence)
+# over the text and fails if the extracted values differ, so gold labels and
+# extractor behaviour cannot silently drift apart.
+#
+# Fields
+#   scope         nationality_scope codes (IN, GB, US, AU, CA, JP) or ALL
+#   content_date  when the content was written / last changed
+#   snapshot_date when it was crawled (for primary sources this is last_verified_ts)
+#   truth         gold slot values for the fact's traveller nationality as of `as_of_date`
+#   questions     one per gold slot; each entry's `queries` are paraphrases that share
+#                 a paraphrase_group and therefore always land in the same split
+
+as_of_date: "2026-11-09"
+current_snapshot: "2026-11-01"
+
+destinations:
+
+  Vietnam:
+    docs:
+      - id: vn_visa_in_gov_2026
+        category: visa_policy
+        source_type: government
+        domain: immigration.gov.vn.example
+        scope: IN
+        content_date: "2026-07-01"
+        title: Vietnam e-visa for Indian passport holders
+        text: >-
+          Indian passport holders must obtain an e-visa before travelling to Vietnam.
+          The Vietnam e-visa permits a stay of up to 90 days with single or multiple entry.
+          Passports must be valid for at least 6 months from the date of entry.
+        claims: {visa_required: true, visa_type: evisa, max_stay_days: 90, passport_validity_months: 6}
+      - id: vn_visa_in_blog_2023
+        category: visa_policy
+        source_type: travel_blog
+        domain: wanderdesi.blog.example
+        scope: IN
+        content_date: "2023-03-14"
+        title: Our Vietnam trip as Indian travellers
+        text: >-
+          Our Vietnam trip from Mumbai: as Indian travellers we applied for the Vietnam e-visa,
+          and it only covered a stay of 30 days. Plan your Vietnam itinerary so you leave
+          before the 30 days run out.
+        claims: {visa_type: evisa, max_stay_days: 30}
+      - id: vn_visa_in_forum_2022
+        category: visa_policy
+        source_type: forum_social
+        domain: backpackerforum.example
+        scope: IN
+        content_date: "2022-11-02"
+        title: Vietnam entry for Indians thread
+        text: >-
+          Indians can get a visa on arrival in Vietnam for a 30 days stay, so there is
+          no need to apply online before you fly to Vietnam.
+        claims: {visa_type: visa_on_arrival, max_stay_days: 30}
+      - id: vn_visa_gb_gov_2025
+        category: visa_policy
+        source_type: government
+        domain: immigration.gov.vn.example
+        scope: GB
+        content_date: "2025-03-15"
+        title: Vietnam visa exemption for British citizens
+        text: >-
+          British citizens can enter Vietnam visa-free for stays of up to 45 days,
+          regardless of the purpose of travel. Passports must be valid for at least
+          6 months on arrival in Vietnam.
+        claims: {visa_required: false, visa_type: visa_free, max_stay_days: 45, passport_validity_months: 6}
+      - id: vn_visa_gb_gov_archive_2022
+        category: visa_policy
+        source_type: government
+        domain: immigration.gov.vn.example
+        scope: GB
+        content_date: "2022-03-15"
+        snapshot_date: "2023-01-10"
+        title: Vietnam visa exemption for British citizens (archived notice)
+        text: >-
+          British citizens are exempt from visa requirements in Vietnam for stays of up
+          to 15 days.
+        claims: {visa_required: false, max_stay_days: 15}
+      - id: vn_health_gov_2026
+        category: vaccination_requirement
+        source_type: government
+        domain: moh.gov.vn.example
+        scope: ALL
+        content_date: "2026-05-10"
+        title: Vietnam health entry requirements
+        text: >-
+          Vietnam has removed its COVID-19 entry measures for arriving travellers. Proof of
+          COVID-19 vaccination is not required for entry to Vietnam.
+        claims: {vaccine_required: false, vaccine_name: covid-19, certificate_required: false}
+      - id: vn_health_blog_2021
+        category: vaccination_requirement
+        source_type: travel_blog
+        domain: wanderdesi.blog.example
+        scope: ALL
+        content_date: "2021-12-01"
+        title: Vietnam reopening checklist
+        text: >-
+          Heading to Vietnam? A COVID-19 vaccination certificate is mandatory for all
+          arrivals, so keep your vaccine certificate handy at the airport.
+        claims: {vaccine_required: true, vaccine_name: covid-19, certificate_required: true}
+    facts:
+      - id: vn_in_visa
+        nationality: India
+        category: visa_policy
+        truth: {visa_required: true, visa_type: evisa, max_stay_days: 90}
+        questions:
+          - slot: max_stay_days
+            queries:
+              - How long can Indian travellers stay in Vietnam on a visa?
+              - What is the maximum stay in Vietnam for an Indian passport holder?
+              - For how many days can Indians stay in Vietnam?
+          - slot: visa_type
+            queries:
+              - Which visa type do Indians need for Vietnam?
+              - Can Indian citizens get an e-visa for Vietnam or is it visa on arrival?
+              - What visa type applies to Indian travellers visiting Vietnam?
+          - slot: visa_required
+            queries:
+              - Do Indians need a visa for Vietnam?
+              - Is a visa required for Indian citizens travelling to Vietnam?
+              - Does an Indian passport holder need a visa to enter Vietnam?
+      - id: vn_gb_visa
+        nationality: United Kingdom
+        category: visa_policy
+        truth: {visa_required: false, max_stay_days: 45}
+        questions:
+          - slot: max_stay_days
+            queries:
+              - How many days can a British tourist stay in Vietnam?
+              - What is the maximum visa-free stay in Vietnam for British nationals?
+              - How long are British citizens allowed to stay in Vietnam?
+          - slot: visa_required
+            queries:
+              - Do British citizens need a visa for Vietnam?
+              - Is a visa required for British passport holders visiting Vietnam?
+              - Can British nationals enter Vietnam without a visa?
+      - id: vn_health
+        nationality: India
+        category: vaccination_requirement
+        truth: {vaccine_required: false, certificate_required: false}
+        questions:
+          - slot: certificate_required
+            queries:
+              - Do I need a COVID-19 vaccination certificate to enter Vietnam?
+              - Is proof of COVID vaccination required for travellers to Vietnam?
+              - Must Indian travellers show a covid vaccine certificate in Vietnam?
+          - slot: vaccine_required
+            queries:
+              - Is the COVID vaccine mandatory for entering Vietnam?
+              - Do travellers to Vietnam need to be vaccinated against covid?
+              - Does Vietnam require a covid vaccine for Indian visitors?
+
+  Thailand:
+    docs:
+      - id: th_visa_gov_2025
+        category: visa_policy
+        source_type: government
+        domain: mfa.go.th.example
+        scope: IN,GB,US
+        content_date: "2025-01-10"
+        title: Thailand visa exemption scheme
+        text: >-
+          Under the visa exemption scheme, Indian, British and American passport holders can
+          enter Thailand visa-free for tourism and stay for up to 60 days. Passports must be
+          valid for at least 6 months on arrival in Thailand.
+        claims: {visa_required: false, visa_type: visa_free, max_stay_days: 60, passport_validity_months: 6}
+      - id: th_visa_news_2023
+        category: visa_policy
+        source_type: news
+        domain: asiatravelnews.example
+        scope: IN
+        content_date: "2023-05-20"
+        title: What Indian tourists need for Thailand
+        text: >-
+          Indian tourists to Thailand can obtain a visa on arrival at Bangkok airports,
+          which allows a stay of 15 days in Thailand.
+        claims: {visa_type: visa_on_arrival, max_stay_days: 15}
+      - id: th_visa_blog_2024
+        category: visa_policy
+        source_type: travel_blog
+        domain: wanderdesi.blog.example
+        scope: IN
+        content_date: "2024-01-15"
+        title: Thailand is visa-free for Indians (for now)
+        text: >-
+          Good news for Indian backpackers: Thailand is visa-free until May 2024, letting
+          you stay in Thailand for 30 days.
+        claims: {visa_required: false, visa_type: visa_free, max_stay_days: 30}
+      - id: th_visa_in_embassy_unrevised
+        category: visa_policy
+        source_type: embassy
+        domain: thaiembdelhi.embassy.example
+        scope: IN
+        content_date: "2023-02-01"
+        title: Visa on arrival for Indian passport holders (page not revised)
+        text: >-
+          Indian passport holders must obtain a visa on arrival in Thailand, which allows a stay of
+          up to 15 days.
+        claims: {visa_required: true, visa_type: visa_on_arrival, max_stay_days: 15}
+      - id: th_health_gov_2026
+        category: vaccination_requirement
+        source_type: government
+        domain: ddc.moph.go.th.example
+        scope: ALL
+        content_date: "2026-03-01"
+        title: Thailand health entry requirements
+        text: >-
+          Thailand asks for a yellow fever vaccination certificate only from travellers arriving
+          from countries with yellow fever risk. Travellers arriving from India are not required
+          to show this certificate in Thailand.
+        claims: {vaccine_required: false, vaccine_name: yellow fever, certificate_required: false}
+      - id: th_health_news_2022
+        category: vaccination_requirement
+        source_type: news
+        domain: asiatravelnews.example
+        scope: ALL
+        content_date: "2022-03-10"
+        title: Thailand Pass rules explained
+        text: >-
+          Thailand Pass rules: all foreign arrivals in Thailand must have a COVID-19
+          vaccination certificate and travel insurance.
+        claims: {vaccine_required: true, vaccine_name: covid-19, certificate_required: true}
+      - id: th_customs_vape_gov_2026
+        category: customs_regulation
+        source_type: government
+        domain: customs.go.th.example
+        scope: ALL
+        content_date: "2026-04-01"
+        title: Thailand customs rules on e-cigarettes
+        text: >-
+          Bringing an e-cigarette into Thailand is prohibited. Thai Customs seizes e-cigarette
+          devices and refills at the border, and offenders face fines or imprisonment.
+        claims: {item_allowed: {e-cigarette: prohibited}}
+      - id: th_customs_vape_forum_2019
+        category: customs_regulation
+        source_type: forum_social
+        domain: backpackerforum.example
+        scope: ALL
+        content_date: "2019-08-01"
+        title: Took my e-cigarette to Thailand
+        text: >-
+          Carried my e-cigarette through Bangkok airport into Thailand last year with no problem,
+          it is allowed for personal use.
+        claims: {item_allowed: {e-cigarette: allowed}}
+      - id: th_customs_drone_gov_2025
+        category: customs_regulation
+        source_type: government
+        domain: caat.go.th.example
+        scope: ALL
+        content_date: "2025-11-12"
+        title: Bringing a drone into Thailand
+        text: >-
+          Drones brought into Thailand are restricted. Every drone must be registered with the
+          Civil Aviation Authority of Thailand and the NBTC before it is flown.
+        claims: {item_allowed: {drone: restricted}}
+      - id: th_customs_allowance_gov_2026
+        category: customs_regulation
+        source_type: government
+        domain: customs.go.th.example
+        scope: ALL
+        content_date: "2026-04-01"
+        title: Thailand duty-free allowance
+        text: >-
+          Personal effects for own use with a total value not exceeding THB 20,000 are duty-free
+          when entering Thailand. Each traveller can carry 1 litre of alcohol duty-free.
+        claims: {duty_free_limit: 20000 THB, item_allowed: {alcohol: allowed}}
+    facts:
+      - id: th_in_visa
+        nationality: India
+        category: visa_policy
+        truth: {visa_required: false, visa_type: visa_free, max_stay_days: 60, passport_validity_months: 6}
+        questions:
+          - slot: max_stay_days
+            queries:
+              - How long can Indian tourists stay in Thailand?
+              - What is the maximum stay in Thailand for Indians without a visa?
+              - How many days can an Indian passport holder spend in Thailand?
+          - slot: visa_required
+            queries:
+              - Do Indian citizens need a visa to visit Thailand?
+              - Is a visa required for Indians travelling to Thailand?
+              - Does an Indian tourist need a visa for Thailand?
+          - slot: visa_type
+            queries:
+              - Which visa type do Indian travellers get in Thailand?
+              - What visa type applies to Indian passport holders entering Thailand?
+              - Do Indians get an e-visa or visa exemption for Thailand?
+          - slot: passport_validity_months
+            queries:
+              - How many months of passport validity does Thailand need for Indian travellers?
+              - For how many months must an Indian passport be valid to enter Thailand?
+      - id: th_us_visa
+        nationality: United States
+        category: visa_policy
+        truth: {visa_required: false, max_stay_days: 60}
+        questions:
+          - slot: max_stay_days
+            queries:
+              - How long can American tourists stay in Thailand?
+              - How many days can Americans stay in Thailand visa-free?
+          - slot: visa_required
+            queries:
+              - Do Americans need a visa for Thailand?
+              - Is a visa required for American citizens visiting Thailand?
+      - id: th_gb_visa
+        nationality: United Kingdom
+        category: visa_policy
+        truth: {max_stay_days: 60}
+        questions:
+          - slot: max_stay_days
+            queries:
+              - How long can British tourists stay in Thailand?
+              - How many days can British citizens stay in Thailand visa-free?
+      - id: th_health
+        nationality: India
+        category: vaccination_requirement
+        truth: {vaccine_required: false, vaccine_name: yellow fever, certificate_required: false}
+        questions:
+          - slot: vaccine_required
+            queries:
+              - Do Indian travellers need a yellow fever vaccine for Thailand?
+              - Is yellow fever vaccination required for Indians entering Thailand?
+              - Does Thailand require any vaccine from Indian visitors?
+          - slot: certificate_required
+            queries:
+              - Do I need a vaccination certificate to enter Thailand?
+              - Is a yellow fever certificate required for Indian tourists in Thailand?
+              - Does Thailand ask for proof of vaccination at the border?
+          - slot: vaccine_name
+            queries:
+              - Which vaccine is needed for Thailand?
+              - What vaccine does Thailand check for on arrival?
+      - id: th_customs
+        nationality: India
+        category: customs_regulation
+        truth: {duty_free_limit: 20000 THB}
+        items: {e-cigarette: prohibited, drone: restricted, alcohol: allowed}
+        questions:
+          - slot: item_allowed
+            item: e-cigarette
+            queries:
+              - Can I bring an e-cigarette through customs in Thailand?
+              - Is it allowed to import an e-cigarette into Thailand?
+              - Is a vape prohibited by customs in Thailand?
+          - slot: item_allowed
+            item: drone
+            queries:
+              - Can I bring a drone to Thailand through customs?
+              - Is it allowed to import a drone into Thailand?
+              - Does Thailand customs allow me to bring my drone?
+          - slot: duty_free_limit
+            queries:
+              - What is the duty-free allowance for personal goods in Thailand?
+              - How much can I bring into Thailand duty free?
+              - What is the duty free limit for travellers entering Thailand?
+
+  Singapore:
+    docs:
+      - id: sg_visa_in_gov_2026
+        category: visa_policy
+        source_type: government
+        domain: ica.gov.sg.example
+        scope: IN
+        content_date: "2026-01-20"
+        title: Singapore visa requirements for Indian nationals
+        text: >-
+          Indian nationals must obtain a visa before travelling to Singapore. Applications are
+          submitted through an authorised visa agent or a Singapore overseas mission. Visitors
+          are granted a stay of up to 30 days on arrival in Singapore.
+        claims: {visa_required: true, max_stay_days: 30}
+      - id: sg_visa_in_forum_2026
+        category: visa_policy
+        source_type: forum_social
+        domain: backpackerforum.example
+        scope: IN
+        content_date: "2026-06-02"
+        title: Singapore visa for Indians?
+        text: >-
+          Indians don't need a visa for Singapore anymore, it is visa-free now and you can
+          stay in Singapore for 30 days.
+        claims: {visa_required: false, visa_type: visa_free, max_stay_days: 30}
+      - id: sg_health_gov_2026
+        category: vaccination_requirement
+        source_type: government
+        domain: moh.gov.sg.example
+        scope: ALL
+        content_date: "2026-02-14"
+        title: Singapore health entry requirements
+        text: >-
+          Singapore has ended its COVID-19 vaccination rules for travellers. Proof of vaccination
+          is not required for entry to Singapore.
+        claims: {vaccine_required: false, vaccine_name: covid-19, certificate_required: false}
+      - id: sg_health_gov_archive_2022
+        category: vaccination_requirement
+        source_type: government
+        domain: moh.gov.sg.example
+        scope: ALL
+        content_date: "2022-04-01"
+        snapshot_date: "2022-08-01"
+        title: Vaccinated Travel Framework (archived notice)
+        text: >-
+          Under the Vaccinated Travel Framework, travellers entering Singapore must have a valid
+          COVID-19 vaccination certificate.
+        claims: {vaccine_required: true, vaccine_name: covid-19, certificate_required: true}
+      - id: sg_customs_vape_gov_2025
+        category: customs_regulation
+        source_type: government
+        domain: customs.gov.sg.example
+        scope: ALL
+        content_date: "2025-09-01"
+        title: E-cigarettes are prohibited in Singapore
+        text: >-
+          E-cigarettes and vaporisers are prohibited in Singapore. Travellers found bringing an
+          e-cigarette into Singapore face fines, and the device will be confiscated.
+        claims: {item_allowed: {e-cigarette: prohibited}}
+      - id: sg_customs_allowance_gov_2026
+        category: customs_regulation
+        source_type: government
+        domain: customs.gov.sg.example
+        scope: ALL
+        content_date: "2026-03-01"
+        title: Singapore GST relief for travellers
+        text: >-
+          Travellers who have been away from Singapore for 48 hours or more receive GST relief on
+          goods worth up to SGD 500. A customs declaration is required at the Red Channel for goods
+          above this value.
+        claims: {duty_free_limit: 500 SGD, declaration_required: true}
+      - id: sg_customs_allowance_ica_unrevised
+        category: customs_regulation
+        source_type: government
+        domain: ica.gov.sg.example
+        scope: ALL
+        content_date: "2021-03-01"
+        title: Singapore arrival guide (page not revised)
+        text: >-
+          Arrival guide: travellers away from Singapore for 48 hours or more get GST relief on goods
+          worth up to SGD 600.
+        claims: {duty_free_limit: 600 SGD}
+      - id: sg_customs_allowance_blog_2021
+        category: customs_regulation
+        source_type: travel_blog
+        domain: sgshopper.blog.example
+        scope: ALL
+        content_date: "2021-05-10"
+        title: Shopping abroad and Singapore GST relief
+        text: >-
+          Singapore GST relief lets returning travellers bring in SGD 600 of goods if they were
+          away from Singapore for 48 hours.
+        claims: {duty_free_limit: 600 SGD}
+      - id: sg_customs_medicine_gov_2025
+        category: customs_regulation
+        source_type: government
+        domain: hsa.gov.sg.example
+        scope: ALL
+        content_date: "2025-07-15"
+        title: Bringing personal medicine into Singapore
+        text: >-
+          Travellers bringing medicine into Singapore need approval from the Health Sciences
+          Authority if the quantity exceeds three months of personal supply.
+        claims: {item_allowed: {medicine: restricted}}
+    facts:
+      - id: sg_in_visa
+        nationality: India
+        category: visa_policy
+        truth: {visa_required: true, max_stay_days: 30}
+        questions:
+          - slot: visa_required
+            queries:
+              - Do Indians need a visa for Singapore?
+              - Is a visa required for Indian citizens visiting Singapore?
+              - Can Indian passport holders enter Singapore without a visa?
+          - slot: max_stay_days
+            queries:
+              - How long can an Indian tourist stay in Singapore?
+              - What is the maximum stay in Singapore for Indian visitors?
+      - id: sg_health
+        nationality: India
+        category: vaccination_requirement
+        truth: {vaccine_required: false, certificate_required: false}
+        questions:
+          - slot: certificate_required
+            queries:
+              - Do I need a COVID vaccination certificate to enter Singapore?
+              - Is proof of vaccination required for travellers to Singapore?
+              - Does Singapore still ask for a covid vaccination certificate?
+          - slot: vaccine_required
+            queries:
+              - Is a covid vaccine required to travel to Singapore?
+              - Do I have to be vaccinated against covid to visit Singapore?
+      - id: sg_customs
+        nationality: India
+        category: customs_regulation
+        truth: {duty_free_limit: 500 SGD, declaration_required: true}
+        items: {e-cigarette: prohibited, medicine: restricted}
+        questions:
+          - slot: item_allowed
+            item: e-cigarette
+            queries:
+              - Can I bring an e-cigarette through Singapore customs?
+              - Is it allowed to import an e-cigarette into Singapore?
+              - Is a vape prohibited by customs in Singapore?
+          - slot: item_allowed
+            item: medicine
+            queries:
+              - Can I bring my medicine into Singapore through customs?
+              - Is it allowed to import medication into Singapore?
+              - Does Singapore customs allow travellers to bring medicines?
+          - slot: duty_free_limit
+            queries:
+              - What is the duty-free limit for goods when returning to Singapore?
+              - How much is the duty free GST relief for travellers in Singapore?
+              - What is the Singapore duty-free allowance for shopping abroad?
+          - slot: declaration_required
+            queries:
+              - Do I need to declare goods above the GST relief limit at Singapore customs?
+              - Is a customs declaration needed in Singapore for goods over the allowance?
+
+      - id: sg_gb_customs
+        nationality: United Kingdom
+        category: customs_regulation
+        items: {e-cigarette: prohibited}
+        questions:
+          - slot: item_allowed
+            item: e-cigarette
+            queries:
+              - Can British travellers bring an e-cigarette through Singapore customs?
+              - Is a vape prohibited for British visitors at customs in Singapore?
+
+  Malaysia:
+    docs:
+      - id: my_visa_in_gov_2026
+        category: visa_policy
+        source_type: government
+        domain: imi.gov.my.example
+        scope: IN
+        content_date: "2026-01-05"
+        title: Malaysia visa exemption for Indian citizens
+        text: >-
+          Indian citizens can enter Malaysia visa-free for stays of up to 30 days. The visa
+          exemption for Indian citizens has been extended until 31 December 2026.
+        claims: {visa_required: false, visa_type: visa_free, max_stay_days: 30}
+      - id: my_visa_in_blog_2023
+        category: visa_policy
+        source_type: travel_blog
+        domain: wanderdesi.blog.example
+        scope: IN
+        content_date: "2023-06-10"
+        title: Getting an eNTRI for Malaysia
+        text: >-
+          Indian travellers must obtain an eNTRI or e-visa before flying to Malaysia, and the
+          eNTRI only allows a stay of 15 days in Malaysia.
+        claims: {visa_required: true, visa_type: evisa, max_stay_days: 15}
+    facts:
+      - id: my_in_visa
+        nationality: India
+        category: visa_policy
+        truth: {visa_required: false, visa_type: visa_free, max_stay_days: 30}
+        questions:
+          - slot: visa_required
+            queries:
+              - Do Indians need a visa for Malaysia?
+              - Is a visa required for Indian tourists visiting Malaysia?
+              - Does an Indian passport holder need a visa to enter Malaysia?
+          - slot: max_stay_days
+            queries:
+              - How long can Indians stay in Malaysia?
+              - What is the maximum stay in Malaysia for Indian travellers?
+              - How many days can an Indian tourist stay in Malaysia?
+          - slot: visa_type
+            queries:
+              - Do Indians need an e-visa for Malaysia?
+              - Which visa type applies to Indian citizens visiting Malaysia?
+
+  Indonesia:
+    docs:
+      - id: id_visa_in_gov_2026
+        category: visa_policy
+        source_type: government
+        domain: imigrasi.go.id.example
+        scope: IN
+        content_date: "2026-02-20"
+        title: Indonesia visa on arrival for Indian passport holders
+        text: >-
+          Indian passport holders can obtain a visa on arrival at major airports in Indonesia,
+          including Bali. A visa on arrival is required for tourism and allows a stay of up to
+          30 days. Passports must be valid for at least 6 months on entry to Indonesia.
+        claims: {visa_required: true, visa_type: visa_on_arrival, max_stay_days: 30, passport_validity_months: 6}
+      - id: id_visa_in_gov_archive_2019
+        category: visa_policy
+        source_type: government
+        domain: imigrasi.go.id.example
+        scope: IN
+        content_date: "2019-01-10"
+        snapshot_date: "2019-12-01"
+        title: Indonesia visa-free entry for Indian citizens (archived notice)
+        text: >-
+          Citizens of India are granted visa-free entry to Indonesia for tourism, with a stay of
+          up to 30 days.
+        claims: {visa_required: false, visa_type: visa_free, max_stay_days: 30}
+    facts:
+      - id: id_in_visa
+        nationality: India
+        category: visa_policy
+        truth: {visa_required: true, visa_type: visa_on_arrival, max_stay_days: 30, passport_validity_months: 6}
+        questions:
+          - slot: visa_required
+            queries:
+              - Do Indians need a visa for Indonesia?
+              - Is a visa required for Indian travellers going to Indonesia?
+              - Does an Indian citizen need a visa to visit Indonesia?
+          - slot: visa_type
+            queries:
+              - Which visa type do Indians get for Indonesia?
+              - Do Indian tourists need an e-visa or visa on arrival for Indonesia?
+          - slot: max_stay_days
+            queries:
+              - How long can Indian tourists stay in Indonesia?
+              - How many days can Indians stay in Indonesia on arrival?
+
+  Japan:
+    docs:
+      - id: jp_visa_in_gov_2026
+        category: visa_policy
+        source_type: government
+        domain: mofa.go.jp.example
+        scope: IN
+        content_date: "2026-04-01"
+        title: Japan visa for Indian nationals
+        text: >-
+          Indian nationals must have a visa to visit Japan for tourism. Short-term visitors can
+          apply online for a Japan e-visa, which permits a stay of up to 90 days.
+        claims: {visa_required: true, visa_type: evisa, max_stay_days: 90}
+      - id: jp_visa_in_blog_2022
+        category: visa_policy
+        source_type: travel_blog
+        domain: wanderdesi.blog.example
+        scope: IN
+        content_date: "2022-09-12"
+        title: How I got my Japan tourist visa
+        text: >-
+          For Indians, Japan needs an embassy visa: you submit your passport at a visa centre and
+          wait about a week. The tourist visa I got for Japan allowed a stay of 15 days.
+        claims: {visa_type: embassy_visa, max_stay_days: 15}
+      - id: jp_health_gov_2026
+        category: vaccination_requirement
+        source_type: government
+        domain: mhlw.go.jp.example
+        scope: ALL
+        content_date: "2026-01-15"
+        title: Japan border health measures
+        text: >-
+          Japan has ended all COVID-19 border measures, and a vaccination certificate is not
+          required for entry to Japan.
+        claims: {vaccine_required: false, vaccine_name: covid-19, certificate_required: false}
+      - id: jp_health_news_2023
+        category: vaccination_requirement
+        source_type: news
+        domain: asiatravelnews.example
+        scope: ALL
+        content_date: "2023-01-15"
+        title: Japan keeps border checks in place
+        text: >-
+          Japan keeps its border checks: a COVID-19 vaccination certificate is required for
+          arrivals in Japan, or travellers must show a negative test.
+        claims: {vaccine_required: true, vaccine_name: covid-19, certificate_required: true}
+      - id: jp_customs_allowance_gov_2025
+        category: customs_regulation
+        source_type: government
+        domain: customs.go.jp.example
+        scope: ALL
+        content_date: "2025-10-01"
+        title: Japan duty-free allowance
+        text: >-
+          Each traveller entering Japan receives a duty-free allowance of JPY 200,000 for personal
+          goods bought overseas.
+        claims: {duty_free_limit: 200000 JPY}
+      - id: jp_customs_medicine_gov_2026
+        category: customs_regulation
+        source_type: government
+        domain: mhlw.go.jp.example
+        scope: ALL
+        content_date: "2026-01-15"
+        title: Bringing medicine into Japan
+        text: >-
+          Travellers carrying more than a one-month supply of prescription medicine into Japan
+          need approval in the form of a Yunyu Kakunin-sho. Medicines containing stimulants are
+          not permitted.
+        claims: {item_allowed: {medicine: restricted}}
+      - id: jp_customs_medicine_forum_2024
+        category: customs_regulation
+        source_type: forum_social
+        domain: backpackerforum.example
+        scope: ALL
+        content_date: "2024-03-02"
+        title: Medicine in Japan luggage
+        text: >-
+          You can carry any medicine into Japan, customs in Japan never checks.
+        claims: {item_allowed: {medicine: allowed}}
+    facts:
+      - id: jp_in_visa
+        nationality: India
+        category: visa_policy
+        truth: {visa_required: true, visa_type: evisa, max_stay_days: 90}
+        questions:
+          - slot: visa_type
+            queries:
+              - Which visa type do Indians need for Japan?
+              - Can Indian citizens apply for a Japan e-visa?
+              - What visa type is issued to Indian tourists visiting Japan?
+          - slot: max_stay_days
+            queries:
+              - How long can an Indian tourist stay in Japan?
+              - What is the maximum stay in Japan for Indian visitors?
+              - How many days can Indians stay in Japan on a tourist visa?
+          - slot: visa_required
+            queries:
+              - Do Indians need a visa for Japan?
+              - Is a visa required for Indian nationals travelling to Japan?
+      - id: jp_health
+        nationality: India
+        category: vaccination_requirement
+        truth: {vaccine_required: false, certificate_required: false}
+        questions:
+          - slot: certificate_required
+            queries:
+              - Do I need a COVID vaccination certificate for Japan?
+              - Is a vaccination certificate required to enter Japan?
+              - Does Japan still ask travellers for proof of covid vaccination?
+      - id: jp_customs
+        nationality: India
+        category: customs_regulation
+        truth: {duty_free_limit: 200000 JPY}
+        items: {medicine: restricted}
+        questions:
+          - slot: duty_free_limit
+            queries:
+              - What is the duty-free allowance in Japan?
+              - How much can I bring into Japan duty free?
+          - slot: item_allowed
+            item: medicine
+            queries:
+              - Can I bring my prescription medicine into Japan through customs?
+              - Is it allowed to import medication into Japan?
+              - Does Japan customs allow travellers to carry medicines?
+
+      - id: jp_us_customs
+        nationality: United States
+        category: customs_regulation
+        truth: {duty_free_limit: 200000 JPY}
+        questions:
+          - slot: duty_free_limit
+            queries:
+              - What is the duty-free allowance in Japan for American tourists?
+              - How much can an American visitor bring into Japan duty free?
+
+  Nepal:
+    docs:
+      - id: np_visa_in_gov_2026
+        category: visa_policy
+        source_type: government
+        domain: immigration.gov.np.example
+        scope: IN
+        content_date: "2026-03-10"
+        title: Entry to Nepal for Indian citizens
+        text: >-
+          Indian citizens can enter Nepal without a visa. A visa is not required for Indian
+          nationals, who can travel to Nepal with a valid passport or voter ID card.
+        claims: {visa_required: false}
+      - id: np_visa_foreign_gov_2026
+        category: visa_policy
+        source_type: government
+        domain: immigration.gov.np.example
+        scope: GB,US,AU,CA
+        content_date: "2026-03-10"
+        title: Nepal tourist visa for foreign nationals
+        text: >-
+          Foreign nationals from countries such as the United Kingdom, the United States,
+          Australia and Canada must obtain a tourist visa for Nepal. A visa on arrival is
+          available at Tribhuvan International Airport for stays of 15, 30 or 90 days.
+        claims: {visa_required: true, visa_type: visa_on_arrival, max_stay_days: 90}
+    facts:
+      - id: np_in_visa
+        nationality: India
+        category: visa_policy
+        truth: {visa_required: false}
+        questions:
+          - slot: visa_required
+            queries:
+              - Do Indians need a visa for Nepal?
+              - Is a visa required for Indian citizens travelling to Nepal?
+              - Can Indian nationals enter Nepal without a visa?
+      - id: np_us_visa
+        nationality: United States
+        category: visa_policy
+        truth: {visa_required: true, visa_type: visa_on_arrival, max_stay_days: 90}
+        questions:
+          - slot: visa_type
+            queries:
+              - What visa type do Americans get for Nepal?
+              - Is there an e-visa or visa on arrival for Americans visiting Nepal?
+          - slot: max_stay_days
+            queries:
+              - How long can American tourists stay in Nepal?
+              - What is the maximum stay in Nepal for Americans?
+
+  Kenya:
+    docs:
+      - id: ke_visa_gov_2026
+        category: visa_policy
+        source_type: government
+        domain: immigration.go.ke.example
+        scope: ALL
+        content_date: "2026-01-15"
+        title: Kenya Electronic Travel Authorisation
+        text: >-
+          Kenya is visa-free for visitors from all countries, but every traveller must apply for
+          an Electronic Travel Authorisation (eTA) before departure. An approved eTA allows a stay
+          of up to 90 days in Kenya.
+        claims: {visa_required: false, visa_type: visa_free, max_stay_days: 90}
+      - id: ke_visa_in_blog_2023
+        category: visa_policy
+        source_type: travel_blog
+        domain: wanderdesi.blog.example
+        scope: IN
+        content_date: "2023-07-01"
+        title: Applying for the Kenya e-visa
+        text: >-
+          As Indian tourists we had to apply for the Kenya e-visa online, and the visa is mandatory
+          before boarding any flight to Kenya.
+        claims: {visa_required: true, visa_type: evisa}
+      - id: ke_visa_in_forum_2026
+        category: visa_policy
+        source_type: forum_social
+        domain: safaritalk.forum.example
+        scope: IN
+        content_date: "2026-09-05"
+        title: Kenya e-visa for Indians still needed?
+        text: >-
+          Kenya still requires an e-visa for Indians, it is mandatory and you pay online before
+          you fly to Kenya.
+        claims: {visa_required: true, visa_type: evisa}
+      - id: ke_health_gov_2026
+        category: vaccination_requirement
+        source_type: government
+        domain: health.go.ke.example
+        scope: ALL
+        content_date: "2026-02-01"
+        title: Kenya yellow fever requirements
+        text: >-
+          Kenya recommends yellow fever vaccination for visitors. A yellow fever certificate is
+          checked only for travellers arriving from countries with risk of transmission, and
+          travellers arriving from India are not required to show it in Kenya.
+        claims: {vaccine_required: false, vaccine_name: yellow fever, certificate_required: false}
+    facts:
+      - id: ke_in_visa
+        nationality: India
+        category: visa_policy
+        truth: {visa_required: false, visa_type: visa_free, max_stay_days: 90}
+        questions:
+          - slot: visa_required
+            queries:
+              - Do Indians need a visa for Kenya?
+              - Is a visa required for Indian tourists visiting Kenya?
+              - Does an Indian passport holder need a visa to travel to Kenya?
+          - slot: visa_type
+            queries:
+              - Do Indians need an e-visa for Kenya?
+              - Which visa type applies to Indian travellers going to Kenya?
+      - id: ke_us_visa
+        nationality: United States
+        category: visa_policy
+        truth: {visa_required: false}
+        questions:
+          - slot: visa_required
+            queries:
+              - Do Americans need a visa for Kenya?
+              - Is a visa required for American citizens travelling to Kenya?
+      - id: ke_health
+        nationality: India
+        category: vaccination_requirement
+        truth: {vaccine_name: yellow fever, certificate_required: false}
+        questions:
+          - slot: vaccine_name
+            queries:
+              - Which vaccine is recommended for Kenya?
+              - What vaccine should I get before travelling to Kenya?
+          - slot: certificate_required
+            queries:
+              - Do Indian travellers need a yellow fever certificate for Kenya?
+              - Is proof of yellow fever vaccination required to enter Kenya?
+
+  United Kingdom:
+    docs:
+      - id: uk_visa_in_gov_2026
+        category: visa_policy
+        source_type: government
+        domain: gov.uk.example
+        scope: IN
+        content_date: "2026-05-01"
+        title: Standard Visitor visa for Indian nationals
+        text: >-
+          Indian nationals must obtain a Standard Visitor visa before travelling to the United
+          Kingdom. A Standard Visitor visa lets you stay in the United Kingdom for up to 6 months.
+        claims: {visa_required: true, max_stay_days: 180}
+      - id: uk_visa_in_forum_2025
+        category: visa_policy
+        source_type: forum_social
+        domain: backpackerforum.example
+        scope: IN
+        content_date: "2025-12-01"
+        title: UK ETA for Indians?
+        text: >-
+          With the new ETA, Indians can now visit the United Kingdom visa-free and stay for
+          6 months.
+        claims: {visa_required: false, visa_type: visa_free, max_stay_days: 180}
+      - id: uk_visa_us_gov_2026
+        category: visa_policy
+        source_type: government
+        domain: gov.uk.example
+        scope: US,AU,CA
+        content_date: "2026-05-01"
+        title: Visiting the United Kingdom with an ETA
+        text: >-
+          American citizens can visit the United Kingdom visa-free and stay for up to 6 months.
+          They must have an electronic travel authorisation (ETA) before travelling.
+        claims: {visa_required: false, visa_type: visa_free, max_stay_days: 180}
+      - id: uk_customs_allowance_gov_2026
+        category: customs_regulation
+        source_type: government
+        domain: gov.uk.example
+        scope: ALL
+        content_date: "2026-01-10"
+        title: Bringing goods into the United Kingdom
+        text: >-
+          Travellers arriving in the United Kingdom from outside Great Britain can bring in goods
+          worth up to GBP 390 without paying duty.
+        claims: {duty_free_limit: 390 GBP}
+      - id: uk_customs_allowance_blog_2008
+        category: customs_regulation
+        source_type: travel_blog
+        domain: sgshopper.blog.example
+        scope: ALL
+        content_date: "2008-06-01"
+        title: UK customs allowance guide
+        text: >-
+          The duty-free allowance for other goods when flying into the United Kingdom is GBP 145
+          per traveller.
+        claims: {duty_free_limit: 145 GBP}
+    facts:
+      - id: uk_in_visa
+        nationality: India
+        category: visa_policy
+        truth: {visa_required: true, max_stay_days: 180}
+        questions:
+          - slot: visa_required
+            queries:
+              - Do Indians need a visa for the UK?
+              - Is a visa required for Indian citizens visiting the United Kingdom?
+              - Can Indian passport holders visit Britain without a visa?
+          - slot: max_stay_days
+            queries:
+              - How long can Indian visitors stay in the UK?
+              - What is the maximum stay in the United Kingdom on an Indian visitor visa?
+      - id: uk_us_visa
+        nationality: United States
+        category: visa_policy
+        truth: {visa_required: false}
+        questions:
+          - slot: visa_required
+            queries:
+              - Do Americans need a visa for the UK?
+              - Is a visa required for American citizens visiting Britain?
+      - id: uk_customs
+        nationality: India
+        category: customs_regulation
+        truth: {duty_free_limit: 390 GBP}
+        questions:
+          - slot: duty_free_limit
+            queries:
+              - What is the duty-free allowance when arriving in the UK?
+              - How much can I bring into the United Kingdom duty free?
+              - What is the UK duty free limit for goods?
+
+  United States:
+    docs:
+      - id: us_visa_in_gov_2026
+        category: visa_policy
+        source_type: government
+        domain: travel.state.gov.example
+        scope: IN
+        content_date: "2026-03-01"
+        title: Visitor visas for Indian citizens
+        text: >-
+          Indian citizens must obtain a B-2 visitor visa from a consulate before travelling to the
+          United States. A visa interview is mandatory for first-time applicants.
+        claims: {visa_required: true}
+      - id: us_customs_allowance_gov_2025
+        category: customs_regulation
+        source_type: government
+        domain: cbp.gov.example
+        scope: ALL
+        content_date: "2025-08-01"
+        title: Personal exemptions for returning travellers
+        text: >-
+          Each returning traveller to the United States has a duty-free personal exemption of
+          USD 800 on goods acquired abroad.
+        claims: {duty_free_limit: 800 USD}
+      - id: us_customs_allowance_blog_2008
+        category: customs_regulation
+        source_type: travel_blog
+        domain: sgshopper.blog.example
+        scope: ALL
+        content_date: "2008-04-20"
+        title: Know your US customs exemption
+        text: >-
+          The duty-free personal exemption when returning to the United States is USD 400 per
+          person.
+        claims: {duty_free_limit: 400 USD}
+      - id: us_customs_currency_gov_2025
+        category: customs_regulation
+        source_type: government
+        domain: cbp.gov.example
+        scope: ALL
+        content_date: "2025-08-01"
+        title: Declaring currency when entering the United States
+        text: >-
+          Travellers entering the United States with currency of more than ten thousand US dollars
+          must file a report with CBP. A currency declaration is required for amounts above this
+          threshold.
+        claims: {declaration_required: true}
+    facts:
+      - id: us_in_visa
+        nationality: India
+        category: visa_policy
+        truth: {visa_required: true}
+        questions:
+          - slot: visa_required
+            queries:
+              - Do Indians need a visa for the United States?
+              - Is a visa required for Indian citizens visiting the USA?
+      - id: us_customs
+        nationality: India
+        category: customs_regulation
+        truth: {duty_free_limit: 800 USD, declaration_required: true}
+        questions:
+          - slot: duty_free_limit
+            queries:
+              - What is the duty-free personal exemption for the United States?
+              - How much can I bring into the USA duty free?
+          - slot: declaration_required
+            queries:
+              - Do I have to declare cash when entering the United States?
+              - Is a customs declaration required for large amounts of currency in the USA?
+
+  Australia:
+    docs:
+      - id: au_visa_in_gov_2026
+        category: visa_policy
+        source_type: government
+        domain: immi.homeaffairs.gov.au.example
+        scope: IN
+        content_date: "2026-02-01"
+        title: Visitor visa (subclass 600) for Indian passport holders
+        text: >-
+          Indian passport holders must obtain a Visitor visa (subclass 600) to travel to Australia.
+          Applications are lodged online as an electronic visa, and the visa can allow a stay of up
+          to 3 months per visit to Australia.
+        claims: {visa_required: true, visa_type: evisa, max_stay_days: 90}
+      - id: au_health_gov_2026
+        category: vaccination_requirement
+        source_type: government
+        domain: health.gov.au.example
+        scope: ALL
+        content_date: "2026-01-20"
+        title: Australia international arrivals health information
+        text: >-
+          Australia removed its COVID-19 vaccination rules for international travellers in 2022.
+          Travellers are not required to provide proof of vaccination to enter Australia.
+        claims: {vaccine_required: false, vaccine_name: covid-19, certificate_required: false}
+      - id: au_health_gov_archive_2022
+        category: vaccination_requirement
+        source_type: government
+        domain: health.gov.au.example
+        scope: ALL
+        content_date: "2022-02-21"
+        snapshot_date: "2022-06-30"
+        title: Australia border reopening for vaccinated travellers (archived notice)
+        text: >-
+          International travellers entering Australia must have proof of COVID-19 vaccination.
+        claims: {vaccine_required: true, vaccine_name: covid-19, certificate_required: true}
+      - id: au_customs_allowance_gov_2025
+        category: customs_regulation
+        source_type: government
+        domain: abf.gov.au.example
+        scope: ALL
+        content_date: "2025-11-01"
+        title: Australia duty-free concessions
+        text: >-
+          Travellers aged 18 and over can bring general goods worth up to AUD 900 into Australia
+          duty-free.
+        claims: {duty_free_limit: 900 AUD}
+      - id: au_customs_food_gov_2025
+        category: customs_regulation
+        source_type: government
+        domain: abf.gov.au.example
+        scope: ALL
+        content_date: "2025-11-01"
+        title: Declaring food when arriving in Australia
+        text: >-
+          All food must be declared when arriving in Australia, and a declaration is mandatory even
+          for small amounts. Biosecurity officers inspect the food and some products are restricted.
+        claims: {declaration_required: true, item_allowed: {food: restricted}}
+      - id: au_customs_food_blog_2024
+        category: customs_regulation
+        source_type: travel_blog
+        domain: wanderdesi.blog.example
+        scope: ALL
+        content_date: "2024-05-01"
+        title: Snacks to pack for Australia
+        text: >-
+          You can carry packaged snacks into Australia without telling anyone; food is allowed in
+          Australia if it is sealed.
+        claims: {item_allowed: {food: allowed}}
+    facts:
+      - id: au_in_visa
+        nationality: India
+        category: visa_policy
+        truth: {visa_required: true, visa_type: evisa, max_stay_days: 90}
+        questions:
+          - slot: visa_type
+            queries:
+              - Which visa type do Indians need for Australia?
+              - Can Indian citizens apply for an e-visa to Australia?
+          - slot: max_stay_days
+            queries:
+              - How long can Indian visitors stay in Australia?
+              - What is the maximum stay in Australia on an Indian visitor visa?
+      - id: au_health
+        nationality: India
+        category: vaccination_requirement
+        truth: {vaccine_required: false, certificate_required: false}
+        questions:
+          - slot: certificate_required
+            queries:
+              - Do I need proof of COVID vaccination to enter Australia?
+              - Is a vaccination certificate required for travel to Australia?
+              - Does Australia ask for a covid vaccination certificate on arrival?
+      - id: au_customs
+        nationality: India
+        category: customs_regulation
+        truth: {duty_free_limit: 900 AUD, declaration_required: true}
+        items: {food: restricted}
+        questions:
+          - slot: duty_free_limit
+            queries:
+              - What is the duty-free allowance for goods in Australia?
+              - How much can I bring into Australia duty free?
+          - slot: item_allowed
+            item: food
+            queries:
+              - Can I bring food into Australia through customs?
+              - Is it allowed to import food into Australia?
+              - Do customs in Australia allow travellers to carry food?
+          - slot: declaration_required
+            queries:
+              - Do I need to declare food at customs in Australia?
+              - Is a customs declaration required for food entering Australia?
+
+      - id: au_gb_customs
+        nationality: United Kingdom
+        category: customs_regulation
+        items: {food: restricted}
+        questions:
+          - slot: item_allowed
+            item: food
+            queries:
+              - Can British travellers bring food into Australia through customs?
+              - Is it allowed for a British visitor to import food into Australia?
+
+  Canada:
+    docs:
+      - id: ca_visa_in_gov_2026
+        category: visa_policy
+        source_type: government
+        domain: canada.ca.example
+        scope: IN
+        content_date: "2026-04-01"
+        title: Visitor visa for Indian citizens
+        text: >-
+          Indian citizens must have a visitor visa to travel to Canada. A border officer can
+          authorise a stay of up to 6 months in Canada.
+        claims: {visa_required: true, max_stay_days: 180}
+      - id: ca_visa_in_forum_2024
+        category: visa_policy
+        source_type: forum_social
+        domain: backpackerforum.example
+        scope: IN
+        content_date: "2024-02-11"
+        title: Canada eTA for Indians with a US visa
+        text: >-
+          Indians with a valid US visa can enter Canada visa-free with just an eTA, no visitor
+          visa needed for Canada.
+        claims: {visa_required: false, visa_type: visa_free}
+      - id: ca_visa_gb_gov_2026
+        category: visa_policy
+        source_type: government
+        domain: canada.ca.example
+        scope: GB,AU,JP
+        content_date: "2026-04-01"
+        title: Electronic Travel Authorization for British citizens
+        text: >-
+          British citizens can travel to Canada visa-free by air but must have an Electronic Travel
+          Authorization (eTA). A stay of up to 6 months in Canada is allowed.
+        claims: {visa_required: false, visa_type: visa_free, max_stay_days: 180}
+      - id: ca_health_gov_2026
+        category: vaccination_requirement
+        source_type: government
+        domain: canada.ca.example
+        scope: ALL
+        content_date: "2026-01-10"
+        title: Canada border health measures
+        text: >-
+          Canada ended its COVID-19 vaccination rules for travellers in October 2022. Proof of
+          vaccination is not required to enter Canada.
+        claims: {vaccine_required: false, vaccine_name: covid-19, certificate_required: false}
+      - id: ca_health_forum_2022
+        category: vaccination_requirement
+        source_type: forum_social
+        domain: backpackerforum.example
+        scope: ALL
+        content_date: "2022-06-10"
+        title: ArriveCAN and vaccination proof
+        text: >-
+          You must have proof of COVID vaccination and an ArriveCAN receipt to enter Canada.
+        claims: {vaccine_required: true, vaccine_name: covid, certificate_required: true}
+    facts:
+      - id: ca_in_visa
+        nationality: India
+        category: visa_policy
+        truth: {visa_required: true, max_stay_days: 180}
+        questions:
+          - slot: visa_required
+            queries:
+              - Do Indians need a visa for Canada?
+              - Is a visa required for Indian citizens travelling to Canada?
+              - Can Indians with a US visa enter Canada without a Canadian visa?
+          - slot: max_stay_days
+            queries:
+              - How long can Indian visitors stay in Canada?
+              - What is the maximum stay in Canada for Indian tourists?
+      - id: ca_gb_visa
+        nationality: United Kingdom
+        category: visa_policy
+        truth: {visa_required: false, max_stay_days: 180}
+        questions:
+          - slot: visa_required
+            queries:
+              - Do British citizens need a visa for Canada?
+              - Is a visa required for British travellers visiting Canada?
+      - id: ca_health
+        nationality: India
+        category: vaccination_requirement
+        truth: {certificate_required: false}
+        questions:
+          - slot: certificate_required
+            queries:
+              - Do I need proof of COVID vaccination to enter Canada?
+              - Is a vaccination certificate still required for Canada?
+
+  India:
+    docs:
+      - id: in_customs_allowance_gov_2026
+        category: customs_regulation
+        source_type: government
+        domain: cbic.gov.in.example
+        scope: ALL
+        content_date: "2026-02-01"
+        title: India baggage rules and duty-free allowance
+        text: >-
+          Indian residents and foreigners arriving in India by air can bring goods worth up to
+          INR 50,000 free of duty as part of the baggage allowance.
+        claims: {duty_free_limit: 50000 INR}
+      - id: in_customs_allowance_blog_2015
+        category: customs_regulation
+        source_type: travel_blog
+        domain: wanderdesi.blog.example
+        scope: ALL
+        content_date: "2015-08-01"
+        title: Shopping limits when flying home to India
+        text: >-
+          The duty-free allowance for Indians returning home to India is INR 35,000, so anything
+          above that attracts customs duty.
+        claims: {duty_free_limit: 35000 INR}
+      - id: in_customs_vape_gov_2025
+        category: customs_regulation
+        source_type: government
+        domain: cbic.gov.in.example
+        scope: ALL
+        content_date: "2025-06-01"
+        title: E-cigarettes and Indian customs
+        text: >-
+          Under the Prohibition of Electronic Cigarettes Act, 2019, the import of an e-cigarette into
+          India is prohibited, including e-cigarette devices carried in baggage.
+        claims: {item_allowed: {e-cigarette: prohibited}}
+      - id: in_customs_vape_blog_2018
+        category: customs_regulation
+        source_type: travel_blog
+        domain: wanderdesi.blog.example
+        scope: ALL
+        content_date: "2018-11-01"
+        title: Travelling to India with an e-cigarette
+        text: >-
+          Taking your e-cigarette to India is fine; it is allowed in checked baggage on flights to
+          India.
+        claims: {item_allowed: {e-cigarette: allowed}}
+      - id: in_customs_currency_gov_2025
+        category: customs_regulation
+        source_type: government
+        domain: cbic.gov.in.example
+        scope: ALL
+        content_date: "2025-06-01"
+        title: Declaring foreign currency on arrival in India
+        text: >-
+          Travellers arriving in India with foreign currency notes above five thousand US dollars
+          must file a report with customs. A currency declaration form is required when the total
+          foreign exchange exceeds ten thousand US dollars.
+        claims: {declaration_required: true}
+      - id: in_evisa_gov_2026
+        category: visa_policy
+        source_type: government
+        domain: indianvisaonline.gov.in.example
+        scope: GB,US,CA,JP
+        content_date: "2026-03-15"
+        title: India e-Tourist visa for British and American citizens
+        text: >-
+          British and American citizens must obtain an e-visa to visit India for tourism. The
+          e-Tourist visa allows each continuous stay of up to 180 days in India.
+        claims: {visa_required: true, visa_type: evisa, max_stay_days: 180}
+      - id: in_evisa_gb_blog_2019
+        category: visa_policy
+        source_type: travel_blog
+        domain: sgshopper.blog.example
+        scope: GB
+        content_date: "2019-02-02"
+        title: India e-visa tips for British visitors
+        text: >-
+          British visitors can get the India e-visa online, but each stay in India is limited to
+          60 days.
+        claims: {visa_type: evisa, max_stay_days: 60}
+    facts:
+      - id: in_customs
+        nationality: India
+        category: customs_regulation
+        truth: {duty_free_limit: 50000 INR, declaration_required: true}
+        items: {e-cigarette: prohibited}
+        questions:
+          - slot: duty_free_limit
+            queries:
+              - What is the duty-free allowance when arriving in India?
+              - How much can I bring into India duty free?
+              - What is the duty free limit for passengers flying into India?
+          - slot: item_allowed
+            item: e-cigarette
+            queries:
+              - Can I bring an e-cigarette through customs in India?
+              - Is it allowed to import an e-cigarette into India?
+              - Is a vape prohibited by customs when entering India?
+          - slot: declaration_required
+            queries:
+              - Do I need to declare foreign currency when arriving in India?
+              - Is a customs declaration required for foreign cash entering India?
+      - id: in_gb_visa
+        nationality: United Kingdom
+        category: visa_policy
+        truth: {visa_required: true, visa_type: evisa, max_stay_days: 180}
+        questions:
+          - slot: max_stay_days
+            queries:
+              - How long can British tourists stay in India on an e-visa?
+              - What is the maximum continuous stay in India for British visitors?
+          - slot: visa_type
+            queries:
+              - Which visa type do British citizens need for India?
+              - Can British nationals get an e-visa for India?
+      - id: in_us_visa
+        nationality: United States
+        category: visa_policy
+        truth: {visa_required: true}
+        questions:
+          - slot: visa_required
+            queries:
+              - Do Americans need a visa for India?
+              - Is a visa required for American tourists visiting India?
+
+  Sri Lanka:
+    docs:
+      - id: lk_eta_gov_faq_unrevised
+        category: visa_policy
+        source_type: government
+        domain: eta.gov.lk.example
+        scope: IN
+        content_date: "2023-04-01"
+        title: Sri Lanka ETA frequently asked questions (page not revised)
+        text: >-
+          Indian passport holders must obtain an Electronic Travel Authorization before travelling to
+          Sri Lanka. A visa is required in the form of an online ETA, which allows a stay of up to
+          30 days.
+        claims: {visa_required: true, max_stay_days: 30}
+      - id: lk_visa_free_embassy_2026
+        category: visa_policy
+        source_type: embassy
+        domain: highcommission.lk.example
+        scope: IN
+        content_date: "2026-02-10"
+        title: Visa-free entry to Sri Lanka for Indian citizens
+        text: >-
+          Indian citizens can visit Sri Lanka visa-free for tourism and stay for up to 30 days.
+          Travellers register their arrival details online before departure.
+        claims: {visa_required: false, visa_type: visa_free, max_stay_days: 30}
+    facts:
+      - id: lk_in_visa
+        nationality: India
+        category: visa_policy
+        truth: {visa_required: false, visa_type: visa_free, max_stay_days: 30}
+        questions:
+          - slot: visa_required
+            queries:
+              - Do Indians need a visa for Sri Lanka?
+              - Is a visa required for Indian tourists visiting Sri Lanka?
+              - Can Indian citizens enter Sri Lanka without a visa?
+          - slot: max_stay_days
+            queries:
+              - How long can Indians stay in Sri Lanka?
+              - What is the maximum stay in Sri Lanka for Indian tourists?
+          - slot: visa_type
+            queries:
+              - Which visa type applies to Indians visiting Sri Lanka?
+              - Do Indians need an e-visa for Sri Lanka?
+
+  Philippines:
+    docs:
+      - id: ph_visa_gov_faq_unrevised
+        category: visa_policy
+        source_type: government
+        domain: immigration.gov.ph.example
+        scope: IN
+        content_date: "2023-08-01"
+        title: Philippine e-visa for Indian nationals (page not revised)
+        text: >-
+          Indian nationals must obtain an e-visa before travelling to the Philippines. The Philippine
+          e-visa allows a stay of up to 30 days.
+        claims: {visa_required: true, visa_type: evisa, max_stay_days: 30}
+      - id: ph_visa_free_embassy_2025
+        category: visa_policy
+        source_type: embassy
+        domain: newdelhi.embassy.ph.example
+        scope: IN
+        content_date: "2025-06-08"
+        title: Visa-free entry to the Philippines for Indian nationals
+        text: >-
+          Indian nationals can enter the Philippines visa-free for tourism and stay for up to 14 days.
+          The stay under visa-free entry cannot be extended.
+        claims: {visa_required: false, visa_type: visa_free, max_stay_days: 14}
+      - id: ph_visa_free_news_2025
+        category: visa_policy
+        source_type: news
+        domain: asiatravelnews.example
+        scope: IN
+        content_date: "2025-06-12"
+        title: Philippines opens visa-free entry to Indian tourists
+        text: >-
+          From June 2025, Indian tourists can visit the Philippines visa-free and stay for 14 days.
+        claims: {visa_required: false, visa_type: visa_free, max_stay_days: 14}
+    facts:
+      - id: ph_in_visa
+        nationality: India
+        category: visa_policy
+        truth: {visa_required: false, visa_type: visa_free, max_stay_days: 14}
+        questions:
+          - slot: visa_required
+            queries:
+              - Do Indians need a visa for the Philippines?
+              - Is a visa required for Indian tourists visiting the Philippines?
+              - Can Indian nationals enter the Philippines without a visa?
+          - slot: max_stay_days
+            queries:
+              - How long can Indian tourists stay in the Philippines?
+              - How many days can Indians stay in the Philippines visa-free?
+          - slot: visa_type
+            queries:
+              - Which visa type do Indians get for the Philippines?
+              - Do Indian nationals need an e-visa for the Philippines?

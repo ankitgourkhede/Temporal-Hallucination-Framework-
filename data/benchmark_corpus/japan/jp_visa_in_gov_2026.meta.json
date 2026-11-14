@@ -1,0 +1,13 @@
+{
+  "doc_key": "jp_visa_in_gov_2026",
+  "title": "Japan visa for Indian nationals",
+  "url": "https://mofa.go.jp.example/jp-visa-in-gov-2026",
+  "source_domain": "mofa.go.jp.example",
+  "source_type": "government",
+  "country": "Japan",
+  "category": "visa_policy",
+  "nationality_scope": "IN",
+  "content_date": "2026-04-01",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

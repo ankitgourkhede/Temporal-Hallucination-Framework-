@@ -1,0 +1,13 @@
+{
+  "doc_key": "au_visa_in_gov_2026",
+  "title": "Visitor visa (subclass 600) for Indian passport holders",
+  "url": "https://immi.homeaffairs.gov.au.example/au-visa-in-gov-2026",
+  "source_domain": "immi.homeaffairs.gov.au.example",
+  "source_type": "government",
+  "country": "Australia",
+  "category": "visa_policy",
+  "nationality_scope": "IN",
+  "content_date": "2026-02-01",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

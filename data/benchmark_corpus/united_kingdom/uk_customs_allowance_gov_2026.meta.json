@@ -1,0 +1,13 @@
+{
+  "doc_key": "uk_customs_allowance_gov_2026",
+  "title": "Bringing goods into the United Kingdom",
+  "url": "https://gov.uk.example/uk-customs-allowance-gov-2026",
+  "source_domain": "gov.uk.example",
+  "source_type": "government",
+  "country": "United Kingdom",
+  "category": "customs_regulation",
+  "nationality_scope": "ALL",
+  "content_date": "2026-01-10",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

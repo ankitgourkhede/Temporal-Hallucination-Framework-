@@ -1,0 +1,13 @@
+{
+  "doc_key": "th_visa_in_embassy_unrevised",
+  "title": "Visa on arrival for Indian passport holders (page not revised)",
+  "url": "https://thaiembdelhi.embassy.example/th-visa-in-embassy-unrevised",
+  "source_domain": "thaiembdelhi.embassy.example",
+  "source_type": "embassy",
+  "country": "Thailand",
+  "category": "visa_policy",
+  "nationality_scope": "IN",
+  "content_date": "2023-02-01",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

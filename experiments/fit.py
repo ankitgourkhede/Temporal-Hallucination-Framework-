@@ -11,15 +11,12 @@ import yaml
 
 from experiments.benchmark import validate_benchmark
 from experiments.learn_weights import fit_all
+from experiments.metrics import values_match
 from trustrag.offline.reputation import SourceReputationStore
 from trustrag.pipeline import TrustRAGPipeline
 
 
-def _equal(left: Any, right: Any) -> bool:
-    try:
-        return float(left) == float(right)
-    except (TypeError, ValueError):
-        return str(left).strip().casefold() == str(right).strip().casefold()
+_equal = values_match
 
 
 def fit_from_benchmark(benchmark_path: str, config_path: str = "trustrag/config.yaml") -> dict[str, Any]:

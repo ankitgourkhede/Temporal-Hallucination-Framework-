@@ -1,7 +1,13 @@
-.PHONY: setup index search train-classifiers benchmark-check fit experiments report api demo-mock demo test
+.PHONY: setup dataset index-benchmark index search train-classifiers benchmark-check fit experiments report api demo-mock demo test
 
 setup:
 	python -m pip install -r requirements.txt
+
+dataset:
+	PYTHONPATH=. python scripts/build_dataset.py
+
+index-benchmark:
+	PYTHONPATH=. python -m trustrag.cli index --corpus data/benchmark_corpus --config trustrag/config.benchmark.yaml
 
 index:
 	PYTHONPATH=. python -m trustrag.cli index --corpus data/corpus --config trustrag/config.yaml
@@ -17,13 +23,13 @@ benchmark-check:
 	PYTHONPATH=. python -m experiments.check_benchmark --benchmark data/benchmark/benchmark.csv --classifier-data data/train/queries_labeled.csv
 
 fit:
-	PYTHONPATH=. python -m experiments.fit --benchmark data/benchmark/benchmark.csv --config trustrag/config.yaml
+	PYTHONPATH=. python -m experiments.fit --benchmark data/benchmark/benchmark.csv --config trustrag/config.benchmark.yaml
 
 experiments:
 	PYTHONPATH=. python -m experiments.run_all --smoke --config trustrag/config.yaml
 
 benchmark-experiments:
-	PYTHONPATH=. python -m experiments.run_all --benchmark data/benchmark/benchmark.csv --config trustrag/config.yaml
+	PYTHONPATH=. python -m experiments.run_all --benchmark data/benchmark/benchmark.csv --config trustrag/config.benchmark.yaml
 
 report:
 	PYTHONPATH=. python -m experiments.report

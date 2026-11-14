@@ -1,0 +1,13 @@
+{
+  "doc_key": "au_customs_allowance_gov_2025",
+  "title": "Australia duty-free concessions",
+  "url": "https://abf.gov.au.example/au-customs-allowance-gov-2025",
+  "source_domain": "abf.gov.au.example",
+  "source_type": "government",
+  "country": "Australia",
+  "category": "customs_regulation",
+  "nationality_scope": "ALL",
+  "content_date": "2025-11-01",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

@@ -1,0 +1,13 @@
+{
+  "doc_key": "ke_health_gov_2026",
+  "title": "Kenya yellow fever requirements",
+  "url": "https://health.go.ke.example/ke-health-gov-2026",
+  "source_domain": "health.go.ke.example",
+  "source_type": "government",
+  "country": "Kenya",
+  "category": "vaccination_requirement",
+  "nationality_scope": "ALL",
+  "content_date": "2026-02-01",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

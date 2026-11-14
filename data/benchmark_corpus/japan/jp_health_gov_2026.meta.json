@@ -1,0 +1,13 @@
+{
+  "doc_key": "jp_health_gov_2026",
+  "title": "Japan border health measures",
+  "url": "https://mhlw.go.jp.example/jp-health-gov-2026",
+  "source_domain": "mhlw.go.jp.example",
+  "source_type": "government",
+  "country": "Japan",
+  "category": "vaccination_requirement",
+  "nationality_scope": "ALL",
+  "content_date": "2026-01-15",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

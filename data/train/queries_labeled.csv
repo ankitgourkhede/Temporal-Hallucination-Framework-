@@ -1,0 +1,137 @@
+query,intent,category,paraphrase_of
+what are the entry requirements for the UK,travel_entry,visa_policy,clf_travel_entry_00
+what are the entry requirements for Thailand,travel_entry,visa_policy,clf_travel_entry_00
+what are the entry requirements for Vietnam,travel_entry,visa_policy,clf_travel_entry_00
+what are the entry requirements for Indonesia,travel_entry,visa_policy,clf_travel_entry_00
+visa rules for Canada for Indian passport holders,travel_entry,visa_policy,clf_travel_entry_01
+visa rules for Nepal for British passport holders,travel_entry,visa_policy,clf_travel_entry_01
+visa rules for Vietnam for Canadian passport holders,travel_entry,visa_policy,clf_travel_entry_01
+visa rules for the USA for Canadian passport holders,travel_entry,visa_policy,clf_travel_entry_01
+Australian passport visa-free countries list includes the USA?,travel_entry,visa_policy,clf_travel_entry_02
+Australian passport visa-free countries list includes the UK?,travel_entry,visa_policy,clf_travel_entry_02
+American passport visa-free countries list includes China?,travel_entry,visa_policy,clf_travel_entry_02
+Indian passport visa-free countries list includes Australia?,travel_entry,visa_policy,clf_travel_entry_02
+how do I apply for an e-visa to India,travel_entry,visa_policy,clf_travel_entry_03
+how do I apply for an e-visa to Singapore,travel_entry,visa_policy,clf_travel_entry_03
+how do I apply for an e-visa to the USA,travel_entry,visa_policy,clf_travel_entry_03
+how do I apply for an e-visa to Nepal,travel_entry,visa_policy,clf_travel_entry_03
+how many days of stay are allowed in Thailand,travel_entry,visa_policy,clf_travel_entry_04
+how many days of stay are allowed in Japan,travel_entry,visa_policy,clf_travel_entry_04
+how many days of stay are allowed in India,travel_entry,visa_policy,clf_travel_entry_04
+how many days of stay are allowed in Canada,travel_entry,visa_policy,clf_travel_entry_04
+is there a visa on arrival in Thailand,travel_entry,visa_policy,clf_travel_entry_05
+is there a visa on arrival in Australia,travel_entry,visa_policy,clf_travel_entry_05
+is there a visa on arrival in Indonesia,travel_entry,visa_policy,clf_travel_entry_05
+is there a visa on arrival in the UK,travel_entry,visa_policy,clf_travel_entry_05
+passport requirements to enter the UK,travel_entry,visa_policy,clf_travel_entry_06
+passport requirements to enter Malaysia,travel_entry,visa_policy,clf_travel_entry_06
+passport requirements to enter Indonesia,travel_entry,visa_policy,clf_travel_entry_06
+passport requirements to enter Thailand,travel_entry,visa_policy,clf_travel_entry_06
+what documents do I need for entry to Japan,travel_entry,visa_policy,clf_travel_entry_07
+what documents do I need for entry to China,travel_entry,visa_policy,clf_travel_entry_07
+what documents do I need for entry to Malaysia,travel_entry,visa_policy,clf_travel_entry_07
+what documents do I need for entry to the UK,travel_entry,visa_policy,clf_travel_entry_07
+can I extend my stay in Kenya after the visa expires,travel_entry,visa_policy,clf_travel_entry_08
+can I extend my stay in Nepal after the visa expires,travel_entry,visa_policy,clf_travel_entry_08
+can I extend my stay in Indonesia after the visa expires,travel_entry,visa_policy,clf_travel_entry_08
+can I extend my stay in the UK after the visa expires,travel_entry,visa_policy,clf_travel_entry_08
+tourist visa processing time for Japan,travel_entry,visa_policy,clf_travel_entry_09
+tourist visa processing time for Nepal,travel_entry,visa_policy,clf_travel_entry_09
+tourist visa processing time for Indonesia,travel_entry,visa_policy,clf_travel_entry_09
+tourist visa processing time for Thailand,travel_entry,visa_policy,clf_travel_entry_09
+health requirements for travelling to Indonesia,health_safety,vaccination_requirement,clf_health_safety_00
+health requirements for travelling to Singapore,health_safety,vaccination_requirement,clf_health_safety_00
+health requirements for travelling to Malaysia,health_safety,vaccination_requirement,clf_health_safety_00
+health requirements for travelling to Australia,health_safety,vaccination_requirement,clf_health_safety_00
+which vaccinations should I get before Singapore,health_safety,vaccination_requirement,clf_health_safety_01
+which vaccinations should I get before Australia,health_safety,vaccination_requirement,clf_health_safety_01
+which vaccinations should I get before Kenya,health_safety,vaccination_requirement,clf_health_safety_01
+which vaccinations should I get before Thailand,health_safety,vaccination_requirement,clf_health_safety_01
+is there any outbreak notice for Thailand travellers,health_safety,vaccination_requirement,clf_health_safety_02
+is there any outbreak notice for Nepal travellers,health_safety,vaccination_requirement,clf_health_safety_02
+is there any outbreak notice for India travellers,health_safety,vaccination_requirement,clf_health_safety_02
+is there any outbreak notice for Canada travellers,health_safety,vaccination_requirement,clf_health_safety_02
+covid rules for arrivals in Australia,health_safety,vaccination_requirement,clf_health_safety_03
+covid rules for arrivals in India,health_safety,vaccination_requirement,clf_health_safety_03
+covid rules for arrivals in Indonesia,health_safety,vaccination_requirement,clf_health_safety_03
+covid rules for arrivals in the UK,health_safety,vaccination_requirement,clf_health_safety_03
+vaccination certificate rules in the USA,health_safety,vaccination_requirement,clf_health_safety_04
+vaccination certificate rules in Indonesia,health_safety,vaccination_requirement,clf_health_safety_04
+vaccination certificate rules in Australia,health_safety,vaccination_requirement,clf_health_safety_04
+vaccination certificate rules in Singapore,health_safety,vaccination_requirement,clf_health_safety_04
+do children need a vaccine to travel to Japan,health_safety,vaccination_requirement,clf_health_safety_05
+do children need a vaccine to travel to India,health_safety,vaccination_requirement,clf_health_safety_05
+do children need a vaccine to travel to Singapore,health_safety,vaccination_requirement,clf_health_safety_05
+do children need a vaccine to travel to Australia,health_safety,vaccination_requirement,clf_health_safety_05
+yellow fever vaccination advice for China,health_safety,vaccination_requirement,clf_health_safety_06
+yellow fever vaccination advice for India,health_safety,vaccination_requirement,clf_health_safety_06
+yellow fever vaccination advice for Indonesia,health_safety,vaccination_requirement,clf_health_safety_06
+yellow fever vaccination advice for Malaysia,health_safety,vaccination_requirement,clf_health_safety_06
+health requirement checklist before flying to Thailand,health_safety,vaccination_requirement,clf_health_safety_07
+health requirement checklist before flying to India,health_safety,vaccination_requirement,clf_health_safety_07
+health requirement checklist before flying to Australia,health_safety,vaccination_requirement,clf_health_safety_07
+health requirement checklist before flying to Singapore,health_safety,vaccination_requirement,clf_health_safety_07
+customs rules when landing in Canada,customs_regulations,customs_regulation,clf_customs_regulations_00
+customs rules when landing in Nepal,customs_regulations,customs_regulation,clf_customs_regulations_00
+customs rules when landing in Malaysia,customs_regulations,customs_regulation,clf_customs_regulations_00
+customs rules when landing in Australia,customs_regulations,customs_regulation,clf_customs_regulations_00
+what do I have to declare at Thailand customs,customs_regulations,customs_regulation,clf_customs_regulations_01
+what do I have to declare at Malaysia customs,customs_regulations,customs_regulation,clf_customs_regulations_01
+what do I have to declare at India customs,customs_regulations,customs_regulation,clf_customs_regulations_01
+what do I have to declare at China customs,customs_regulations,customs_regulation,clf_customs_regulations_01
+restricted items list for Thailand,customs_regulations,customs_regulation,clf_customs_regulations_02
+restricted items list for the USA,customs_regulations,customs_regulation,clf_customs_regulations_02
+restricted items list for the UK,customs_regulations,customs_regulation,clf_customs_regulations_02
+restricted items list for Vietnam,customs_regulations,customs_regulation,clf_customs_regulations_02
+duty on electronics bought abroad when entering Indonesia,customs_regulations,customs_regulation,clf_customs_regulations_03
+duty on electronics bought abroad when entering the UK,customs_regulations,customs_regulation,clf_customs_regulations_03
+duty on electronics bought abroad when entering Kenya,customs_regulations,customs_regulation,clf_customs_regulations_03
+duty on electronics bought abroad when entering Malaysia,customs_regulations,customs_regulation,clf_customs_regulations_03
+can I carry alcohol through customs in Nepal,customs_regulations,customs_regulation,clf_customs_regulations_04
+can I carry tobacco through customs in Malaysia,customs_regulations,customs_regulation,clf_customs_regulations_04
+can I carry cash through customs in Thailand,customs_regulations,customs_regulation,clf_customs_regulations_04
+can I carry e-cigarette through customs in the USA,customs_regulations,customs_regulation,clf_customs_regulations_04
+import rules for e-cigarette in the UK,customs_regulations,customs_regulation,clf_customs_regulations_05
+import rules for cash in China,customs_regulations,customs_regulation,clf_customs_regulations_05
+import rules for medicine in Thailand,customs_regulations,customs_regulation,clf_customs_regulations_05
+import rules for medicine in Vietnam,customs_regulations,customs_regulation,clf_customs_regulations_05
+is alcohol prohibited at Australia customs,customs_regulations,customs_regulation,clf_customs_regulations_06
+is medicine prohibited at Kenya customs,customs_regulations,customs_regulation,clf_customs_regulations_06
+is tobacco prohibited at Singapore customs,customs_regulations,customs_regulation,clf_customs_regulations_06
+is drone prohibited at Nepal customs,customs_regulations,customs_regulation,clf_customs_regulations_06
+how much duty do I pay on gifts in Vietnam,customs_regulations,customs_regulation,clf_customs_regulations_07
+how much duty do I pay on gifts in the UK,customs_regulations,customs_regulation,clf_customs_regulations_07
+how much duty do I pay on gifts in Australia,customs_regulations,customs_regulation,clf_customs_regulations_07
+how much duty do I pay on gifts in China,customs_regulations,customs_regulation,clf_customs_regulations_07
+best beaches in China,out_of_scope,,clf_out_of_scope_00
+best beaches in Nepal,out_of_scope,,clf_out_of_scope_00
+best beaches in Vietnam,out_of_scope,,clf_out_of_scope_00
+best beaches in Singapore,out_of_scope,,clf_out_of_scope_00
+cheap hotels in the USA,out_of_scope,,clf_out_of_scope_01
+cheap hotels in India,out_of_scope,,clf_out_of_scope_01
+cheap hotels in Australia,out_of_scope,,clf_out_of_scope_01
+cheap hotels in the UK,out_of_scope,,clf_out_of_scope_01
+what is the weather like in Australia in December,out_of_scope,,clf_out_of_scope_02
+what is the weather like in Vietnam in December,out_of_scope,,clf_out_of_scope_02
+what is the weather like in the USA in December,out_of_scope,,clf_out_of_scope_02
+what is the weather like in Japan in December,out_of_scope,,clf_out_of_scope_02
+top restaurants to try in Vietnam,out_of_scope,,clf_out_of_scope_03
+top restaurants to try in Australia,out_of_scope,,clf_out_of_scope_03
+top restaurants to try in Thailand,out_of_scope,,clf_out_of_scope_03
+top restaurants to try in Singapore,out_of_scope,,clf_out_of_scope_03
+things to do in Malaysia with kids,out_of_scope,,clf_out_of_scope_04
+things to do in Canada with kids,out_of_scope,,clf_out_of_scope_04
+things to do in India with kids,out_of_scope,,clf_out_of_scope_04
+things to do in Vietnam with kids,out_of_scope,,clf_out_of_scope_04
+flight price from Delhi to Indonesia,out_of_scope,,clf_out_of_scope_05
+flight price from Delhi to Malaysia,out_of_scope,,clf_out_of_scope_05
+flight price from Delhi to the UK,out_of_scope,,clf_out_of_scope_05
+flight price from Delhi to Japan,out_of_scope,,clf_out_of_scope_05
+sightseeing itinerary for 3 days in Thailand,out_of_scope,,clf_out_of_scope_06
+sightseeing itinerary for 3 days in Vietnam,out_of_scope,,clf_out_of_scope_06
+sightseeing itinerary for 3 days in Kenya,out_of_scope,,clf_out_of_scope_06
+sightseeing itinerary for 3 days in Canada,out_of_scope,,clf_out_of_scope_06
+best hotel near the airport in Japan,out_of_scope,,clf_out_of_scope_07
+best hotel near the airport in Thailand,out_of_scope,,clf_out_of_scope_07
+best hotel near the airport in Malaysia,out_of_scope,,clf_out_of_scope_07
+best hotel near the airport in China,out_of_scope,,clf_out_of_scope_07

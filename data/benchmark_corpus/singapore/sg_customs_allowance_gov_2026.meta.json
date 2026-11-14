@@ -1,0 +1,13 @@
+{
+  "doc_key": "sg_customs_allowance_gov_2026",
+  "title": "Singapore GST relief for travellers",
+  "url": "https://customs.gov.sg.example/sg-customs-allowance-gov-2026",
+  "source_domain": "customs.gov.sg.example",
+  "source_type": "government",
+  "country": "Singapore",
+  "category": "customs_regulation",
+  "nationality_scope": "ALL",
+  "content_date": "2026-03-01",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

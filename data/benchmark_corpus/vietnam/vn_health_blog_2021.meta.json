@@ -1,0 +1,13 @@
+{
+  "doc_key": "vn_health_blog_2021",
+  "title": "Vietnam reopening checklist",
+  "url": "https://wanderdesi.blog.example/vn-health-blog-2021",
+  "source_domain": "wanderdesi.blog.example",
+  "source_type": "travel_blog",
+  "country": "Vietnam",
+  "category": "vaccination_requirement",
+  "nationality_scope": "ALL",
+  "content_date": "2021-12-01",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

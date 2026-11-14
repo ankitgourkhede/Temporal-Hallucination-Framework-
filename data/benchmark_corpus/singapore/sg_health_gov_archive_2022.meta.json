@@ -1,0 +1,13 @@
+{
+  "doc_key": "sg_health_gov_archive_2022",
+  "title": "Vaccinated Travel Framework (archived notice)",
+  "url": "https://moh.gov.sg.example/sg-health-gov-archive-2022",
+  "source_domain": "moh.gov.sg.example",
+  "source_type": "government",
+  "country": "Singapore",
+  "category": "vaccination_requirement",
+  "nationality_scope": "ALL",
+  "content_date": "2022-04-01",
+  "snapshot_date": "2022-08-01",
+  "synthetic": true
+}

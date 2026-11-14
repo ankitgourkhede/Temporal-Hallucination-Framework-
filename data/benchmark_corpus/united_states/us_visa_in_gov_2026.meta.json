@@ -1,0 +1,13 @@
+{
+  "doc_key": "us_visa_in_gov_2026",
+  "title": "Visitor visas for Indian citizens",
+  "url": "https://travel.state.gov.example/us-visa-in-gov-2026",
+  "source_domain": "travel.state.gov.example",
+  "source_type": "government",
+  "country": "United States",
+  "category": "visa_policy",
+  "nationality_scope": "IN",
+  "content_date": "2026-03-01",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

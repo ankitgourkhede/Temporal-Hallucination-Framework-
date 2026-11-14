@@ -1,0 +1,13 @@
+{
+  "doc_key": "ca_visa_gb_gov_2026",
+  "title": "Electronic Travel Authorization for British citizens",
+  "url": "https://canada.ca.example/ca-visa-gb-gov-2026",
+  "source_domain": "canada.ca.example",
+  "source_type": "government",
+  "country": "Canada",
+  "category": "visa_policy",
+  "nationality_scope": "GB,AU,JP",
+  "content_date": "2026-04-01",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

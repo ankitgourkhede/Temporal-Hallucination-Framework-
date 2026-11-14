@@ -1,0 +1,13 @@
+{
+  "doc_key": "jp_health_news_2023",
+  "title": "Japan keeps border checks in place",
+  "url": "https://asiatravelnews.example/jp-health-news-2023",
+  "source_domain": "asiatravelnews.example",
+  "source_type": "news",
+  "country": "Japan",
+  "category": "vaccination_requirement",
+  "nationality_scope": "ALL",
+  "content_date": "2023-01-15",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}

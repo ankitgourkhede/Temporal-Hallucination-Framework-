@@ -54,11 +54,30 @@ class MockLLM:
             facts = payload.get("facts", [])
             destination = payload.get("destination") or "your destination"
             nationality = payload.get("nationality") or "the stated"
+            nationality_label = {"India": "Indian", "United Kingdom": "British", "United States": "American"}.get(nationality, nationality)
             sentences = []
             for fact in facts:
                 slot, value, citation = fact["slot"], fact["value"], fact["evidence_id"]
-                if slot == "max_stay_days":
-                    nationality_label = {"India": "Indian", "United Kingdom": "British", "United States": "American"}.get(nationality, nationality)
+                if slot == "visa_required":
+                    phrase = "is required" if value else "is not required"
+                    sentences.append(
+                        f"A visa {phrase} for {nationality_label} passport holders travelling to {destination} [{citation}]."
+                    )
+                elif slot == "passport_validity_months":
+                    sentences.append(
+                        f"Passports must be valid for at least {value} months on entry to {destination} [{citation}]."
+                    )
+                elif slot == "vaccine_name":
+                    sentences.append(f"The vaccine checked for {destination} is {value} [{citation}].")
+                elif slot == "certificate_required":
+                    phrase = "is required" if value else "is not required"
+                    sentences.append(f"A vaccination certificate {phrase} to enter {destination} [{citation}].")
+                elif slot == "duty_free_limit":
+                    amount, currency = value
+                    sentences.append(
+                        f"The duty-free allowance for {destination} is {currency} {float(amount):,.0f} [{citation}]."
+                    )
+                elif slot == "max_stay_days":
                     sentences.append(
                         f"For {nationality_label} passport holders travelling to {destination}, "
                         f"the listed maximum stay is {value} days [{citation}]."
@@ -86,8 +105,8 @@ class MockLLM:
                     else:
                         sentences.append(f"The item is listed as {value} [{citation}].")
                 elif slot == "declaration_required":
-                    phrase = "must be declared" if value else "does not need to be declared"
-                    sentences.append(f"The item {phrase} [{citation}].")
+                    phrase = "is required" if value else "is not required"
+                    sentences.append(f"A customs declaration {phrase} in {destination} [{citation}].")
             text = " ".join(sentences) or "I couldn't find a supported answer in the saved evidence."
             if self.hallucinate:
                 text += " Visa on arrival is available at all airports [E99]."

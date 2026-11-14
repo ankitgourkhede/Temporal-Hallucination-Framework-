@@ -1,0 +1,13 @@
+{
+  "doc_key": "ca_health_forum_2022",
+  "title": "ArriveCAN and vaccination proof",
+  "url": "https://backpackerforum.example/ca-health-forum-2022",
+  "source_domain": "backpackerforum.example",
+  "source_type": "forum_social",
+  "country": "Canada",
+  "category": "vaccination_requirement",
+  "nationality_scope": "ALL",
+  "content_date": "2022-06-10",
+  "snapshot_date": "2026-11-01",
+  "synthetic": true
+}
