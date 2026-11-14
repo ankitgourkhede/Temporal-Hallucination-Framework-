@@ -3,18 +3,17 @@
 from __future__ import annotations
 
 import hashlib
-import json
 import re
 import sqlite3
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from html import unescape
 from pathlib import Path
 from typing import Any, Callable
 from urllib.error import URLError
-from urllib.parse import urljoin, urlsplit
+from urllib.parse import urlsplit
 from urllib.request import Request, urlopen
 from urllib.robotparser import RobotFileParser
 

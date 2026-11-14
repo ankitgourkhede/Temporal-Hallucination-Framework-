@@ -16,7 +16,17 @@ def fuse_slots(
     no_primary_evidence_slots: set[str] | None = None,
     primary_conflict_slots: set[str] | None = None,
     confidence_slope: float = 10.0,
+    confidence_mode: str = "trust",
 ) -> list[dict[str, Any]]:
+    """Fuse evidence into one value per slot.
+
+    confidence_mode:
+      trust            answer_trust = share x max Trust (Trust already includes (1 - CP), so a
+                       resolved conflict is penalised twice; legacy behaviour)
+      quality_x_share  answer_trust = share x max T_quality (conflict enters once, via share)
+    """
+    if confidence_mode not in {"trust", "quality_x_share"}:
+        raise ValueError(f"Unsupported confidence mode: {confidence_mode}")
     flags = set(flags or [])
     no_primary_evidence_slots = no_primary_evidence_slots or set()
     primary_conflict_slots = primary_conflict_slots or set()
@@ -51,7 +61,11 @@ def fuse_slots(
         total_support = sum(support.values())
         share = support[winner_key] / total_support if total_support else 0.0
         best_trust = max((float(item["Trust"]) for item in winner_items), default=0.0)
-        answer_trust = share * best_trust
+        if confidence_mode == "quality_x_share":
+            best_quality = max((float(item.get("T_quality", item["Trust"])) for item in winner_items), default=0.0)
+            answer_trust = share * best_quality
+        else:
+            answer_trust = share * best_trust
         confidence_before_caps = 1.0 / (1.0 + math.exp(-confidence_slope * (answer_trust - 0.5)))
         confidence = confidence_before_caps
         applied_caps = []

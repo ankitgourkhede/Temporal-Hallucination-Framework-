@@ -1,4 +1,4 @@
-.PHONY: setup dataset index-benchmark ablation-freshness sensitivity index search train-classifiers benchmark-check fit experiments report api demo-mock demo test
+.PHONY: reproduce sensitivity-legacy setup dataset index-benchmark ablation-freshness sensitivity index search train-classifiers benchmark-check fit experiments report api demo-mock demo test
 
 setup:
 	python -m pip install -r requirements.txt
@@ -41,6 +41,9 @@ ablation-freshness:
 	cp -r results/main_results.csv results/predictions.csv results/stats_tests.csv results/run_manifest.json results/REPORT.md results/figures results/ablation_last_verified/
 
 # Freshness-weight sensitivity on train+dev only (never reads the test split).
+sensitivity-legacy:
+	PYTHONPATH=. python -m experiments.sensitivity --config trustrag/config.benchmark.legacy.yaml --label last_verified
+
 sensitivity:
 	PYTHONPATH=. python -m experiments.sensitivity --config trustrag/config.benchmark.yaml --label content_relative
 
@@ -58,3 +61,9 @@ demo:
 
 test:
 	PYTHONPATH=. pytest -q
+
+# Rebuild every benchmark artifact from facts.yaml, in dependency order:
+# data -> index -> classifiers -> checks -> freshness ablation (+ its sensitivity, which needs the
+# legacy fit) -> main fit -> S0-S3 test run -> report -> main sensitivity -> unit tests.
+reproduce: dataset index-benchmark train-classifiers benchmark-check ablation-freshness sensitivity-legacy fit benchmark-experiments report sensitivity test
+

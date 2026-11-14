@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import json
 import time
-from concurrent.futures import ThreadPoolExecutor
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -14,7 +13,7 @@ import yaml
 from trustrag.offline.embed_index import encode_query_vector
 from trustrag.offline.knowledge_store import KnowledgeStore
 from trustrag.online.generation.generate import build_generation_payload, generate_answer
-from trustrag.online.generation.llm import LLM, build_llm
+from trustrag.online.generation.llm import LLM, FallbackLLM, build_llm
 from trustrag.online.generation.verify import verify_answer
 from trustrag.online.live.fetcher import LiveFetcher
 from trustrag.online.live.google import GoogleSearchFallback
@@ -51,7 +50,8 @@ class TrustRAGPipeline:
         started = time.perf_counter()
         if system not in {"S0", "S1", "S2", "S3"}:
             raise ValueError(f"Unsupported system: {system}")
-        active_llm = self.llm or build_llm(llm, self.config)
+        active_llm = self.llm or (build_llm(llm, self.config) if llm == "mock" else FallbackLLM(llm, self.config))
+        self._active_llm = active_llm
         trace: dict[str, Any] = {
             "system": system,
             "system_name": self.SYSTEM_NAMES[system],
@@ -234,7 +234,10 @@ class TrustRAGPipeline:
                         verification_required=True,
                     )
 
-                generation_payload, context_evidence = build_generation_payload(query, pass_policy, trust_result)
+                main_slot = self._main_slot(query, trust_result["fusion"], pass_policy)
+                generation_payload, context_evidence = build_generation_payload(
+                    query, pass_policy, trust_result, required_slots={main_slot} if main_slot else None
+                )
                 generation_started = time.perf_counter()
                 generated = generate_answer(active_llm, generation_payload)
                 trace["generations"] += 1
@@ -247,7 +250,6 @@ class TrustRAGPipeline:
 
                 final_generation, final_verification = generated, verification
                 final_context, final_trust = context_evidence, trust_result
-                main_slot = self._main_slot(query, trust_result["fusion"])
                 original_confidence = next(
                     (float(item.get("confidence", 0.0)) for item in trust_result["fusion"] if item["slot"] == main_slot),
                     max((item.get("confidence", 0.0) for item in trust_result["fusion"]), default=0.0),
@@ -337,9 +339,13 @@ class TrustRAGPipeline:
         combined = offline_result
         live_documents: list[Any] = []
 
-        if not main_slot_available and mode != "benchmark" and live_check and policy.get("live_requested"):
+        # Also re-check answers that *were* found offline when the topic is volatile enough:
+        # an outdated page in the index is otherwise never compared with the live source.
+        verify_levels = set(self.config.get("live", {}).get("verify_found_answers", []))
+        verify_found = policy.get("volatility_level") in verify_levels
+        if (not main_slot_available or verify_found) and mode != "benchmark" and live_check and policy.get("live_requested"):
             live_documents, live_flags = self._fetch_live(policy, mode, live_check)
-            fallback_stages.append("live_api")
+            fallback_stages.append("live_api" if not main_slot_available else "live_verify")
             if live_documents:
                 live_result = self._retrieve_documents_only(
                     retriever, query_vector, policy, live_documents
@@ -513,7 +519,12 @@ class TrustRAGPipeline:
         return sorted(sources_by_document.values(), key=lambda source: source["trust"], reverse=True)
 
     @staticmethod
-    def _main_slot(query: str, fusion: list[dict[str, Any]]) -> str | None:
+    def _main_slot(query: str, fusion: list[dict[str, Any]], policy: dict[str, Any] | None = None) -> str | None:
+        available = {item["slot"] for item in fusion}
+        if policy is not None:
+            requested = TrustRAGPipeline._requested_slot(query, policy)
+            if requested in available:
+                return requested
         lowered = query.lower()
         preferred = (
             ("max_stay_days", ("how long", "duration", "stay", "days")),
@@ -522,7 +533,6 @@ class TrustRAGPipeline:
             ("item_allowed", ("carry", "bring", "allowed", "prohibited")),
             ("declaration_required", ("declare", "declaration")),
         )
-        available = {item["slot"] for item in fusion}
         for slot, terms in preferred:
             if slot in available and any(term in lowered for term in terms):
                 return slot
@@ -565,6 +575,11 @@ class TrustRAGPipeline:
     ) -> dict[str, Any]:
         latency_ms = (time.perf_counter() - started) * 1000
         trace["total_ms"] = latency_ms
+        fallback_reason = getattr(getattr(self, "_active_llm", None), "fallback_reason", None)
+        if fallback_reason and trace.get("generations"):
+            # The chosen LLM was unavailable; the answer came from the template generator.
+            flags = [*flags, f"llm_fallback:{trace.get('llm')}:{fallback_reason}"]
+            trace["llm_used"] = "template"
         response = {
             "query": query,
             "system": trace.get("system"),

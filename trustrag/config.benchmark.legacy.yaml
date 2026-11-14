@@ -73,6 +73,8 @@ trust:
   conflict_mode: both
   # last_verified: legacy freshness from crawl/verification date (ablation baseline)
   # content_relative: freshness from content date relative to the newest primary source
+  # trust: share x max Trust (legacy; conflict counted twice); quality_x_share: conflict counted once
+  confidence_mode: quality_x_share
   freshness_mode: last_verified
 
 generation:
@@ -94,11 +96,13 @@ llm:
   openai:
     model: gpt-4o-mini
   anthropic:
-    model: claude-3-5-haiku-latest
+    model: claude-haiku-5-5
 
 live:
   enabled: true
   demo_auto_check: true
+  # Volatility levels whose offline answers are also re-checked live (demo mode only).
+  verify_found_answers: [High]
   auto_on_high_volatility: false
   total_timeout_s: 6.0
   per_adapter_timeout_s: 5.0

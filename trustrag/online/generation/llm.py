@@ -172,7 +172,7 @@ class OpenAILLM:
 
 
 class AnthropicLLM:
-    def __init__(self, model: str = "claude-3-5-haiku-latest"):
+    def __init__(self, model: str = "claude-haiku-5-5"):
         try:
             from anthropic import Anthropic
         except ImportError as error:
@@ -202,5 +202,32 @@ def build_llm(name: str, config: dict[str, Any]) -> LLM:
     if name == "openai":
         return OpenAILLM(str(backend.get("model", "gpt-4o-mini")))
     if name == "anthropic":
-        return AnthropicLLM(str(backend.get("model", "claude-3-5-haiku-latest")))
+        return AnthropicLLM(str(backend.get("model", "claude-haiku-5-5")))
     raise ValueError(f"Unsupported LLM backend: {name}")
+
+
+class FallbackLLM:
+    """Use the chosen backend; if it cannot be reached, answer with the template generator.
+
+    The template generator only restates the verified facts with citations, so falling back
+    keeps the answer evidence-bound. `fallback_reason` records why, for the response flags.
+    """
+
+    def __init__(self, name: str, config: dict[str, Any]):
+        self.name = name
+        self.fallback_reason: str | None = None
+        self._template = MockLLM()
+        try:
+            self._primary: LLM | None = build_llm(name, config)
+        except Exception as error:  # missing package, bad config
+            self._primary = None
+            self.fallback_reason = type(error).__name__
+
+    def generate(self, system: str, user: Any, **kwargs: Any) -> LLMResult:
+        if self._primary is not None:
+            try:
+                return self._primary.generate(system, user, **kwargs)
+            except Exception as error:  # unreachable server, missing key, rate limit
+                self.fallback_reason = type(error).__name__
+        return self._template.generate(system, user, **kwargs)
+

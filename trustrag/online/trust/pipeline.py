@@ -67,6 +67,7 @@ class TrustPipeline:
                 retrieval_result.get("trace", {}).get("no_primary_evidence_slots", [])
             ),
             primary_conflict_slots=primary_conflict_slots,
+            confidence_mode=str(trust_config.get("confidence_mode", "trust")),
         )
         trace = {
             "evidence": [

@@ -1,313 +1,313 @@
-query_id,system,gold_value,predicted_value,correct,verification_status,confidence,faithfulness,hallucination_rate,latency_ms,retry,evidence_precision,evidence_recall,has_conflict,predicted_conflict,trust_labels,trust_scores
-vn_in_visa__max_stay_days__p1,S0,90,30,False,UNVERIFIED,0.91185,,0.0,682.351314000698,False,0.0,0.0,True,False,[],[]
-vn_in_visa__max_stay_days__p1,S1,90,90,True,VERIFIED,0.056876,1.0,0.0,482.727110000269,False,0.0,0.0,True,True,"[True, False, False]","[0.30357142857142855, 0.08423086940262652, 0.03267865644875597]"
-vn_in_visa__max_stay_days__p1,S2,90,90,True,VERIFIED,0.093476,1.0,0.0,441.0343629988347,False,0.0,0.0,True,True,"[True, False, False]","[0.3035714285714285, 0.03423091245100049, 0.0]"
-vn_in_visa__max_stay_days__p1,S3,90,90,True,VERIFIED,0.074916,1.0,0.0,491.5150859997084,False,0.0,0.0,True,True,"[True, False, False]","[0.2796523125258704, 0.03486980813721768, 0.0]"
-vn_in_visa__max_stay_days__p2,S0,90,90,True,UNVERIFIED,0.862847,,0.0,455.34681900062424,False,0.0,0.0,True,False,[],[]
-vn_in_visa__max_stay_days__p2,S1,90,90,True,VERIFIED,0.056876,1.0,0.0,436.26120500084653,False,0.0,0.0,True,True,"[True, False, False]","[0.30357142857142855, 0.08423086940262652, 0.03267865644875597]"
-vn_in_visa__max_stay_days__p2,S2,90,90,True,VERIFIED,0.093476,1.0,0.0,472.8607220004051,False,0.0,0.0,True,True,"[True, False, False]","[0.3035714285714285, 0.03423091245100049, 0.0]"
-vn_in_visa__max_stay_days__p2,S3,90,90,True,VERIFIED,0.074916,1.0,0.0,443.1150410000555,False,0.0,0.0,True,True,"[True, False, False]","[0.2796523125258704, 0.03486980813721768, 0.0]"
-vn_in_visa__max_stay_days__p3,S0,90,30,False,UNVERIFIED,0.855433,,0.0,440.8214869999938,False,0.0,0.0,True,False,[],[]
-vn_in_visa__max_stay_days__p3,S1,90,90,True,VERIFIED,0.056876,1.0,0.0,435.0821059997543,False,0.0,0.0,True,True,"[True, False, False]","[0.30357142857142855, 0.03267865644875597, 0.08423086940262652]"
-vn_in_visa__max_stay_days__p3,S2,90,90,True,VERIFIED,0.093476,1.0,0.0,454.1446379989793,False,0.0,0.0,True,True,"[True, False, False]","[0.3035714285714285, 0.0, 0.03423091245100049]"
-vn_in_visa__max_stay_days__p3,S3,90,90,True,VERIFIED,0.074916,1.0,0.0,498.5440029995516,False,0.0,0.0,True,True,"[True, False, False]","[0.2796523125258704, 0.0, 0.03486980813721768]"
-vn_in_visa__visa_required__p1,S0,true,True,True,UNVERIFIED,0.88139,,0.0,603.944369000601,False,0.0,0.0,True,False,[],[]
-vn_in_visa__visa_required__p1,S1,true,True,True,VERIFIED,0.972653,1.0,0.0,425.23793100008334,False,0.0,0.0,True,False,[True],[0.8571428571428571]
-vn_in_visa__visa_required__p1,S2,true,True,True,VERIFIED,0.978573,1.0,0.0,478.44248300134495,False,0.0,0.0,True,False,[True],[0.882142857142857]
-vn_in_visa__visa_required__p1,S3,true,True,True,VERIFIED,0.980913,1.0,0.0,747.1652379990701,False,0.0,0.0,True,False,[True],[0.8939483497421955]
-vn_in_visa__visa_required__p2,S0,true,True,True,UNVERIFIED,0.859471,,0.0,407.571060999544,False,0.0,0.0,True,False,[],[]
-vn_in_visa__visa_required__p2,S1,true,True,True,VERIFIED,0.972653,1.0,0.0,432.7645150005992,False,0.0,0.0,True,False,[True],[0.8571428571428571]
-vn_in_visa__visa_required__p2,S2,true,True,True,VERIFIED,0.978573,1.0,0.0,475.90631099956227,False,0.0,0.0,True,False,[True],[0.882142857142857]
-vn_in_visa__visa_required__p2,S3,true,True,True,VERIFIED,0.980913,1.0,0.0,468.90222299953166,False,0.0,0.0,True,False,[True],[0.8939483497421955]
-vn_in_visa__visa_required__p3,S0,true,True,True,UNVERIFIED,0.882251,,0.0,443.3810000009544,False,0.0,0.0,True,False,[],[]
-vn_in_visa__visa_required__p3,S1,true,True,True,VERIFIED,0.972653,1.0,0.0,530.1699880001252,False,0.0,0.0,True,False,[True],[0.8571428571428571]
-vn_in_visa__visa_required__p3,S2,true,True,True,VERIFIED,0.978573,1.0,0.0,446.04464399890276,False,0.0,0.0,True,False,[True],[0.882142857142857]
-vn_in_visa__visa_required__p3,S3,true,True,True,VERIFIED,0.980913,1.0,0.0,531.8493410013616,False,0.0,0.0,True,False,[True],[0.8939483497421955]
-th_in_visa__max_stay_days__p1,S0,60,15,False,UNVERIFIED,0.881831,,0.0,438.3302520000143,False,0.0,0.0,True,False,[],[]
-th_in_visa__max_stay_days__p1,S1,60,60,True,VERIFIED,0.012939,1.0,0.0,481.7600369988213,False,0.0,0.0,True,True,"[False, True, False, False]","[0.03764826235487865, 0.10771428571428569, 0.023920022527365123, 0.005060128955028252]"
-th_in_visa__max_stay_days__p1,S2,60,60,True,VERIFIED,0.016144,1.0,0.0,413.4550519993354,False,0.0,0.0,True,True,"[False, True, False, False]","[0.014103160530381008, 0.10171428571428567, 0.0004163061390038392, 0.0]"
-th_in_visa__max_stay_days__p1,S3,60,60,True,VERIFIED,0.015114,1.0,0.0,473.3871539992833,False,0.0,0.0,True,True,"[False, True, False, False]","[0.0, 0.08230884307327405, 0.0, 0.0]"
-th_in_visa__max_stay_days__p2,S0,60,30,False,UNVERIFIED,0.84618,,0.0,420.6996800003253,False,0.0,0.0,True,False,[],[]
-th_in_visa__max_stay_days__p2,S1,60,60,True,VERIFIED,0.012939,1.0,0.0,459.186549000151,False,0.0,0.0,True,True,"[False, True, False, False]","[0.03764826235487865, 0.10771428571428569, 0.005060128955028252, 0.023920022527365123]"
-th_in_visa__max_stay_days__p2,S2,60,60,True,VERIFIED,0.016144,1.0,0.0,440.3667589995166,False,0.0,0.0,True,True,"[False, True, False, False]","[0.014103160530381008, 0.10171428571428567, 0.0, 0.0004163061390038392]"
-th_in_visa__max_stay_days__p2,S3,60,60,True,VERIFIED,0.015114,1.0,0.0,447.2737270007201,False,0.0,0.0,True,True,"[False, True, False, False]","[0.0, 0.08230884307327405, 0.0, 0.0]"
-th_in_visa__max_stay_days__p3,S0,60,15,False,UNVERIFIED,0.894955,,0.0,444.1642989986576,False,0.0,0.0,True,False,[],[]
-th_in_visa__max_stay_days__p3,S1,60,60,True,VERIFIED,0.012939,1.0,0.0,521.5194970005541,False,0.0,0.0,True,True,"[False, True, False, False]","[0.03764826235487865, 0.10771428571428569, 0.023920022527365123, 0.005060128955028252]"
-th_in_visa__max_stay_days__p3,S2,60,60,True,VERIFIED,0.016144,1.0,0.0,531.8306669996673,False,0.0,0.0,True,True,"[False, True, False, False]","[0.014103160530381008, 0.10171428571428567, 0.0004163061390038392, 0.0]"
-th_in_visa__max_stay_days__p3,S3,60,60,True,VERIFIED,0.015114,1.0,0.0,513.155643000573,False,0.0,0.0,True,True,"[False, True, False, False]","[0.0, 0.08230884307327405, 0.0, 0.0]"
-th_us_visa__visa_required__p1,S0,false,False,True,UNVERIFIED,0.775481,,0.0,468.58215700012806,False,0.0,0.0,True,False,[],[]
-th_us_visa__visa_required__p1,S1,false,False,True,VERIFIED,0.977811,1.0,0.0,443.53036800021073,False,0.0,0.0,True,False,[True],[0.8785714285714286]
-th_us_visa__visa_required__p1,S2,false,False,True,VERIFIED,0.982634,1.0,0.0,474.4349720003811,False,0.0,0.0,True,False,[True],[0.9035714285714285]
-th_us_visa__visa_required__p1,S3,false,False,True,VERIFIED,0.988679,1.0,0.0,453.6673480015452,False,0.0,0.0,True,False,[True],[0.9469741748710978]
-th_us_visa__visa_required__p2,S0,false,False,True,UNVERIFIED,0.789498,,0.0,771.6842530007852,False,0.0,0.0,True,False,[],[]
-th_us_visa__visa_required__p2,S1,false,False,True,VERIFIED,0.977811,1.0,0.0,421.1616810007399,False,0.0,0.0,True,False,[True],[0.8785714285714286]
-th_us_visa__visa_required__p2,S2,false,False,True,VERIFIED,0.982634,1.0,0.0,457.6515870012372,False,0.0,0.0,True,False,[True],[0.9035714285714285]
-th_us_visa__visa_required__p2,S3,false,False,True,VERIFIED,0.988679,1.0,0.0,471.45831999841903,False,0.0,0.0,True,False,[True],[0.9469741748710978]
-th_health__vaccine_required__p1,S0,false,False,True,UNVERIFIED,0.896651,,0.0,481.69202099961694,False,0.0,0.0,True,False,[],[]
-th_health__vaccine_required__p1,S1,false,False,True,VERIFIED,0.052551,1.0,0.0,520.1331919997756,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.10460611245910324]"
-th_health__vaccine_required__p1,S2,false,False,True,VERIFIED,0.053574,1.0,0.0,601.1087560000306,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.10085611245910327]"
-th_health__vaccine_required__p1,S3,false,False,True,VERIFIED,0.206461,1.0,0.0,437.52975900133606,False,0.0,0.0,True,True,"[True, False]","[0.46283689510052695, 0.12348155620743483]"
-th_health__vaccine_required__p2,S0,false,False,True,UNVERIFIED,0.908273,,0.0,450.55754799977876,False,0.0,0.0,True,False,[],[]
-th_health__vaccine_required__p2,S1,false,False,True,VERIFIED,0.052551,1.0,0.0,435.7461540002987,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.10460611245910324]"
-th_health__vaccine_required__p2,S2,false,False,True,VERIFIED,0.053574,1.0,0.0,430.0323129991739,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.10085611245910327]"
-th_health__vaccine_required__p2,S3,false,False,True,VERIFIED,0.206461,1.0,0.0,471.669982000094,False,0.0,0.0,True,True,"[True, False]","[0.46283689510052695, 0.12348155620743483]"
-th_health__vaccine_required__p3,S0,false,False,True,UNVERIFIED,0.815608,,0.0,419.95910100013134,False,0.0,0.0,True,False,[],[]
-th_health__vaccine_required__p3,S1,false,False,True,VERIFIED,0.052551,1.0,0.0,462.8685759998916,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.10460611245910324]"
-th_health__vaccine_required__p3,S2,false,False,True,VERIFIED,0.053574,1.0,0.0,543.3972390001145,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.10085611245910327]"
-th_health__vaccine_required__p3,S3,false,False,True,VERIFIED,0.206461,1.0,0.0,452.0303839999542,False,0.0,0.0,True,True,"[True, False]","[0.46283689510052695, 0.12348155620743483]"
-th_health__vaccine_name__p1,S0,yellow fever,yellow fever,True,UNVERIFIED,0.792113,,0.0,448.18613799907325,False,0.0,0.0,True,False,[],[]
-th_health__vaccine_name__p1,S1,yellow fever,yellow fever,True,VERIFIED,0.052551,1.0,0.0,500.07399400055874,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.10460611245910324]"
-th_health__vaccine_name__p1,S2,yellow fever,yellow fever,True,VERIFIED,0.053574,1.0,0.0,462.46673399946303,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.10085611245910327]"
-th_health__vaccine_name__p1,S3,yellow fever,yellow fever,True,VERIFIED,0.206461,1.0,0.0,426.0352799992688,False,0.0,0.0,True,True,"[True, False]","[0.46283689510052695, 0.12348155620743483]"
-th_health__vaccine_name__p2,S0,yellow fever,covid-19,False,UNVERIFIED,0.786641,,0.0,429.2337499991845,False,0.0,0.0,True,False,[],[]
-th_health__vaccine_name__p2,S1,yellow fever,yellow fever,True,VERIFIED,0.052551,1.0,0.0,434.14476799989643,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.10460611245910324]"
-th_health__vaccine_name__p2,S2,yellow fever,yellow fever,True,VERIFIED,0.053574,1.0,0.0,456.41260699994746,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.10085611245910327]"
-th_health__vaccine_name__p2,S3,yellow fever,yellow fever,True,VERIFIED,0.206461,1.0,0.0,437.9082870000275,False,0.0,0.0,True,True,"[True, False]","[0.46283689510052695, 0.12348155620743483]"
-th_customs__item_allowed_drone__p1,S0,restricted,restricted,True,UNVERIFIED,0.839334,,0.0,451.2977980011783,False,0.0,0.0,False,False,[],[]
-th_customs__item_allowed_drone__p1,S1,restricted,restricted,True,VERIFIED,0.946597,1.0,0.0,458.7147290003486,False,0.0,0.0,False,False,[True],[0.7874999999999999]
-th_customs__item_allowed_drone__p1,S2,restricted,restricted,True,VERIFIED,0.932453,1.0,0.0,772.1575169998687,False,0.0,0.0,False,False,[True],[0.7625]
-th_customs__item_allowed_drone__p1,S3,restricted,restricted,True,VERIFIED,0.932453,1.0,0.0,466.45213500050886,False,0.0,0.0,False,False,[True],[0.7625]
-th_customs__item_allowed_drone__p2,S0,restricted,restricted,True,UNVERIFIED,0.856049,,0.0,526.8943099999888,False,0.0,0.0,False,False,[],[]
-th_customs__item_allowed_drone__p2,S1,restricted,restricted,True,VERIFIED,0.946597,1.0,0.0,511.8745090003358,False,0.0,0.0,False,False,[True],[0.7874999999999999]
-th_customs__item_allowed_drone__p2,S2,restricted,restricted,True,VERIFIED,0.932453,1.0,0.0,505.3732640008093,False,0.0,0.0,False,False,[True],[0.7625]
-th_customs__item_allowed_drone__p2,S3,restricted,restricted,True,VERIFIED,0.932453,1.0,0.0,451.54049299890175,False,0.0,0.0,False,False,[True],[0.7625]
-th_customs__item_allowed_drone__p3,S0,restricted,restricted,True,UNVERIFIED,0.844655,,0.0,541.7196050002531,False,0.0,0.0,False,False,[],[]
-th_customs__item_allowed_drone__p3,S1,restricted,restricted,True,VERIFIED,0.946597,1.0,0.0,425.812653000321,False,0.0,0.0,False,False,[True],[0.7874999999999999]
-th_customs__item_allowed_drone__p3,S2,restricted,restricted,True,VERIFIED,0.932453,1.0,0.0,441.2416100003611,False,0.0,0.0,False,False,[True],[0.7625]
-th_customs__item_allowed_drone__p3,S3,restricted,restricted,True,VERIFIED,0.932453,1.0,0.0,537.32004000085,False,0.0,0.0,False,False,[True],[0.7625]
-sg_in_visa__max_stay_days__p1,S0,30,30,True,UNVERIFIED,0.865203,,0.0,436.38208999982453,False,0.0,0.0,False,False,[],[]
-sg_in_visa__max_stay_days__p1,S1,30,30,True,VERIFIED,0.989763,1.0,0.0,472.4125590000767,False,0.0,0.0,False,False,"[True, True]","[0.9571428571428571, 0.6153571428571428]"
-sg_in_visa__max_stay_days__p1,S2,30,30,True,VERIFIED,0.989763,1.0,0.0,433.05019500076014,False,0.0,0.0,False,False,"[True, True]","[0.9571428571428571, 0.6278571428571428]"
-sg_in_visa__max_stay_days__p1,S3,30,30,True,VERIFIED,0.980913,1.0,0.0,465.0297559983301,False,0.0,0.0,False,False,"[True, True]","[0.8939483497421955, 0.4484070900715649]"
-sg_in_visa__max_stay_days__p2,S0,30,30,True,UNVERIFIED,0.784428,,0.0,460.8881090007344,False,0.0,0.0,False,False,[],[]
-sg_in_visa__max_stay_days__p2,S1,30,30,True,VERIFIED,0.989763,1.0,0.0,599.9144270008401,False,0.0,0.0,False,False,"[True, True]","[0.9571428571428571, 0.6153571428571428]"
-sg_in_visa__max_stay_days__p2,S2,30,30,True,VERIFIED,0.989763,1.0,0.0,407.50113099966256,False,0.0,0.0,False,False,"[True, True]","[0.9571428571428571, 0.6278571428571428]"
-sg_in_visa__max_stay_days__p2,S3,30,30,True,VERIFIED,0.980913,1.0,0.0,470.6005609987187,False,0.0,0.0,False,False,"[True, True]","[0.8939483497421955, 0.4484070900715649]"
-sg_health__vaccine_required__p1,S0,false,True,False,UNVERIFIED,0.915829,,0.0,414.1092440004286,False,0.0,0.0,True,False,[],[]
-sg_health__vaccine_required__p1,S1,false,False,True,VERIFIED,0.379904,1.0,0.0,461.3941550014715,False,0.0,0.0,True,False,"[False, True]","[0.587556413705902, 0.7874999999999999]"
-sg_health__vaccine_required__p1,S2,false,False,True,VERIFIED,0.394424,1.0,0.0,427.20993799957796,False,0.0,0.0,True,False,"[False, True]","[0.6000564137059019, 0.8]"
-sg_health__vaccine_required__p1,S3,false,False,True,VERIFIED,0.831833,1.0,0.0,453.2249829990178,False,0.0,0.0,True,False,"[False, True]","[0.3484838263067135, 0.9120067486018812]"
-sg_health__vaccine_required__p2,S0,false,True,False,UNVERIFIED,0.896041,,0.0,533.9784289990348,False,0.0,0.0,True,False,[],[]
-sg_health__vaccine_required__p2,S1,false,False,True,VERIFIED,0.379904,1.0,0.0,439.83282199951645,False,0.0,0.0,True,False,"[False, True]","[0.587556413705902, 0.7874999999999999]"
-sg_health__vaccine_required__p2,S2,false,False,True,VERIFIED,0.394424,1.0,0.0,449.30242899863515,False,0.0,0.0,True,False,"[False, True]","[0.6000564137059019, 0.8]"
-sg_health__vaccine_required__p2,S3,false,False,True,VERIFIED,0.831833,1.0,0.0,501.6179030008061,False,0.0,0.0,True,False,"[False, True]","[0.3484838263067135, 0.9120067486018812]"
-sg_customs__duty_free_limit__p1,S0,500 SGD,"(600.0, 'SGD')",False,UNVERIFIED,0.76172,,0.0,826.6221070007305,False,0.0,0.0,True,False,[],[]
-sg_customs__duty_free_limit__p1,S1,500 SGD,"(500.0, 'SGD')",True,VERIFIED,0.012651,1.0,0.0,436.00303499988513,False,0.0,0.0,True,True,"[False, True]","[0.0571761998893859, 0.10074999999999996]"
-sg_customs__duty_free_limit__p1,S2,500 SGD,"(500.0, 'SGD')",True,VERIFIED,0.011246,1.0,0.0,463.8479790010024,False,0.0,0.0,True,True,"[False, True]","[0.06655238565897865, 0.09074999999999996]"
-sg_customs__duty_free_limit__p1,S3,500 SGD,"(500.0, 'SGD')",True,VERIFIED,0.011246,1.0,0.0,467.90349000002607,False,0.0,0.0,True,True,"[False, True]","[0.06655238565897865, 0.09074999999999996]"
-sg_customs__duty_free_limit__p2,S0,500 SGD,,False,CLARIFICATION,0.0,,0.0,405.70646499872964,False,0.0,0.0,True,False,[],[]
-sg_customs__duty_free_limit__p2,S1,500 SGD,,False,CLARIFICATION,0.0,,0.0,240.95495300025505,False,0.0,0.0,True,False,[],[]
-sg_customs__duty_free_limit__p2,S2,500 SGD,,False,CLARIFICATION,0.0,,0.0,261.5249369991943,False,0.0,0.0,True,False,[],[]
-sg_customs__duty_free_limit__p2,S3,500 SGD,,False,CLARIFICATION,0.0,,0.0,305.8499409999058,False,0.0,0.0,True,False,[],[]
-sg_customs__duty_free_limit__p3,S0,500 SGD,"(600.0, 'SGD')",False,UNVERIFIED,0.710884,,0.0,490.19836299885355,False,0.0,0.0,True,False,[],[]
-sg_customs__duty_free_limit__p3,S1,500 SGD,"(500.0, 'SGD')",True,VERIFIED,0.012651,1.0,0.0,442.78891300018586,False,0.0,0.0,True,True,"[False, True]","[0.0571761998893859, 0.10074999999999996]"
-sg_customs__duty_free_limit__p3,S2,500 SGD,"(500.0, 'SGD')",True,VERIFIED,0.011246,1.0,0.0,460.27106099973025,False,0.0,0.0,True,True,"[False, True]","[0.06655238565897865, 0.09074999999999996]"
-sg_customs__duty_free_limit__p3,S3,500 SGD,"(500.0, 'SGD')",True,VERIFIED,0.011246,1.0,0.0,475.61997000047995,False,0.0,0.0,True,True,"[False, True]","[0.06655238565897865, 0.09074999999999996]"
-my_in_visa__visa_required__p1,S0,false,False,True,UNVERIFIED,0.826909,,0.0,455.6134270005714,False,0.0,0.0,True,False,[],[]
-my_in_visa__visa_required__p1,S1,false,False,True,VERIFIED,0.061881,1.0,0.0,432.4593149995053,False,0.0,0.0,True,True,"[True, False]","[0.28125, 0.0654826917177228]"
-my_in_visa__visa_required__p1,S2,false,False,True,VERIFIED,0.088906,1.0,0.0,432.5767670015921,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.021733652961199584]"
-my_in_visa__visa_required__p1,S3,false,False,True,VERIFIED,0.067297,1.0,0.0,441.59415799913404,False,0.0,0.0,True,True,"[True, False]","[0.25368944833765683, 0.017746191169943998]"
-my_in_visa__visa_required__p2,S0,false,False,True,UNVERIFIED,0.819738,,0.0,431.9447060006496,False,0.0,0.0,True,False,[],[]
-my_in_visa__visa_required__p2,S1,false,False,True,VERIFIED,0.061881,1.0,0.0,428.7248800010275,False,0.0,0.0,True,True,"[True, False]","[0.28125, 0.0654826917177228]"
-my_in_visa__visa_required__p2,S2,false,False,True,VERIFIED,0.088906,1.0,0.0,489.2559229992912,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.021733652961199584]"
-my_in_visa__visa_required__p2,S3,false,False,True,VERIFIED,0.067297,1.0,0.0,459.2165570011275,False,0.0,0.0,True,True,"[True, False]","[0.25368944833765683, 0.017746191169943998]"
-my_in_visa__visa_required__p3,S0,false,False,True,UNVERIFIED,0.818403,,0.0,432.54949299989676,False,0.0,0.0,True,False,[],[]
-my_in_visa__visa_required__p3,S1,false,False,True,VERIFIED,0.061881,1.0,0.0,437.03155999901355,False,0.0,0.0,True,True,"[True, False]","[0.28125, 0.0654826917177228]"
-my_in_visa__visa_required__p3,S2,false,False,True,VERIFIED,0.088906,1.0,0.0,429.79940400073247,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.021733652961199584]"
-my_in_visa__visa_required__p3,S3,false,False,True,VERIFIED,0.067297,1.0,0.0,505.23980700018,False,0.0,0.0,True,True,"[True, False]","[0.25368944833765683, 0.017746191169943998]"
-id_in_visa__visa_required__p1,S0,true,True,True,UNVERIFIED,0.819604,,0.0,472.03076500045427,False,0.0,0.0,True,False,[],[]
-id_in_visa__visa_required__p1,S1,true,True,True,VERIFIED,0.45477,1.0,0.0,444.84196299890755,False,0.0,0.0,True,False,"[True, False]","[0.825, 0.5875000000000183]"
-id_in_visa__visa_required__p1,S2,true,True,True,VERIFIED,0.563295,1.0,0.0,429.78410800060374,False,0.0,0.0,True,False,"[True, False]","[0.8499999999999999, 0.5250000000000277]"
-id_in_visa__visa_required__p1,S3,true,True,True,VERIFIED,0.420041,1.0,0.0,856.8175460004568,False,0.0,0.0,True,False,"[True, False]","[0.814409612048842, 0.6036084116396332]"
-id_in_visa__visa_required__p2,S0,true,True,True,UNVERIFIED,0.837073,,0.0,470.05684599935194,False,0.0,0.0,True,False,[],[]
-id_in_visa__visa_required__p2,S1,true,True,True,VERIFIED,0.45477,1.0,0.0,447.67731799947796,False,0.0,0.0,True,False,"[True, False]","[0.825, 0.5875000000000183]"
-id_in_visa__visa_required__p2,S2,true,True,True,VERIFIED,0.563295,1.0,0.0,477.85127899987856,False,0.0,0.0,True,False,"[True, False]","[0.8499999999999999, 0.5250000000000277]"
-id_in_visa__visa_required__p2,S3,true,True,True,VERIFIED,0.420041,1.0,0.0,506.45295799949963,False,0.0,0.0,True,False,"[True, False]","[0.814409612048842, 0.6036084116396332]"
-id_in_visa__visa_required__p3,S0,true,False,False,UNVERIFIED,0.85466,,0.0,455.89811700119753,False,0.0,0.0,True,False,[],[]
-id_in_visa__visa_required__p3,S1,true,True,True,VERIFIED,0.45477,1.0,0.0,561.8271610001102,False,0.0,0.0,True,False,"[False, True]","[0.5875000000000183, 0.825]"
-id_in_visa__visa_required__p3,S2,true,True,True,VERIFIED,0.563295,1.0,0.0,470.8882689992606,False,0.0,0.0,True,False,"[False, True]","[0.5250000000000277, 0.8499999999999999]"
-id_in_visa__visa_required__p3,S3,true,True,True,VERIFIED,0.420041,1.0,0.0,468.0166729995108,False,0.0,0.0,True,False,"[False, True]","[0.6036084116396332, 0.814409612048842]"
-id_in_visa__visa_type__p1,S0,visa_on_arrival,visa_free,False,UNVERIFIED,0.769117,,0.0,446.84303399844794,False,0.0,0.0,True,False,[],[]
-id_in_visa__visa_type__p1,S1,visa_on_arrival,visa_on_arrival,True,VERIFIED,0.962673,1.0,0.0,448.12601800003904,False,0.0,0.0,True,False,"[False, True]","[0.5875000000000183, 0.825]"
-id_in_visa__visa_type__p1,S2,visa_on_arrival,visa_on_arrival,True,VERIFIED,0.970688,1.0,0.0,433.7360340014129,False,0.0,0.0,True,False,"[False, True]","[0.5250000000000277, 0.8499999999999999]"
-id_in_visa__visa_type__p1,S3,visa_on_arrival,visa_on_arrival,True,VERIFIED,0.958675,1.0,0.0,492.273108999143,False,0.0,0.0,True,False,"[False, True]","[0.6036084116396332, 0.814409612048842]"
-id_in_visa__visa_type__p2,S0,visa_on_arrival,visa_on_arrival,True,UNVERIFIED,0.832313,,0.0,440.16455199925986,False,0.0,0.0,True,False,[],[]
-id_in_visa__visa_type__p2,S1,visa_on_arrival,visa_on_arrival,True,VERIFIED,0.962673,1.0,0.0,436.79905499993765,False,0.0,0.0,True,False,"[True, False]","[0.825, 0.5875000000000183]"
-id_in_visa__visa_type__p2,S2,visa_on_arrival,visa_on_arrival,True,VERIFIED,0.970688,1.0,0.0,455.265288001101,False,0.0,0.0,True,False,"[True, False]","[0.8499999999999999, 0.5250000000000277]"
-id_in_visa__visa_type__p2,S3,visa_on_arrival,visa_on_arrival,True,VERIFIED,0.958675,1.0,0.0,453.91005300007237,False,0.0,0.0,True,False,"[True, False]","[0.814409612048842, 0.6036084116396332]"
-id_in_visa__max_stay_days__p1,S0,30,30,True,UNVERIFIED,0.845922,,0.0,419.16044900062843,False,0.0,0.0,False,False,[],[]
-id_in_visa__max_stay_days__p1,S1,30,30,True,VERIFIED,0.962673,1.0,0.0,480.3381639994768,False,0.0,0.0,False,False,"[True, True]","[0.5875000000000183, 0.825]"
-id_in_visa__max_stay_days__p1,S2,30,30,True,VERIFIED,0.970688,1.0,0.0,473.83255600107077,False,0.0,0.0,False,False,"[True, True]","[0.5250000000000277, 0.8499999999999999]"
-id_in_visa__max_stay_days__p1,S3,30,30,True,VERIFIED,0.958675,1.0,0.0,475.51980199932586,False,0.0,0.0,False,False,"[True, True]","[0.6036084116396332, 0.814409612048842]"
-id_in_visa__max_stay_days__p2,S0,30,30,True,UNVERIFIED,0.847351,,0.0,534.641965999981,False,0.0,0.0,False,False,[],[]
-id_in_visa__max_stay_days__p2,S1,30,30,True,VERIFIED,0.962673,1.0,0.0,469.13003900044714,False,0.0,0.0,False,False,"[True, True]","[0.825, 0.5875000000000183]"
-id_in_visa__max_stay_days__p2,S2,30,30,True,VERIFIED,0.970688,1.0,0.0,491.37242200049513,False,0.0,0.0,False,False,"[True, True]","[0.8499999999999999, 0.5250000000000277]"
-id_in_visa__max_stay_days__p2,S3,30,30,True,VERIFIED,0.958675,1.0,0.0,421.888595999917,False,0.0,0.0,False,False,"[True, True]","[0.814409612048842, 0.6036084116396332]"
-jp_in_visa__max_stay_days__p1,S0,90,90,True,UNVERIFIED,0.871255,,0.0,426.8951089998154,False,0.0,0.0,True,False,[],[]
-jp_in_visa__max_stay_days__p1,S1,90,90,True,VERIFIED,0.049557,1.0,0.0,786.5400530008628,False,0.0,0.0,True,True,"[True, False]","[0.26875, 0.08423080032894593]"
-jp_in_visa__max_stay_days__p1,S2,90,90,True,VERIFIED,0.07213,1.0,0.0,451.44894200166164,False,0.0,0.0,True,True,"[True, False]","[0.275, 0.03423081587803431]"
-jp_in_visa__max_stay_days__p1,S3,90,90,True,VERIFIED,0.044196,1.0,0.0,458.016968001175,False,0.0,0.0,True,True,"[True, False]","[0.22275771701246383, 0.03486974820616598]"
-jp_in_visa__max_stay_days__p2,S0,90,90,True,UNVERIFIED,0.814682,,0.0,462.75439399869356,False,0.0,0.0,True,False,[],[]
-jp_in_visa__max_stay_days__p2,S1,90,90,True,VERIFIED,0.049557,1.0,0.0,596.9920980005554,False,0.0,0.0,True,True,"[True, False]","[0.26875, 0.08423080032894593]"
-jp_in_visa__max_stay_days__p2,S2,90,90,True,VERIFIED,0.07213,1.0,0.0,487.4489649992029,False,0.0,0.0,True,True,"[True, False]","[0.275, 0.03423081587803431]"
-jp_in_visa__max_stay_days__p2,S3,90,90,True,VERIFIED,0.044196,1.0,0.0,568.7153240014595,False,0.0,0.0,True,True,"[True, False]","[0.22275771701246383, 0.03486974820616598]"
-jp_in_visa__max_stay_days__p3,S0,90,90,True,UNVERIFIED,0.903748,,0.0,412.44001899940486,False,0.0,0.0,True,False,[],[]
-jp_in_visa__max_stay_days__p3,S1,90,90,True,VERIFIED,0.049557,1.0,0.0,460.90887200080033,False,0.0,0.0,True,True,"[True, False]","[0.26875, 0.08423080032894593]"
-jp_in_visa__max_stay_days__p3,S2,90,90,True,VERIFIED,0.07213,1.0,0.0,417.3382720000518,False,0.0,0.0,True,True,"[True, False]","[0.275, 0.03423081587803431]"
-jp_in_visa__max_stay_days__p3,S3,90,90,True,VERIFIED,0.044196,1.0,0.0,445.665626999471,False,0.0,0.0,True,True,"[True, False]","[0.22275771701246383, 0.03486974820616598]"
-jp_in_visa__visa_required__p1,S0,true,True,True,UNVERIFIED,0.875527,,0.0,409.37680800016096,False,0.0,0.0,False,False,[],[]
-jp_in_visa__visa_required__p1,S1,true,True,True,VERIFIED,0.946597,1.0,0.0,422.519301999273,False,0.0,0.0,False,False,[True],[0.7874999999999999]
-jp_in_visa__visa_required__p1,S2,true,True,True,VERIFIED,0.962673,1.0,0.0,464.808703000017,False,0.0,0.0,False,False,[True],[0.825]
-jp_in_visa__visa_required__p1,S3,true,True,True,VERIFIED,0.942762,1.0,0.0,461.7944109995733,False,0.0,0.0,False,False,[True],[0.7801591587153823]
-jp_in_visa__visa_required__p2,S0,true,True,True,UNVERIFIED,0.90896,,0.0,422.2731330009992,False,0.0,0.0,False,False,[],[]
-jp_in_visa__visa_required__p2,S1,true,True,True,VERIFIED,0.946597,1.0,0.0,615.9908919998998,False,0.0,0.0,False,False,[True],[0.7874999999999999]
-jp_in_visa__visa_required__p2,S2,true,True,True,VERIFIED,0.962673,1.0,0.0,511.24452099975315,False,0.0,0.0,False,False,[True],[0.825]
-jp_in_visa__visa_required__p2,S3,true,True,True,VERIFIED,0.942762,1.0,0.0,414.7405389994674,False,0.0,0.0,False,False,[True],[0.7801591587153823]
-jp_health__certificate_required__p1,S0,false,True,False,UNVERIFIED,0.821076,,0.0,455.94859100128815,False,0.0,0.0,True,False,[],[]
-jp_health__certificate_required__p1,S1,false,False,True,VERIFIED,0.04452,1.0,0.0,431.9080279983609,False,0.0,0.0,True,True,"[True, False]","[0.26875, 0.10476140413187986]"
-jp_health__certificate_required__p1,S2,false,False,True,VERIFIED,0.047936,1.0,0.0,433.3453949984687,False,0.0,0.0,True,True,"[True, False]","[0.27499999999999997, 0.10101140413187985]"
-jp_health__certificate_required__p1,S3,false,False,True,VERIFIED,0.195271,1.0,0.0,462.64416799931496,False,0.0,0.0,True,True,"[True, False]","[0.4558197005707581, 0.12391923174818685]"
-jp_health__certificate_required__p2,S0,false,True,False,UNVERIFIED,0.792192,,0.0,440.4037069998594,False,0.0,0.0,True,False,[],[]
-jp_health__certificate_required__p2,S1,false,False,True,VERIFIED,0.04452,1.0,0.0,415.6515289996605,False,0.0,0.0,True,True,"[True, False]","[0.26875, 0.10476140413187986]"
-jp_health__certificate_required__p2,S2,false,False,True,VERIFIED,0.047936,1.0,0.0,434.8464180002338,False,0.0,0.0,True,True,"[True, False]","[0.27499999999999997, 0.10101140413187985]"
-jp_health__certificate_required__p2,S3,false,False,True,VERIFIED,0.195271,1.0,0.0,763.8310999991518,False,0.0,0.0,True,True,"[True, False]","[0.4558197005707581, 0.12391923174818685]"
-jp_health__certificate_required__p3,S0,false,True,False,UNVERIFIED,0.809326,,0.0,496.0717639987706,False,0.0,0.0,True,False,[],[]
-jp_health__certificate_required__p3,S1,false,False,True,VERIFIED,0.04452,1.0,0.0,506.7026930009888,False,0.0,0.0,True,True,"[True, False]","[0.26875, 0.10476140413187986]"
-jp_health__certificate_required__p3,S2,false,False,True,VERIFIED,0.047936,1.0,0.0,471.6492429997743,False,0.0,0.0,True,True,"[True, False]","[0.27499999999999997, 0.10101140413187985]"
-jp_health__certificate_required__p3,S3,false,False,True,VERIFIED,0.195271,1.0,0.0,511.6525650009862,False,0.0,0.0,True,True,"[True, False]","[0.4558197005707581, 0.12391923174818685]"
-jp_customs__duty_free_limit__p1,S0,200000 JPY,"(200000.0, 'JPY')",True,UNVERIFIED,0.851437,,0.0,465.12500000062573,False,0.0,0.0,False,False,[],[]
-jp_customs__duty_free_limit__p1,S1,200000 JPY,"(200000.0, 'JPY')",True,VERIFIED,0.946597,1.0,0.0,524.862641999789,False,0.0,0.0,False,False,[True],[0.7874999999999999]
-jp_customs__duty_free_limit__p1,S2,200000 JPY,"(200000.0, 'JPY')",True,VERIFIED,0.932453,1.0,0.0,436.26871000014944,False,0.0,0.0,False,False,[True],[0.7625]
-jp_customs__duty_free_limit__p1,S3,200000 JPY,"(200000.0, 'JPY')",True,VERIFIED,0.932453,1.0,0.0,452.7499679988978,False,0.0,0.0,False,False,[True],[0.7625]
-jp_customs__duty_free_limit__p2,S0,200000 JPY,"(200000.0, 'JPY')",True,UNVERIFIED,0.871039,,0.0,428.6728150000272,False,0.0,0.0,False,False,[],[]
-jp_customs__duty_free_limit__p2,S1,200000 JPY,"(200000.0, 'JPY')",True,VERIFIED,0.946597,1.0,0.0,433.5495480008831,False,0.0,0.0,False,False,[True],[0.7874999999999999]
-jp_customs__duty_free_limit__p2,S2,200000 JPY,"(200000.0, 'JPY')",True,VERIFIED,0.932453,1.0,0.0,552.5281870013714,False,0.0,0.0,False,False,[True],[0.7625]
-jp_customs__duty_free_limit__p2,S3,200000 JPY,"(200000.0, 'JPY')",True,VERIFIED,0.932453,1.0,0.0,500.43237199861323,False,0.0,0.0,False,False,[True],[0.7625]
-jp_us_customs__duty_free_limit__p1,S0,200000 JPY,"(200000.0, 'JPY')",True,UNVERIFIED,0.827317,,0.0,474.632687999474,False,0.0,0.0,False,False,[],[]
-jp_us_customs__duty_free_limit__p1,S1,200000 JPY,"(200000.0, 'JPY')",True,VERIFIED,0.946597,1.0,0.0,471.95587500027614,False,0.0,0.0,False,False,[True],[0.7874999999999999]
-jp_us_customs__duty_free_limit__p1,S2,200000 JPY,"(200000.0, 'JPY')",True,VERIFIED,0.932453,1.0,0.0,440.4399180002656,False,0.0,0.0,False,False,[True],[0.7625]
-jp_us_customs__duty_free_limit__p1,S3,200000 JPY,"(200000.0, 'JPY')",True,VERIFIED,0.932453,1.0,0.0,437.50092499976745,False,0.0,0.0,False,False,[True],[0.7625]
-jp_us_customs__duty_free_limit__p2,S0,200000 JPY,"(200000.0, 'JPY')",True,UNVERIFIED,0.833202,,0.0,438.5648269999365,False,0.0,0.0,False,False,[],[]
-jp_us_customs__duty_free_limit__p2,S1,200000 JPY,"(200000.0, 'JPY')",True,VERIFIED,0.946597,1.0,0.0,465.9116599996196,False,0.0,0.0,False,False,[True],[0.7874999999999999]
-jp_us_customs__duty_free_limit__p2,S2,200000 JPY,"(200000.0, 'JPY')",True,VERIFIED,0.932453,1.0,0.0,436.76860999948985,False,0.0,0.0,False,False,[True],[0.7625]
-jp_us_customs__duty_free_limit__p2,S3,200000 JPY,"(200000.0, 'JPY')",True,VERIFIED,0.932453,1.0,0.0,429.9834670000564,False,0.0,0.0,False,False,[True],[0.7625]
-np_in_visa__visa_required__p1,S0,false,False,True,UNVERIFIED,0.878941,,0.0,423.7857130010525,False,0.0,0.0,True,False,[],[]
-np_in_visa__visa_required__p1,S1,false,False,True,VERIFIED,0.962673,1.0,0.0,499.03890200039314,False,0.0,0.0,True,False,[True],[0.825]
-np_in_visa__visa_required__p1,S2,false,False,True,VERIFIED,0.974043,1.0,0.0,522.7253270004439,False,0.0,0.0,True,False,[True],[0.8625]
-np_in_visa__visa_required__p1,S3,false,False,True,VERIFIED,0.976559,1.0,0.0,465.6896060005238,False,0.0,0.0,True,False,[True],[0.8729543526909613]
-np_in_visa__visa_required__p2,S0,false,False,True,UNVERIFIED,0.906936,,0.0,444.80984099936904,False,0.0,0.0,True,False,[],[]
-np_in_visa__visa_required__p2,S1,false,False,True,VERIFIED,0.962673,1.0,0.0,789.3623769996339,False,0.0,0.0,True,False,[True],[0.825]
-np_in_visa__visa_required__p2,S2,false,False,True,VERIFIED,0.974043,1.0,0.0,458.9595529996586,False,0.0,0.0,True,False,[True],[0.8625]
-np_in_visa__visa_required__p2,S3,false,False,True,VERIFIED,0.976559,1.0,0.0,427.3120200014091,False,0.0,0.0,True,False,[True],[0.8729543526909613]
-np_in_visa__visa_required__p3,S0,false,False,True,UNVERIFIED,0.921969,,0.0,478.4583910004585,False,0.0,0.0,True,False,[],[]
-np_in_visa__visa_required__p3,S1,false,False,True,VERIFIED,0.962673,1.0,0.0,495.1203360014915,False,0.0,0.0,True,False,[True],[0.825]
-np_in_visa__visa_required__p3,S2,false,False,True,VERIFIED,0.974043,1.0,0.0,496.5395660001377,False,0.0,0.0,True,False,[True],[0.8625]
-np_in_visa__visa_required__p3,S3,false,False,True,VERIFIED,0.976559,1.0,0.0,638.8168989997212,False,0.0,0.0,True,False,[True],[0.8729543526909613]
-ke_health__certificate_required__p1,S0,false,False,True,UNVERIFIED,0.880237,,0.0,455.8628510003473,False,0.0,0.0,False,False,[],[]
-ke_health__certificate_required__p1,S1,false,False,True,VERIFIED,0.970688,1.0,0.0,463.32823999910033,False,0.0,0.0,False,False,[True],[0.85]
-ke_health__certificate_required__p1,S2,false,False,True,VERIFIED,0.970688,1.0,0.0,504.9787309999374,False,0.0,0.0,False,False,[True],[0.85]
-ke_health__certificate_required__p1,S3,false,False,True,VERIFIED,0.989088,1.0,0.0,439.51231599930907,False,0.0,0.0,False,False,[True],[0.9506940917742792]
-ke_health__certificate_required__p2,S0,false,False,True,UNVERIFIED,0.890232,,0.0,427.82383099984145,False,0.0,0.0,False,False,[],[]
-ke_health__certificate_required__p2,S1,false,False,True,VERIFIED,0.970688,1.0,0.0,455.0176659995486,False,0.0,0.0,False,False,[True],[0.85]
-ke_health__certificate_required__p2,S2,false,False,True,VERIFIED,0.970688,1.0,0.0,481.0115300006146,False,0.0,0.0,False,False,[True],[0.85]
-ke_health__certificate_required__p2,S3,false,False,True,VERIFIED,0.989088,1.0,0.0,422.899552000672,False,0.0,0.0,False,False,[True],[0.9506940917742792]
-uk_customs__duty_free_limit__p1,S0,390 GBP,"(390.0, 'GBP')",True,UNVERIFIED,0.801783,,0.0,439.62425500103564,False,0.0,0.0,True,False,[],[]
-uk_customs__duty_free_limit__p1,S1,390 GBP,"(390.0, 'GBP')",True,VERIFIED,0.962673,1.0,0.0,424.31105300056515,False,0.0,0.0,True,False,[True],[0.825]
-uk_customs__duty_free_limit__p1,S2,390 GBP,"(390.0, 'GBP')",True,VERIFIED,0.952574,1.0,0.0,483.30146100124693,False,0.0,0.0,True,False,[True],[0.8]
-uk_customs__duty_free_limit__p1,S3,390 GBP,"(390.0, 'GBP')",True,VERIFIED,0.952574,1.0,0.0,485.9233389997826,False,0.0,0.0,True,False,[True],[0.8]
-uk_customs__duty_free_limit__p2,S0,390 GBP,"(390.0, 'GBP')",True,UNVERIFIED,0.84855,,0.0,409.05440599999565,False,0.0,0.0,True,False,[],[]
-uk_customs__duty_free_limit__p2,S1,390 GBP,"(390.0, 'GBP')",True,VERIFIED,0.962673,1.0,0.0,447.7679809988331,False,0.0,0.0,True,False,[True],[0.825]
-uk_customs__duty_free_limit__p2,S2,390 GBP,"(390.0, 'GBP')",True,VERIFIED,0.952574,1.0,0.0,510.83594099873153,False,0.0,0.0,True,False,[True],[0.8]
-uk_customs__duty_free_limit__p2,S3,390 GBP,"(390.0, 'GBP')",True,VERIFIED,0.952574,1.0,0.0,468.54971699940506,False,0.0,0.0,True,False,[True],[0.8]
-uk_customs__duty_free_limit__p3,S0,390 GBP,"(390.0, 'GBP')",True,UNVERIFIED,0.794745,,0.0,407.67829899959906,False,0.0,0.0,True,False,[],[]
-uk_customs__duty_free_limit__p3,S1,390 GBP,"(390.0, 'GBP')",True,VERIFIED,0.962673,1.0,0.0,428.94718700154044,False,0.0,0.0,True,False,[True],[0.825]
-uk_customs__duty_free_limit__p3,S2,390 GBP,"(390.0, 'GBP')",True,VERIFIED,0.952574,1.0,0.0,758.6983640012477,False,0.0,0.0,True,False,[True],[0.8]
-uk_customs__duty_free_limit__p3,S3,390 GBP,"(390.0, 'GBP')",True,VERIFIED,0.952574,1.0,0.0,463.1150229997729,False,0.0,0.0,True,False,[True],[0.8]
-us_customs__duty_free_limit__p1,S0,800 USD,"(800.0, 'USD')",True,UNVERIFIED,0.812728,,0.0,543.0139449999842,False,0.0,0.0,True,False,[],[]
-us_customs__duty_free_limit__p1,S1,800 USD,"(800.0, 'USD')",True,VERIFIED,0.946597,1.0,0.0,499.8482530008914,False,0.0,0.0,True,False,[True],[0.7874999999999999]
-us_customs__duty_free_limit__p1,S2,800 USD,"(800.0, 'USD')",True,VERIFIED,0.932453,1.0,0.0,484.31590300060634,False,0.0,0.0,True,False,[True],[0.7625]
-us_customs__duty_free_limit__p1,S3,800 USD,"(800.0, 'USD')",True,VERIFIED,0.932453,1.0,0.0,503.08481700085395,False,0.0,0.0,True,False,[True],[0.7625]
-us_customs__duty_free_limit__p2,S0,800 USD,"(800.0, 'USD')",True,UNVERIFIED,0.786763,,0.0,560.1029680001375,False,0.0,0.0,True,False,[],[]
-us_customs__duty_free_limit__p2,S1,800 USD,"(800.0, 'USD')",True,VERIFIED,0.946597,1.0,0.0,467.26047300035134,False,0.0,0.0,True,False,[True],[0.7874999999999999]
-us_customs__duty_free_limit__p2,S2,800 USD,"(800.0, 'USD')",True,VERIFIED,0.932453,1.0,0.0,433.900021998852,False,0.0,0.0,True,False,[True],[0.7625]
-us_customs__duty_free_limit__p2,S3,800 USD,"(800.0, 'USD')",True,VERIFIED,0.932453,1.0,0.0,481.99478300011833,False,0.0,0.0,True,False,[True],[0.7625]
-au_customs__duty_free_limit__p1,S0,900 AUD,"(900.0, 'AUD')",True,UNVERIFIED,0.819661,,0.0,426.6513059992576,False,0.0,0.0,False,False,[],[]
-au_customs__duty_free_limit__p1,S1,900 AUD,"(900.0, 'AUD')",True,VERIFIED,0.946597,1.0,0.0,433.95325300116383,False,0.0,0.0,False,False,[True],[0.7874999999999999]
-au_customs__duty_free_limit__p1,S2,900 AUD,"(900.0, 'AUD')",True,VERIFIED,0.932453,1.0,0.0,434.1505590000452,False,0.0,0.0,False,False,[True],[0.7625]
-au_customs__duty_free_limit__p1,S3,900 AUD,"(900.0, 'AUD')",True,VERIFIED,0.932453,1.0,0.0,491.35765000028186,False,0.0,0.0,False,False,[True],[0.7625]
-au_customs__duty_free_limit__p2,S0,900 AUD,"(900.0, 'AUD')",True,UNVERIFIED,0.859287,,0.0,610.4875710007036,False,0.0,0.0,False,False,[],[]
-au_customs__duty_free_limit__p2,S1,900 AUD,"(900.0, 'AUD')",True,VERIFIED,0.946597,1.0,0.0,429.813232000015,False,0.0,0.0,False,False,[True],[0.7874999999999999]
-au_customs__duty_free_limit__p2,S2,900 AUD,"(900.0, 'AUD')",True,VERIFIED,0.932453,1.0,0.0,441.1206350014254,False,0.0,0.0,False,False,[True],[0.7625]
-au_customs__duty_free_limit__p2,S3,900 AUD,"(900.0, 'AUD')",True,VERIFIED,0.932453,1.0,0.0,429.19560200061824,False,0.0,0.0,False,False,[True],[0.7625]
-au_customs__item_allowed_food__p1,S0,restricted,restricted,True,UNVERIFIED,0.797133,,0.0,522.6000610000483,False,0.0,0.0,True,False,[],[]
-au_customs__item_allowed_food__p1,S1,restricted,restricted,True,VERIFIED,0.962673,1.0,0.0,428.77749299987045,False,0.0,0.0,True,False,[True],[0.825]
-au_customs__item_allowed_food__p1,S2,restricted,restricted,True,VERIFIED,0.952574,1.0,0.0,439.5684599985543,False,0.0,0.0,True,False,[True],[0.7999999999999999]
-au_customs__item_allowed_food__p1,S3,restricted,restricted,True,VERIFIED,0.952574,1.0,0.0,431.32550200061814,False,0.0,0.0,True,False,[True],[0.7999999999999999]
-au_customs__item_allowed_food__p2,S0,restricted,restricted,True,UNVERIFIED,0.779966,,0.0,447.09839100141835,False,0.0,0.0,True,False,[],[]
-au_customs__item_allowed_food__p2,S1,restricted,restricted,True,VERIFIED,0.962673,1.0,0.0,598.1155610006681,False,0.0,0.0,True,False,[True],[0.825]
-au_customs__item_allowed_food__p2,S2,restricted,restricted,True,VERIFIED,0.952574,1.0,0.0,447.48307700137957,False,0.0,0.0,True,False,[True],[0.7999999999999999]
-au_customs__item_allowed_food__p2,S3,restricted,restricted,True,VERIFIED,0.952574,1.0,0.0,424.596234001001,False,0.0,0.0,True,False,[True],[0.7999999999999999]
-au_customs__item_allowed_food__p3,S0,restricted,restricted,True,UNVERIFIED,0.774472,,0.0,757.5873530004174,False,0.0,0.0,True,False,[],[]
-au_customs__item_allowed_food__p3,S1,restricted,restricted,True,VERIFIED,0.962673,1.0,0.0,444.6522599992022,False,0.0,0.0,True,False,[True],[0.825]
-au_customs__item_allowed_food__p3,S2,restricted,restricted,True,VERIFIED,0.952574,1.0,0.0,435.8515209987672,False,0.0,0.0,True,False,[True],[0.7999999999999999]
-au_customs__item_allowed_food__p3,S3,restricted,restricted,True,VERIFIED,0.952574,1.0,0.0,516.2377300002845,False,0.0,0.0,True,False,[True],[0.7999999999999999]
-au_customs__declaration_required__p1,S0,true,True,True,UNVERIFIED,0.884677,,0.0,551.8951469985041,False,0.0,0.0,False,False,[],[]
-au_customs__declaration_required__p1,S1,true,True,True,VERIFIED,0.962673,1.0,0.0,494.276033999995,False,0.0,0.0,False,False,[True],[0.825]
-au_customs__declaration_required__p1,S2,true,True,True,VERIFIED,0.952574,1.0,0.0,530.2113229990937,False,0.0,0.0,False,False,[True],[0.7999999999999999]
-au_customs__declaration_required__p1,S3,true,True,True,VERIFIED,0.952574,1.0,0.0,449.4844490000105,False,0.0,0.0,False,False,[True],[0.7999999999999999]
-au_customs__declaration_required__p2,S0,true,True,True,UNVERIFIED,0.881166,,0.0,450.907530999757,False,0.0,0.0,False,False,[],[]
-au_customs__declaration_required__p2,S1,true,True,True,VERIFIED,0.962673,1.0,0.0,443.5939380000491,False,0.0,0.0,False,False,[True],[0.825]
-au_customs__declaration_required__p2,S2,true,True,True,VERIFIED,0.952574,1.0,0.0,459.4148539999878,False,0.0,0.0,False,False,[True],[0.7999999999999999]
-au_customs__declaration_required__p2,S3,true,True,True,VERIFIED,0.952574,1.0,0.0,436.93542899927706,False,0.0,0.0,False,False,[True],[0.7999999999999999]
-ca_in_visa__visa_required__p1,S0,true,False,False,UNVERIFIED,0.898291,,0.0,425.57116499847325,False,0.0,0.0,True,False,[],[]
-ca_in_visa__visa_required__p1,S1,true,True,True,VERIFIED,0.08177,1.0,0.0,458.5049249999429,False,0.0,0.0,True,True,"[True, False]","[0.28750000000000003, 0.03269077845982142]"
-ca_in_visa__visa_required__p1,S2,true,True,True,VERIFIED,0.112795,1.0,0.0,490.54945500029135,False,0.0,0.0,True,True,"[True, False]","[0.29375000000000007, 0.0]"
-ca_in_visa__visa_required__p1,S3,true,True,True,VERIFIED,0.090426,1.0,0.0,468.8372939999681,False,0.0,0.0,True,True,"[True, False]","[0.26915531400025333, 0.0]"
-ca_in_visa__visa_required__p2,S0,true,True,True,UNVERIFIED,0.899527,,0.0,431.0139280005387,False,0.0,0.0,True,False,[],[]
-ca_in_visa__visa_required__p2,S1,true,True,True,VERIFIED,0.08177,1.0,0.0,435.7741059993714,False,0.0,0.0,True,True,"[True, False]","[0.28750000000000003, 0.03269077845982142]"
-ca_in_visa__visa_required__p2,S2,true,True,True,VERIFIED,0.112795,1.0,0.0,683.1328200005373,False,0.0,0.0,True,True,"[True, False]","[0.29375000000000007, 0.0]"
-ca_in_visa__visa_required__p2,S3,true,True,True,VERIFIED,0.090426,1.0,0.0,426.1828550006612,False,0.0,0.0,True,True,"[True, False]","[0.26915531400025333, 0.0]"
-ca_in_visa__visa_required__p3,S0,true,False,False,UNVERIFIED,0.901282,,0.0,428.1133200001932,False,0.0,0.0,True,False,[],[]
-ca_in_visa__visa_required__p3,S1,true,True,True,VERIFIED,0.962673,1.0,0.0,439.61874399974477,False,0.0,0.0,True,True,"[True, False]","[0.28750000000000003, 0.03269077845982142]"
-ca_in_visa__visa_required__p3,S2,true,True,True,VERIFIED,0.974043,1.0,0.0,504.40671400065185,False,0.0,0.0,True,True,"[True, False]","[0.29375000000000007, 0.0]"
-ca_in_visa__visa_required__p3,S3,true,True,True,VERIFIED,0.976559,1.0,0.0,448.53262700053165,False,0.0,0.0,True,True,"[True, False]","[0.26915531400025333, 0.0]"
-ca_in_visa__max_stay_days__p1,S0,180,180,True,UNVERIFIED,0.896637,,0.0,416.4704240010906,False,0.0,0.0,False,False,[],[]
-ca_in_visa__max_stay_days__p1,S1,180,180,True,VERIFIED,0.962673,1.0,0.0,440.5401799995161,False,0.0,0.0,False,False,[True],[0.825]
-ca_in_visa__max_stay_days__p1,S2,180,180,True,VERIFIED,0.974043,1.0,0.0,870.2124709998316,False,0.0,0.0,False,False,[True],[0.8625]
-ca_in_visa__max_stay_days__p1,S3,180,180,True,VERIFIED,0.976559,1.0,0.0,431.4964400000463,False,0.0,0.0,False,False,[True],[0.8729543526909613]
-ca_in_visa__max_stay_days__p2,S0,180,180,True,UNVERIFIED,0.824543,,0.0,446.18834299944865,False,0.0,0.0,False,False,[],[]
-ca_in_visa__max_stay_days__p2,S1,180,180,True,VERIFIED,0.962673,1.0,0.0,544.6206840006198,False,0.0,0.0,False,False,[True],[0.825]
-ca_in_visa__max_stay_days__p2,S2,180,180,True,VERIFIED,0.974043,1.0,0.0,523.2207019998896,False,0.0,0.0,False,False,[True],[0.8625]
-ca_in_visa__max_stay_days__p2,S3,180,180,True,VERIFIED,0.976559,1.0,0.0,514.879458998621,False,0.0,0.0,False,False,[True],[0.8729543526909613]
-in_gb_visa__max_stay_days__p1,S0,180,60,False,UNVERIFIED,0.935625,,0.0,520.5493579996983,False,0.0,0.0,True,False,[],[]
-in_gb_visa__max_stay_days__p1,S1,180,180,True,VERIFIED,0.498151,1.0,0.0,418.8268790003349,False,0.0,0.0,True,True,"[True, False]","[0.5625, 0.07125000000000924]"
-in_gb_visa__max_stay_days__p1,S2,180,180,True,VERIFIED,0.589722,1.0,0.0,477.7389470000344,False,0.0,0.0,True,True,"[True, False]","[0.5624999999999999, 0.027500000000013847]"
-in_gb_visa__max_stay_days__p1,S3,180,180,True,VERIFIED,0.39002,1.0,0.0,457.6079969992861,False,0.0,0.0,True,True,"[True, False]","[0.48531581227771103, 0.03202067777596329]"
-in_gb_visa__max_stay_days__p2,S0,180,60,False,UNVERIFIED,0.793765,,0.0,427.8427280005417,False,0.0,0.0,True,False,[],[]
-in_gb_visa__max_stay_days__p2,S1,180,180,True,VERIFIED,0.498151,1.0,0.0,470.62641699994856,False,0.0,0.0,True,True,"[True, False]","[0.5625, 0.07125000000000924]"
-in_gb_visa__max_stay_days__p2,S2,180,180,True,VERIFIED,0.589722,1.0,0.0,557.1070129990403,False,0.0,0.0,True,True,"[True, False]","[0.5624999999999999, 0.027500000000013847]"
-in_gb_visa__max_stay_days__p2,S3,180,180,True,VERIFIED,0.39002,1.0,0.0,576.4422730007936,False,0.0,0.0,True,True,"[True, False]","[0.48531581227771103, 0.03202067777596329]"
-in_gb_visa__visa_type__p1,S0,evisa,evisa,True,UNVERIFIED,0.810165,,0.0,421.2579100003495,False,0.0,0.0,False,False,[],[]
-in_gb_visa__visa_type__p1,S1,evisa,evisa,True,VERIFIED,0.498151,1.0,0.0,437.40119699941715,False,0.0,0.0,False,False,"[True, True]","[0.825, 0.4925000000000185]"
-in_gb_visa__visa_type__p1,S2,evisa,evisa,True,VERIFIED,0.589722,1.0,0.0,425.5682769999112,False,0.0,0.0,False,False,"[True, True]","[0.8499999999999999, 0.4050000000000277]"
-in_gb_visa__visa_type__p1,S3,evisa,evisa,True,VERIFIED,0.39002,1.0,0.0,501.5911339996819,False,0.0,0.0,False,False,"[True, True]","[0.814409612048842, 0.39868508024238125]"
-in_gb_visa__visa_type__p2,S0,evisa,evisa,True,UNVERIFIED,0.876176,,0.0,413.39606099973025,False,0.0,0.0,False,False,[],[]
-in_gb_visa__visa_type__p2,S1,evisa,evisa,True,VERIFIED,0.498151,1.0,0.0,430.57008300093,False,0.0,0.0,False,False,"[True, True]","[0.825, 0.4925000000000185]"
-in_gb_visa__visa_type__p2,S2,evisa,evisa,True,VERIFIED,0.589722,1.0,0.0,432.48691500048153,False,0.0,0.0,False,False,"[True, True]","[0.8499999999999999, 0.4050000000000277]"
-in_gb_visa__visa_type__p2,S3,evisa,evisa,True,VERIFIED,0.39002,1.0,0.0,435.90333400061354,False,0.0,0.0,False,False,"[True, True]","[0.814409612048842, 0.39868508024238125]"
-in_us_visa__visa_required__p1,S0,true,True,True,UNVERIFIED,0.809657,,0.0,477.9965630004881,False,0.0,0.0,False,False,[],[]
-in_us_visa__visa_required__p1,S1,true,True,True,VERIFIED,0.962673,1.0,0.0,468.5777369995776,False,0.0,0.0,False,False,[True],[0.825]
-in_us_visa__visa_required__p1,S2,true,True,True,VERIFIED,0.970688,1.0,0.0,449.41712400031975,False,0.0,0.0,False,False,[True],[0.8499999999999999]
-in_us_visa__visa_required__p1,S3,true,True,True,VERIFIED,0.958675,1.0,0.0,428.0134459986584,False,0.0,0.0,False,False,[True],[0.814409612048842]
-in_us_visa__visa_required__p2,S0,true,True,True,UNVERIFIED,0.827113,,0.0,802.511701000185,False,0.0,0.0,False,False,[],[]
-in_us_visa__visa_required__p2,S1,true,True,True,VERIFIED,0.962673,1.0,0.0,429.88766099915665,False,0.0,0.0,False,False,[True],[0.825]
-in_us_visa__visa_required__p2,S2,true,True,True,VERIFIED,0.970688,1.0,0.0,440.5752170005144,False,0.0,0.0,False,False,[True],[0.8499999999999999]
-in_us_visa__visa_required__p2,S3,true,True,True,VERIFIED,0.958675,1.0,0.0,500.3082319999521,False,0.0,0.0,False,False,[True],[0.814409612048842]
-ph_in_visa__visa_type__p1,S0,visa_free,visa_free,True,UNVERIFIED,0.791505,,0.0,500.9399789996678,False,0.0,0.0,True,False,[],[]
-ph_in_visa__visa_type__p1,S1,visa_free,visa_free,True,VERIFIED,0.6,1.0,0.0,470.3083730000799,False,0.0,0.0,True,True,"[True, False, True]","[0.934206280418471, 0.044516048638956744, 0.7587245931126033]"
-ph_in_visa__visa_type__p1,S2,visa_free,visa_free,True,VERIFIED,0.6,1.0,0.0,521.4337910001632,False,0.0,0.0,True,True,"[True, False, True]","[0.9341862437426114, 0.02102407295843511, 0.7712077112171618]"
-ph_in_visa__visa_type__p1,S3,visa_free,visa_free,True,VERIFIED,0.6,1.0,0.0,624.1683469997952,False,0.0,0.0,True,True,"[True, False, True]","[0.8596921075743486, 0.0012771648928874943, 0.6329914566745785]"
-ph_in_visa__visa_type__p2,S0,visa_free,evisa,False,UNVERIFIED,0.891623,,0.0,541.3206510002055,False,0.0,0.0,True,False,[],[]
-ph_in_visa__visa_type__p2,S1,visa_free,visa_free,True,VERIFIED,0.6,1.0,0.0,434.6209359991917,False,0.0,0.0,True,True,"[False, True, True]","[0.044516048638956744, 0.934206280418471, 0.7587245931126033]"
-ph_in_visa__visa_type__p2,S2,visa_free,visa_free,True,VERIFIED,0.6,1.0,0.0,434.1095600011613,False,0.0,0.0,True,True,"[False, True, True]","[0.02102407295843511, 0.9341862437426114, 0.7712077112171618]"
-ph_in_visa__visa_type__p2,S3,visa_free,visa_free,True,VERIFIED,0.6,1.0,0.0,437.30074300037813,False,0.0,0.0,True,True,"[False, True, True]","[0.0012771648928874943, 0.8596921075743486, 0.6329914566745785]"
+query_id,system,gold_value,predicted_value,correct,resolved_correct,verification_status,confidence,faithfulness,hallucination_rate,latency_ms,retry,evidence_precision,evidence_recall,has_conflict,predicted_conflict,trust_labels,trust_scores
+vn_in_visa__max_stay_days__p1,S0,90,30,False,False,UNVERIFIED,0.91185,,0.0,605.3822920002858,False,0.0,0.0,True,False,[],[]
+vn_in_visa__max_stay_days__p1,S1,90,90,True,True,VERIFIED,0.350542,1.0,0.0,479.7017210003105,False,0.0,0.0,True,True,"[True, False, False]","[0.30357142857142855, 0.08423086940262652, 0.03267865644875597]"
+vn_in_visa__max_stay_days__p1,S2,90,90,True,True,VERIFIED,0.612109,1.0,0.0,460.370127000715,False,0.0,0.0,True,True,"[True, False, False]","[0.3035714285714285, 0.03423091245100049, 0.0]"
+vn_in_visa__max_stay_days__p1,S3,90,90,True,True,VERIFIED,0.493242,1.0,0.0,486.77998700077296,False,0.0,0.0,True,True,"[True, False, False]","[0.2796523125258704, 0.03486980813721768, 0.0]"
+vn_in_visa__max_stay_days__p2,S0,90,90,True,True,UNVERIFIED,0.862847,,0.0,514.3358029999945,False,0.0,0.0,True,False,[],[]
+vn_in_visa__max_stay_days__p2,S1,90,90,True,True,VERIFIED,0.350542,1.0,0.0,451.5073430011398,False,0.0,0.0,True,True,"[True, False, False]","[0.30357142857142855, 0.08423086940262652, 0.03267865644875597]"
+vn_in_visa__max_stay_days__p2,S2,90,90,True,True,VERIFIED,0.612109,1.0,0.0,453.695678999793,False,0.0,0.0,True,True,"[True, False, False]","[0.3035714285714285, 0.03423091245100049, 0.0]"
+vn_in_visa__max_stay_days__p2,S3,90,90,True,True,VERIFIED,0.493242,1.0,0.0,476.59514699989813,False,0.0,0.0,True,True,"[True, False, False]","[0.2796523125258704, 0.03486980813721768, 0.0]"
+vn_in_visa__max_stay_days__p3,S0,90,30,False,False,UNVERIFIED,0.855433,,0.0,420.03797799952736,False,0.0,0.0,True,False,[],[]
+vn_in_visa__max_stay_days__p3,S1,90,90,True,True,VERIFIED,0.350542,1.0,0.0,488.752683999337,False,0.0,0.0,True,True,"[True, False, False]","[0.30357142857142855, 0.03267865644875597, 0.08423086940262652]"
+vn_in_visa__max_stay_days__p3,S2,90,90,True,True,VERIFIED,0.612109,1.0,0.0,474.59387600065384,False,0.0,0.0,True,True,"[True, False, False]","[0.3035714285714285, 0.0, 0.03423091245100049]"
+vn_in_visa__max_stay_days__p3,S3,90,90,True,True,VERIFIED,0.493242,1.0,0.0,443.4900730011577,False,0.0,0.0,True,True,"[True, False, False]","[0.2796523125258704, 0.0, 0.03486980813721768]"
+vn_in_visa__visa_required__p1,S0,true,True,True,True,UNVERIFIED,0.88139,,0.0,470.8009059995675,False,0.0,0.0,True,False,[],[]
+vn_in_visa__visa_required__p1,S1,true,True,True,True,VERIFIED,0.972653,1.0,0.0,479.88636400077667,False,0.0,0.0,True,False,[True],[0.8571428571428571]
+vn_in_visa__visa_required__p1,S2,true,True,True,True,VERIFIED,0.978573,1.0,0.0,427.2337550009979,False,0.0,0.0,True,False,[True],[0.882142857142857]
+vn_in_visa__visa_required__p1,S3,true,True,True,True,VERIFIED,0.980913,1.0,0.0,715.4043089994957,False,0.0,0.0,True,False,[True],[0.8939483497421955]
+vn_in_visa__visa_required__p2,S0,true,True,True,True,UNVERIFIED,0.859471,,0.0,430.8756339996762,False,0.0,0.0,True,False,[],[]
+vn_in_visa__visa_required__p2,S1,true,True,True,True,VERIFIED,0.972653,1.0,0.0,436.2421189998713,False,0.0,0.0,True,False,[True],[0.8571428571428571]
+vn_in_visa__visa_required__p2,S2,true,True,True,True,VERIFIED,0.978573,1.0,0.0,471.55241499967815,False,0.0,0.0,True,False,[True],[0.882142857142857]
+vn_in_visa__visa_required__p2,S3,true,True,True,True,VERIFIED,0.980913,1.0,0.0,461.28958699955547,False,0.0,0.0,True,False,[True],[0.8939483497421955]
+vn_in_visa__visa_required__p3,S0,true,True,True,True,UNVERIFIED,0.882251,,0.0,483.99877399970137,False,0.0,0.0,True,False,[],[]
+vn_in_visa__visa_required__p3,S1,true,True,True,True,VERIFIED,0.972653,1.0,0.0,546.8582840003364,False,0.0,0.0,True,False,[True],[0.8571428571428571]
+vn_in_visa__visa_required__p3,S2,true,True,True,True,VERIFIED,0.978573,1.0,0.0,428.1950750009855,False,0.0,0.0,True,False,[True],[0.882142857142857]
+vn_in_visa__visa_required__p3,S3,true,True,True,True,VERIFIED,0.980913,1.0,0.0,531.8298929996672,False,0.0,0.0,True,False,[True],[0.8939483497421955]
+th_in_visa__max_stay_days__p1,S0,60,15,False,False,UNVERIFIED,0.881831,,0.0,415.8410599993658,False,0.0,0.0,True,False,[],[]
+th_in_visa__max_stay_days__p1,S1,60,60,True,True,VERIFIED,0.158086,1.0,0.0,551.4921929989214,False,0.0,0.0,True,True,"[False, True, False, False]","[0.03764826235487865, 0.10771428571428569, 0.023920022527365123, 0.005060128955028252]"
+th_in_visa__max_stay_days__p1,S2,60,60,True,True,VERIFIED,0.365963,1.0,0.0,416.45579500072927,False,0.0,0.0,True,True,"[False, True, False, False]","[0.014103160530381008, 0.10171428571428567, 0.0004163061390038392, 0.0]"
+th_in_visa__max_stay_days__p1,S3,60,60,True,True,VERIFIED,0.292234,1.0,0.0,465.03315799964184,False,0.0,0.0,True,True,"[False, True, False, False]","[0.0, 0.08230884307327405, 0.0, 0.0]"
+th_in_visa__max_stay_days__p2,S0,60,30,False,False,UNVERIFIED,0.84618,,0.0,438.81236299966986,False,0.0,0.0,True,False,[],[]
+th_in_visa__max_stay_days__p2,S1,60,60,True,True,VERIFIED,0.158086,1.0,0.0,473.66094700009853,False,0.0,0.0,True,True,"[False, True, False, False]","[0.03764826235487865, 0.10771428571428569, 0.005060128955028252, 0.023920022527365123]"
+th_in_visa__max_stay_days__p2,S2,60,60,True,True,VERIFIED,0.365963,1.0,0.0,455.61558800000057,False,0.0,0.0,True,True,"[False, True, False, False]","[0.014103160530381008, 0.10171428571428567, 0.0, 0.0004163061390038392]"
+th_in_visa__max_stay_days__p2,S3,60,60,True,True,VERIFIED,0.292234,1.0,0.0,467.0041970002785,False,0.0,0.0,True,True,"[False, True, False, False]","[0.0, 0.08230884307327405, 0.0, 0.0]"
+th_in_visa__max_stay_days__p3,S0,60,15,False,False,UNVERIFIED,0.894955,,0.0,484.2262749989459,False,0.0,0.0,True,False,[],[]
+th_in_visa__max_stay_days__p3,S1,60,60,True,True,VERIFIED,0.158086,1.0,0.0,535.130565000145,False,0.0,0.0,True,True,"[False, True, False, False]","[0.03764826235487865, 0.10771428571428569, 0.023920022527365123, 0.005060128955028252]"
+th_in_visa__max_stay_days__p3,S2,60,60,True,True,VERIFIED,0.365963,1.0,0.0,451.83402200018463,False,0.0,0.0,True,True,"[False, True, False, False]","[0.014103160530381008, 0.10171428571428567, 0.0004163061390038392, 0.0]"
+th_in_visa__max_stay_days__p3,S3,60,60,True,True,VERIFIED,0.292234,1.0,0.0,441.73392800075817,False,0.0,0.0,True,True,"[False, True, False, False]","[0.0, 0.08230884307327405, 0.0, 0.0]"
+th_us_visa__visa_required__p1,S0,false,False,True,True,UNVERIFIED,0.775481,,0.0,441.42492200080596,False,0.0,0.0,True,False,[],[]
+th_us_visa__visa_required__p1,S1,false,False,True,True,VERIFIED,0.977811,1.0,0.0,430.9075319997646,False,0.0,0.0,True,False,[True],[0.8785714285714286]
+th_us_visa__visa_required__p1,S2,false,False,True,True,VERIFIED,0.982634,1.0,0.0,466.2864760011871,False,0.0,0.0,True,False,[True],[0.9035714285714285]
+th_us_visa__visa_required__p1,S3,false,False,True,True,VERIFIED,0.988679,1.0,0.0,433.38045999917085,False,0.0,0.0,True,False,[True],[0.9469741748710978]
+th_us_visa__visa_required__p2,S0,false,False,True,True,UNVERIFIED,0.789498,,0.0,736.3290040011634,False,0.0,0.0,True,False,[],[]
+th_us_visa__visa_required__p2,S1,false,False,True,True,VERIFIED,0.977811,1.0,0.0,427.66295299952617,False,0.0,0.0,True,False,[True],[0.8785714285714286]
+th_us_visa__visa_required__p2,S2,false,False,True,True,VERIFIED,0.982634,1.0,0.0,442.4189550009032,False,0.0,0.0,True,False,[True],[0.9035714285714285]
+th_us_visa__visa_required__p2,S3,false,False,True,True,VERIFIED,0.988679,1.0,0.0,501.8727679998847,False,0.0,0.0,True,False,[True],[0.9469741748710978]
+th_health__vaccine_required__p1,S0,false,False,True,True,UNVERIFIED,0.896651,,0.0,556.5052490001108,False,0.0,0.0,True,False,[],[]
+th_health__vaccine_required__p1,S1,false,False,True,True,VERIFIED,0.313462,1.0,0.0,479.85792299914465,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.10460611245910324]"
+th_health__vaccine_required__p1,S2,false,False,True,True,VERIFIED,0.322288,1.0,0.0,645.3565150004579,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.10085611245910327]"
+th_health__vaccine_required__p1,S3,false,False,True,True,VERIFIED,0.909474,1.0,0.0,474.0046169990819,False,0.0,0.0,True,True,"[True, False]","[0.46283689510052695, 0.12348155620743483]"
+th_health__vaccine_required__p2,S0,false,False,True,True,UNVERIFIED,0.908273,,0.0,425.376196999423,False,0.0,0.0,True,False,[],[]
+th_health__vaccine_required__p2,S1,false,False,True,True,VERIFIED,0.313462,1.0,0.0,470.6546409997827,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.10460611245910324]"
+th_health__vaccine_required__p2,S2,false,False,True,True,VERIFIED,0.322288,1.0,0.0,484.52134800027125,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.10085611245910327]"
+th_health__vaccine_required__p2,S3,false,False,True,True,VERIFIED,0.909474,1.0,0.0,446.0329939993244,False,0.0,0.0,True,True,"[True, False]","[0.46283689510052695, 0.12348155620743483]"
+th_health__vaccine_required__p3,S0,false,False,True,True,UNVERIFIED,0.815608,,0.0,426.9146050010022,False,0.0,0.0,True,False,[],[]
+th_health__vaccine_required__p3,S1,false,False,True,True,VERIFIED,0.313462,1.0,0.0,476.513203999275,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.10460611245910324]"
+th_health__vaccine_required__p3,S2,false,False,True,True,VERIFIED,0.322288,1.0,0.0,550.4942530005792,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.10085611245910327]"
+th_health__vaccine_required__p3,S3,false,False,True,True,VERIFIED,0.909474,1.0,0.0,450.116486999832,False,0.0,0.0,True,True,"[True, False]","[0.46283689510052695, 0.12348155620743483]"
+th_health__vaccine_name__p1,S0,yellow fever,yellow fever,True,True,UNVERIFIED,0.792113,,0.0,406.15144399998826,False,0.0,0.0,True,False,[],[]
+th_health__vaccine_name__p1,S1,yellow fever,yellow fever,True,True,VERIFIED,0.313462,1.0,0.0,457.54400599980727,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.10460611245910324]"
+th_health__vaccine_name__p1,S2,yellow fever,yellow fever,True,True,VERIFIED,0.322288,1.0,0.0,433.2374549994711,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.10085611245910327]"
+th_health__vaccine_name__p1,S3,yellow fever,yellow fever,True,True,VERIFIED,0.909474,1.0,0.0,449.9493459989026,False,0.0,0.0,True,True,"[True, False]","[0.46283689510052695, 0.12348155620743483]"
+th_health__vaccine_name__p2,S0,yellow fever,covid-19,False,False,UNVERIFIED,0.786641,,0.0,421.06105299899355,False,0.0,0.0,True,False,[],[]
+th_health__vaccine_name__p2,S1,yellow fever,yellow fever,True,True,VERIFIED,0.313462,1.0,0.0,437.66649600001983,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.10460611245910324]"
+th_health__vaccine_name__p2,S2,yellow fever,yellow fever,True,True,VERIFIED,0.322288,1.0,0.0,471.6333440010203,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.10085611245910327]"
+th_health__vaccine_name__p2,S3,yellow fever,yellow fever,True,True,VERIFIED,0.909474,1.0,0.0,437.2856940008205,False,0.0,0.0,True,True,"[True, False]","[0.46283689510052695, 0.12348155620743483]"
+th_customs__item_allowed_drone__p1,S0,restricted,restricted,True,True,UNVERIFIED,0.839334,,0.0,430.02300300031493,False,0.0,0.0,False,False,[],[]
+th_customs__item_allowed_drone__p1,S1,restricted,restricted,True,True,VERIFIED,0.946597,1.0,0.0,495.7885620005982,False,0.0,0.0,False,False,[True],[0.7874999999999999]
+th_customs__item_allowed_drone__p1,S2,restricted,restricted,True,True,VERIFIED,0.932453,1.0,0.0,818.5521710001922,False,0.0,0.0,False,False,[True],[0.7625]
+th_customs__item_allowed_drone__p1,S3,restricted,restricted,True,True,VERIFIED,0.932453,1.0,0.0,540.6596869997884,False,0.0,0.0,False,False,[True],[0.7625]
+th_customs__item_allowed_drone__p2,S0,restricted,restricted,True,True,UNVERIFIED,0.856049,,0.0,406.40176099987,False,0.0,0.0,False,False,[],[]
+th_customs__item_allowed_drone__p2,S1,restricted,restricted,True,True,VERIFIED,0.946597,1.0,0.0,485.384753001199,False,0.0,0.0,False,False,[True],[0.7874999999999999]
+th_customs__item_allowed_drone__p2,S2,restricted,restricted,True,True,VERIFIED,0.932453,1.0,0.0,472.10786100004043,False,0.0,0.0,False,False,[True],[0.7625]
+th_customs__item_allowed_drone__p2,S3,restricted,restricted,True,True,VERIFIED,0.932453,1.0,0.0,446.8171059997985,False,0.0,0.0,False,False,[True],[0.7625]
+th_customs__item_allowed_drone__p3,S0,restricted,restricted,True,True,UNVERIFIED,0.844655,,0.0,531.5238909988693,False,0.0,0.0,False,False,[],[]
+th_customs__item_allowed_drone__p3,S1,restricted,restricted,True,True,VERIFIED,0.946597,1.0,0.0,423.2664980008849,False,0.0,0.0,False,False,[True],[0.7874999999999999]
+th_customs__item_allowed_drone__p3,S2,restricted,restricted,True,True,VERIFIED,0.932453,1.0,0.0,436.5825330005464,False,0.0,0.0,False,False,[True],[0.7625]
+th_customs__item_allowed_drone__p3,S3,restricted,restricted,True,True,VERIFIED,0.932453,1.0,0.0,522.4094200002583,False,0.0,0.0,False,False,[True],[0.7625]
+sg_in_visa__max_stay_days__p1,S0,30,30,True,True,UNVERIFIED,0.865203,,0.0,441.8635000001814,False,0.0,0.0,False,False,[],[]
+sg_in_visa__max_stay_days__p1,S1,30,30,True,True,VERIFIED,0.989763,1.0,0.0,473.6931959996582,False,0.0,0.0,False,False,"[True, True]","[0.9571428571428571, 0.6153571428571428]"
+sg_in_visa__max_stay_days__p1,S2,30,30,True,True,VERIFIED,0.989763,1.0,0.0,437.6625570002943,False,0.0,0.0,False,False,"[True, True]","[0.9571428571428571, 0.6278571428571428]"
+sg_in_visa__max_stay_days__p1,S3,30,30,True,True,VERIFIED,0.980913,1.0,0.0,460.03872500114085,False,0.0,0.0,False,False,"[True, True]","[0.8939483497421955, 0.4484070900715649]"
+sg_in_visa__max_stay_days__p2,S0,30,30,True,True,UNVERIFIED,0.784428,,0.0,416.53157000109786,False,0.0,0.0,False,False,[],[]
+sg_in_visa__max_stay_days__p2,S1,30,30,True,True,VERIFIED,0.989763,1.0,0.0,500.63955600126064,False,0.0,0.0,False,False,"[True, True]","[0.9571428571428571, 0.6153571428571428]"
+sg_in_visa__max_stay_days__p2,S2,30,30,True,True,VERIFIED,0.989763,1.0,0.0,471.8128109998361,False,0.0,0.0,False,False,"[True, True]","[0.9571428571428571, 0.6278571428571428]"
+sg_in_visa__max_stay_days__p2,S3,30,30,True,True,VERIFIED,0.980913,1.0,0.0,423.87421000057657,False,0.0,0.0,False,False,"[True, True]","[0.8939483497421955, 0.4484070900715649]"
+sg_health__vaccine_required__p1,S0,false,True,False,False,UNVERIFIED,0.915829,,0.0,442.314998999791,False,0.0,0.0,True,False,[],[]
+sg_health__vaccine_required__p1,S1,false,False,True,True,VERIFIED,0.379904,1.0,0.0,458.410694000122,False,0.0,0.0,True,False,"[False, True]","[0.587556413705902, 0.7874999999999999]"
+sg_health__vaccine_required__p1,S2,false,False,True,True,VERIFIED,0.394424,1.0,0.0,475.536063000618,False,0.0,0.0,True,False,"[False, True]","[0.6000564137059019, 0.8]"
+sg_health__vaccine_required__p1,S3,false,False,True,True,VERIFIED,0.831833,1.0,0.0,434.82853999921645,False,0.0,0.0,True,False,"[False, True]","[0.3484838263067135, 0.9120067486018812]"
+sg_health__vaccine_required__p2,S0,false,True,False,False,UNVERIFIED,0.896041,,0.0,495.83749499834084,False,0.0,0.0,True,False,[],[]
+sg_health__vaccine_required__p2,S1,false,False,True,True,VERIFIED,0.379904,1.0,0.0,569.8026640002354,False,0.0,0.0,True,False,"[False, True]","[0.587556413705902, 0.7874999999999999]"
+sg_health__vaccine_required__p2,S2,false,False,True,True,VERIFIED,0.394424,1.0,0.0,469.08898200126714,False,0.0,0.0,True,False,"[False, True]","[0.6000564137059019, 0.8]"
+sg_health__vaccine_required__p2,S3,false,False,True,True,VERIFIED,0.831833,1.0,0.0,445.1432570003817,False,0.0,0.0,True,False,"[False, True]","[0.3484838263067135, 0.9120067486018812]"
+sg_customs__duty_free_limit__p1,S0,500 SGD,"(600.0, 'SGD')",False,False,UNVERIFIED,0.76172,,0.0,782.2763149997627,False,0.0,0.0,True,False,[],[]
+sg_customs__duty_free_limit__p1,S1,500 SGD,"(500.0, 'SGD')",True,True,VERIFIED,0.143527,1.0,0.0,457.3424000009254,False,0.0,0.0,True,True,"[False, True]","[0.0571761998893859, 0.10074999999999996]"
+sg_customs__duty_free_limit__p1,S2,500 SGD,"(500.0, 'SGD')",True,True,VERIFIED,0.084536,1.0,0.0,485.53979299867933,False,0.0,0.0,True,True,"[False, True]","[0.06655238565897865, 0.09074999999999996]"
+sg_customs__duty_free_limit__p1,S3,500 SGD,"(500.0, 'SGD')",True,True,VERIFIED,0.084536,1.0,0.0,505.71925900112547,False,0.0,0.0,True,True,"[False, True]","[0.06655238565897865, 0.09074999999999996]"
+sg_customs__duty_free_limit__p2,S0,500 SGD,,False,False,CLARIFICATION,0.0,,0.0,289.9330359996384,False,0.0,0.0,True,False,[],[]
+sg_customs__duty_free_limit__p2,S1,500 SGD,,False,False,CLARIFICATION,0.0,,0.0,272.6193119997333,False,0.0,0.0,True,False,[],[]
+sg_customs__duty_free_limit__p2,S2,500 SGD,,False,False,CLARIFICATION,0.0,,0.0,256.2795459998597,False,0.0,0.0,True,False,[],[]
+sg_customs__duty_free_limit__p2,S3,500 SGD,,False,False,CLARIFICATION,0.0,,0.0,240.62625100123114,False,0.0,0.0,True,False,[],[]
+sg_customs__duty_free_limit__p3,S0,500 SGD,"(600.0, 'SGD')",False,False,UNVERIFIED,0.710884,,0.0,500.9528929986118,False,0.0,0.0,True,False,[],[]
+sg_customs__duty_free_limit__p3,S1,500 SGD,"(500.0, 'SGD')",True,True,VERIFIED,0.143527,1.0,0.0,514.7596050010179,False,0.0,0.0,True,True,"[False, True]","[0.0571761998893859, 0.10074999999999996]"
+sg_customs__duty_free_limit__p3,S2,500 SGD,"(500.0, 'SGD')",True,True,VERIFIED,0.084536,1.0,0.0,501.30538000121305,False,0.0,0.0,True,True,"[False, True]","[0.06655238565897865, 0.09074999999999996]"
+sg_customs__duty_free_limit__p3,S3,500 SGD,"(500.0, 'SGD')",True,True,VERIFIED,0.084536,1.0,0.0,470.5168540003797,False,0.0,0.0,True,True,"[False, True]","[0.06655238565897865, 0.09074999999999996]"
+my_in_visa__visa_required__p1,S0,false,False,True,True,UNVERIFIED,0.826909,,0.0,415.8205000003363,False,0.0,0.0,True,False,[],[]
+my_in_visa__visa_required__p1,S1,false,False,True,True,VERIFIED,0.39238,1.0,0.0,433.11525900026027,False,0.0,0.0,True,True,"[True, False]","[0.28125, 0.0654826917177228]"
+my_in_visa__visa_required__p1,S2,false,False,True,True,VERIFIED,0.585617,1.0,0.0,435.9755209989089,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.021733652961199584]"
+my_in_visa__visa_required__p1,S3,false,False,True,True,VERIFIED,0.435873,1.0,0.0,447.7283870000974,False,0.0,0.0,True,True,"[True, False]","[0.25368944833765683, 0.017746191169943998]"
+my_in_visa__visa_required__p2,S0,false,False,True,True,UNVERIFIED,0.819738,,0.0,495.7882510007039,False,0.0,0.0,True,False,[],[]
+my_in_visa__visa_required__p2,S1,false,False,True,True,VERIFIED,0.39238,1.0,0.0,444.37259799997264,False,0.0,0.0,True,True,"[True, False]","[0.28125, 0.0654826917177228]"
+my_in_visa__visa_required__p2,S2,false,False,True,True,VERIFIED,0.585617,1.0,0.0,441.9617029998335,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.021733652961199584]"
+my_in_visa__visa_required__p2,S3,false,False,True,True,VERIFIED,0.435873,1.0,0.0,617.1335010003531,False,0.0,0.0,True,True,"[True, False]","[0.25368944833765683, 0.017746191169943998]"
+my_in_visa__visa_required__p3,S0,false,False,True,True,UNVERIFIED,0.818403,,0.0,507.77888800075743,False,0.0,0.0,True,False,[],[]
+my_in_visa__visa_required__p3,S1,false,False,True,True,VERIFIED,0.39238,1.0,0.0,496.5010220003023,False,0.0,0.0,True,True,"[True, False]","[0.28125, 0.0654826917177228]"
+my_in_visa__visa_required__p3,S2,false,False,True,True,VERIFIED,0.585617,1.0,0.0,422.1345440000732,False,0.0,0.0,True,True,"[True, False]","[0.2875, 0.021733652961199584]"
+my_in_visa__visa_required__p3,S3,false,False,True,True,VERIFIED,0.435873,1.0,0.0,497.5240120002127,False,0.0,0.0,True,True,"[True, False]","[0.25368944833765683, 0.017746191169943998]"
+id_in_visa__visa_required__p1,S0,true,True,True,True,UNVERIFIED,0.819604,,0.0,415.95964900079707,False,0.0,0.0,True,False,[],[]
+id_in_visa__visa_required__p1,S1,true,True,True,True,VERIFIED,0.45477,1.0,0.0,433.2576059987332,False,0.0,0.0,True,False,"[True, False]","[0.825, 0.5875000000000183]"
+id_in_visa__visa_required__p1,S2,true,True,True,True,VERIFIED,0.563295,1.0,0.0,455.9175629983656,False,0.0,0.0,True,False,"[True, False]","[0.8499999999999999, 0.5250000000000277]"
+id_in_visa__visa_required__p1,S3,true,True,True,True,VERIFIED,0.420041,1.0,0.0,769.785923001109,False,0.0,0.0,True,False,"[True, False]","[0.814409612048842, 0.6036084116396332]"
+id_in_visa__visa_required__p2,S0,true,True,True,True,UNVERIFIED,0.837073,,0.0,455.44502300072054,False,0.0,0.0,True,False,[],[]
+id_in_visa__visa_required__p2,S1,true,True,True,True,VERIFIED,0.45477,1.0,0.0,444.44004599972686,False,0.0,0.0,True,False,"[True, False]","[0.825, 0.5875000000000183]"
+id_in_visa__visa_required__p2,S2,true,True,True,True,VERIFIED,0.563295,1.0,0.0,474.2034379996767,False,0.0,0.0,True,False,"[True, False]","[0.8499999999999999, 0.5250000000000277]"
+id_in_visa__visa_required__p2,S3,true,True,True,True,VERIFIED,0.420041,1.0,0.0,470.7051740006136,False,0.0,0.0,True,False,"[True, False]","[0.814409612048842, 0.6036084116396332]"
+id_in_visa__visa_required__p3,S0,true,False,False,False,UNVERIFIED,0.85466,,0.0,521.0233259986126,False,0.0,0.0,True,False,[],[]
+id_in_visa__visa_required__p3,S1,true,True,True,True,VERIFIED,0.45477,1.0,0.0,547.8540980002435,False,0.0,0.0,True,False,"[False, True]","[0.5875000000000183, 0.825]"
+id_in_visa__visa_required__p3,S2,true,True,True,True,VERIFIED,0.563295,1.0,0.0,423.1553560002794,False,0.0,0.0,True,False,"[False, True]","[0.5250000000000277, 0.8499999999999999]"
+id_in_visa__visa_required__p3,S3,true,True,True,True,VERIFIED,0.420041,1.0,0.0,467.9364860003261,False,0.0,0.0,True,False,"[False, True]","[0.6036084116396332, 0.814409612048842]"
+id_in_visa__visa_type__p1,S0,visa_on_arrival,visa_free,False,False,UNVERIFIED,0.769117,,0.0,552.5497759990685,False,0.0,0.0,True,False,[],[]
+id_in_visa__visa_type__p1,S1,visa_on_arrival,visa_on_arrival,True,True,VERIFIED,0.45477,1.0,0.0,484.36653899989324,False,0.0,0.0,True,False,"[False, True]","[0.5875000000000183, 0.825]"
+id_in_visa__visa_type__p1,S2,visa_on_arrival,visa_on_arrival,True,True,VERIFIED,0.563295,1.0,0.0,454.49179300157994,False,0.0,0.0,True,False,"[False, True]","[0.5250000000000277, 0.8499999999999999]"
+id_in_visa__visa_type__p1,S3,visa_on_arrival,visa_on_arrival,True,True,VERIFIED,0.420041,1.0,0.0,526.7946320000192,False,0.0,0.0,True,False,"[False, True]","[0.6036084116396332, 0.814409612048842]"
+id_in_visa__visa_type__p2,S0,visa_on_arrival,visa_on_arrival,True,True,UNVERIFIED,0.832313,,0.0,456.79221600039455,False,0.0,0.0,True,False,[],[]
+id_in_visa__visa_type__p2,S1,visa_on_arrival,visa_on_arrival,True,True,VERIFIED,0.45477,1.0,0.0,477.51452199918276,False,0.0,0.0,True,False,"[True, False]","[0.825, 0.5875000000000183]"
+id_in_visa__visa_type__p2,S2,visa_on_arrival,visa_on_arrival,True,True,VERIFIED,0.563295,1.0,0.0,459.5222719999583,False,0.0,0.0,True,False,"[True, False]","[0.8499999999999999, 0.5250000000000277]"
+id_in_visa__visa_type__p2,S3,visa_on_arrival,visa_on_arrival,True,True,VERIFIED,0.420041,1.0,0.0,519.7273579997272,False,0.0,0.0,True,False,"[True, False]","[0.814409612048842, 0.6036084116396332]"
+id_in_visa__max_stay_days__p1,S0,30,30,True,True,UNVERIFIED,0.845922,,0.0,438.9387369992619,False,0.0,0.0,False,False,[],[]
+id_in_visa__max_stay_days__p1,S1,30,30,True,True,VERIFIED,0.962673,1.0,0.0,494.45994599955156,False,0.0,0.0,False,False,"[True, True]","[0.5875000000000183, 0.825]"
+id_in_visa__max_stay_days__p1,S2,30,30,True,True,VERIFIED,0.970688,1.0,0.0,458.0251950010279,False,0.0,0.0,False,False,"[True, True]","[0.5250000000000277, 0.8499999999999999]"
+id_in_visa__max_stay_days__p1,S3,30,30,True,True,VERIFIED,0.958675,1.0,0.0,443.0914490003488,False,0.0,0.0,False,False,"[True, True]","[0.6036084116396332, 0.814409612048842]"
+id_in_visa__max_stay_days__p2,S0,30,30,True,True,UNVERIFIED,0.847351,,0.0,413.54785499970603,False,0.0,0.0,False,False,[],[]
+id_in_visa__max_stay_days__p2,S1,30,30,True,True,VERIFIED,0.962673,1.0,0.0,475.40957700039144,False,0.0,0.0,False,False,"[True, True]","[0.825, 0.5875000000000183]"
+id_in_visa__max_stay_days__p2,S2,30,30,True,True,VERIFIED,0.970688,1.0,0.0,467.31240000008256,False,0.0,0.0,False,False,"[True, True]","[0.8499999999999999, 0.5250000000000277]"
+id_in_visa__max_stay_days__p2,S3,30,30,True,True,VERIFIED,0.958675,1.0,0.0,426.2417830013874,False,0.0,0.0,False,False,"[True, True]","[0.814409612048842, 0.6036084116396332]"
+jp_in_visa__max_stay_days__p1,S0,90,90,True,True,UNVERIFIED,0.871255,,0.0,468.94286799943075,False,0.0,0.0,True,False,[],[]
+jp_in_visa__max_stay_days__p1,S1,90,90,True,True,VERIFIED,0.287487,1.0,0.0,776.371101001132,False,0.0,0.0,True,True,"[True, False]","[0.26875, 0.08423080032894593]"
+jp_in_visa__max_stay_days__p1,S2,90,90,True,True,VERIFIED,0.472819,1.0,0.0,447.5655940004799,False,0.0,0.0,True,True,"[True, False]","[0.275, 0.03423081587803431]"
+jp_in_visa__max_stay_days__p1,S3,90,90,True,True,VERIFIED,0.240882,1.0,0.0,469.2134039996745,False,0.0,0.0,True,True,"[True, False]","[0.22275771701246383, 0.03486974820616598]"
+jp_in_visa__max_stay_days__p2,S0,90,90,True,True,UNVERIFIED,0.814682,,0.0,461.51254500000505,False,0.0,0.0,True,False,[],[]
+jp_in_visa__max_stay_days__p2,S1,90,90,True,True,VERIFIED,0.287487,1.0,0.0,581.0424089995649,False,0.0,0.0,True,True,"[True, False]","[0.26875, 0.08423080032894593]"
+jp_in_visa__max_stay_days__p2,S2,90,90,True,True,VERIFIED,0.472819,1.0,0.0,483.62828100107436,False,0.0,0.0,True,True,"[True, False]","[0.275, 0.03423081587803431]"
+jp_in_visa__max_stay_days__p2,S3,90,90,True,True,VERIFIED,0.240882,1.0,0.0,519.987140000012,False,0.0,0.0,True,True,"[True, False]","[0.22275771701246383, 0.03486974820616598]"
+jp_in_visa__max_stay_days__p3,S0,90,90,True,True,UNVERIFIED,0.903748,,0.0,519.7467240013793,False,0.0,0.0,True,False,[],[]
+jp_in_visa__max_stay_days__p3,S1,90,90,True,True,VERIFIED,0.287487,1.0,0.0,473.75600499981374,False,0.0,0.0,True,True,"[True, False]","[0.26875, 0.08423080032894593]"
+jp_in_visa__max_stay_days__p3,S2,90,90,True,True,VERIFIED,0.472819,1.0,0.0,447.09199800126953,False,0.0,0.0,True,True,"[True, False]","[0.275, 0.03423081587803431]"
+jp_in_visa__max_stay_days__p3,S3,90,90,True,True,VERIFIED,0.240882,1.0,0.0,473.37978999894403,False,0.0,0.0,True,True,"[True, False]","[0.22275771701246383, 0.03486974820616598]"
+jp_in_visa__visa_required__p1,S0,true,True,True,True,UNVERIFIED,0.875527,,0.0,406.64237000055437,False,0.0,0.0,False,False,[],[]
+jp_in_visa__visa_required__p1,S1,true,True,True,True,VERIFIED,0.946597,1.0,0.0,459.02529999875696,False,0.0,0.0,False,False,[True],[0.7874999999999999]
+jp_in_visa__visa_required__p1,S2,true,True,True,True,VERIFIED,0.962673,1.0,0.0,539.6609239996906,False,0.0,0.0,False,False,[True],[0.825]
+jp_in_visa__visa_required__p1,S3,true,True,True,True,VERIFIED,0.942762,1.0,0.0,451.21967399973073,False,0.0,0.0,False,False,[True],[0.7801591587153823]
+jp_in_visa__visa_required__p2,S0,true,True,True,True,UNVERIFIED,0.90896,,0.0,433.5575309996784,False,0.0,0.0,False,False,[],[]
+jp_in_visa__visa_required__p2,S1,true,True,True,True,VERIFIED,0.946597,1.0,0.0,435.38063099913415,False,0.0,0.0,False,False,[True],[0.7874999999999999]
+jp_in_visa__visa_required__p2,S2,true,True,True,True,VERIFIED,0.962673,1.0,0.0,458.97970399892074,False,0.0,0.0,False,False,[True],[0.825]
+jp_in_visa__visa_required__p2,S3,true,True,True,True,VERIFIED,0.942762,1.0,0.0,448.0765340013022,False,0.0,0.0,False,False,[True],[0.7801591587153823]
+jp_health__certificate_required__p1,S0,false,True,False,False,UNVERIFIED,0.821076,,0.0,426.29503200078034,False,0.0,0.0,True,False,[],[]
+jp_health__certificate_required__p1,S1,false,False,True,True,VERIFIED,0.243688,1.0,0.0,445.37338400004955,False,0.0,0.0,True,True,"[True, False]","[0.26875, 0.10476140413187986]"
+jp_health__certificate_required__p1,S2,false,False,True,True,VERIFIED,0.273385,1.0,0.0,439.5772569987457,False,0.0,0.0,True,True,"[True, False]","[0.27499999999999997, 0.10101140413187985]"
+jp_health__certificate_required__p1,S3,false,False,True,True,VERIFIED,0.897317,1.0,0.0,502.20806500146864,False,0.0,0.0,True,True,"[True, False]","[0.4558197005707581, 0.12391923174818685]"
+jp_health__certificate_required__p2,S0,false,True,False,False,UNVERIFIED,0.792192,,0.0,412.0897259999765,False,0.0,0.0,True,False,[],[]
+jp_health__certificate_required__p2,S1,false,False,True,True,VERIFIED,0.243688,1.0,0.0,462.37748800012923,False,0.0,0.0,True,True,"[True, False]","[0.26875, 0.10476140413187986]"
+jp_health__certificate_required__p2,S2,false,False,True,True,VERIFIED,0.273385,1.0,0.0,559.5612489996711,False,0.0,0.0,True,True,"[True, False]","[0.27499999999999997, 0.10101140413187985]"
+jp_health__certificate_required__p2,S3,false,False,True,True,VERIFIED,0.897317,1.0,0.0,867.0052590005071,False,0.0,0.0,True,True,"[True, False]","[0.4558197005707581, 0.12391923174818685]"
+jp_health__certificate_required__p3,S0,false,True,False,False,UNVERIFIED,0.809326,,0.0,420.2717329990264,False,0.0,0.0,True,False,[],[]
+jp_health__certificate_required__p3,S1,false,False,True,True,VERIFIED,0.243688,1.0,0.0,521.7366220003896,False,0.0,0.0,True,True,"[True, False]","[0.26875, 0.10476140413187986]"
+jp_health__certificate_required__p3,S2,false,False,True,True,VERIFIED,0.273385,1.0,0.0,493.0707390012685,False,0.0,0.0,True,True,"[True, False]","[0.27499999999999997, 0.10101140413187985]"
+jp_health__certificate_required__p3,S3,false,False,True,True,VERIFIED,0.897317,1.0,0.0,551.0615589992085,False,0.0,0.0,True,True,"[True, False]","[0.4558197005707581, 0.12391923174818685]"
+jp_customs__duty_free_limit__p1,S0,200000 JPY,"(200000.0, 'JPY')",True,True,UNVERIFIED,0.851437,,0.0,445.6227190003119,False,0.0,0.0,False,False,[],[]
+jp_customs__duty_free_limit__p1,S1,200000 JPY,"(200000.0, 'JPY')",True,True,VERIFIED,0.946597,1.0,0.0,499.93110800096474,False,0.0,0.0,False,False,[True],[0.7874999999999999]
+jp_customs__duty_free_limit__p1,S2,200000 JPY,"(200000.0, 'JPY')",True,True,VERIFIED,0.932453,1.0,0.0,441.7685240005085,False,0.0,0.0,False,False,[True],[0.7625]
+jp_customs__duty_free_limit__p1,S3,200000 JPY,"(200000.0, 'JPY')",True,True,VERIFIED,0.932453,1.0,0.0,560.2424469998368,False,0.0,0.0,False,False,[True],[0.7625]
+jp_customs__duty_free_limit__p2,S0,200000 JPY,"(200000.0, 'JPY')",True,True,UNVERIFIED,0.871039,,0.0,525.7311229997867,False,0.0,0.0,False,False,[],[]
+jp_customs__duty_free_limit__p2,S1,200000 JPY,"(200000.0, 'JPY')",True,True,VERIFIED,0.946597,1.0,0.0,415.91861300003075,False,0.0,0.0,False,False,[True],[0.7874999999999999]
+jp_customs__duty_free_limit__p2,S2,200000 JPY,"(200000.0, 'JPY')",True,True,VERIFIED,0.932453,1.0,0.0,429.17447299987543,False,0.0,0.0,False,False,[True],[0.7625]
+jp_customs__duty_free_limit__p2,S3,200000 JPY,"(200000.0, 'JPY')",True,True,VERIFIED,0.932453,1.0,0.0,461.39411499825655,False,0.0,0.0,False,False,[True],[0.7625]
+jp_us_customs__duty_free_limit__p1,S0,200000 JPY,"(200000.0, 'JPY')",True,True,UNVERIFIED,0.827317,,0.0,449.5525940001244,False,0.0,0.0,False,False,[],[]
+jp_us_customs__duty_free_limit__p1,S1,200000 JPY,"(200000.0, 'JPY')",True,True,VERIFIED,0.946597,1.0,0.0,444.10268700085,False,0.0,0.0,False,False,[True],[0.7874999999999999]
+jp_us_customs__duty_free_limit__p1,S2,200000 JPY,"(200000.0, 'JPY')",True,True,VERIFIED,0.932453,1.0,0.0,442.2016499993333,False,0.0,0.0,False,False,[True],[0.7625]
+jp_us_customs__duty_free_limit__p1,S3,200000 JPY,"(200000.0, 'JPY')",True,True,VERIFIED,0.932453,1.0,0.0,431.2120500017045,False,0.0,0.0,False,False,[True],[0.7625]
+jp_us_customs__duty_free_limit__p2,S0,200000 JPY,"(200000.0, 'JPY')",True,True,UNVERIFIED,0.833202,,0.0,459.7681630002626,False,0.0,0.0,False,False,[],[]
+jp_us_customs__duty_free_limit__p2,S1,200000 JPY,"(200000.0, 'JPY')",True,True,VERIFIED,0.946597,1.0,0.0,434.1058049994899,False,0.0,0.0,False,False,[True],[0.7874999999999999]
+jp_us_customs__duty_free_limit__p2,S2,200000 JPY,"(200000.0, 'JPY')",True,True,VERIFIED,0.932453,1.0,0.0,426.14887799936696,False,0.0,0.0,False,False,[True],[0.7625]
+jp_us_customs__duty_free_limit__p2,S3,200000 JPY,"(200000.0, 'JPY')",True,True,VERIFIED,0.932453,1.0,0.0,449.69214599950647,False,0.0,0.0,False,False,[True],[0.7625]
+np_in_visa__visa_required__p1,S0,false,False,True,True,UNVERIFIED,0.878941,,0.0,449.468718999924,False,0.0,0.0,True,False,[],[]
+np_in_visa__visa_required__p1,S1,false,False,True,True,VERIFIED,0.962673,1.0,0.0,504.6685729994351,False,0.0,0.0,True,False,[True],[0.825]
+np_in_visa__visa_required__p1,S2,false,False,True,True,VERIFIED,0.974043,1.0,0.0,503.44326499907766,False,0.0,0.0,True,False,[True],[0.8625]
+np_in_visa__visa_required__p1,S3,false,False,True,True,VERIFIED,0.976559,1.0,0.0,415.33230200002436,False,0.0,0.0,True,False,[True],[0.8729543526909613]
+np_in_visa__visa_required__p2,S0,false,False,True,True,UNVERIFIED,0.906936,,0.0,422.69590199975937,False,0.0,0.0,True,False,[],[]
+np_in_visa__visa_required__p2,S1,false,False,True,True,VERIFIED,0.962673,1.0,0.0,824.1571580001619,False,0.0,0.0,True,False,[True],[0.825]
+np_in_visa__visa_required__p2,S2,false,False,True,True,VERIFIED,0.974043,1.0,0.0,429.64166999990994,False,0.0,0.0,True,False,[True],[0.8625]
+np_in_visa__visa_required__p2,S3,false,False,True,True,VERIFIED,0.976559,1.0,0.0,438.41758700000355,False,0.0,0.0,True,False,[True],[0.8729543526909613]
+np_in_visa__visa_required__p3,S0,false,False,True,True,UNVERIFIED,0.921969,,0.0,492.8580300002068,False,0.0,0.0,True,False,[],[]
+np_in_visa__visa_required__p3,S1,false,False,True,True,VERIFIED,0.962673,1.0,0.0,558.604251998986,False,0.0,0.0,True,False,[True],[0.825]
+np_in_visa__visa_required__p3,S2,false,False,True,True,VERIFIED,0.974043,1.0,0.0,448.75357799901394,False,0.0,0.0,True,False,[True],[0.8625]
+np_in_visa__visa_required__p3,S3,false,False,True,True,VERIFIED,0.976559,1.0,0.0,582.5959470002999,False,0.0,0.0,True,False,[True],[0.8729543526909613]
+ke_health__certificate_required__p1,S0,false,False,True,True,UNVERIFIED,0.880237,,0.0,403.9819070003432,False,0.0,0.0,False,False,[],[]
+ke_health__certificate_required__p1,S1,false,False,True,True,VERIFIED,0.970688,1.0,0.0,495.6593829992926,False,0.0,0.0,False,False,[True],[0.85]
+ke_health__certificate_required__p1,S2,false,False,True,True,VERIFIED,0.970688,1.0,0.0,439.84425500093494,False,0.0,0.0,False,False,[True],[0.85]
+ke_health__certificate_required__p1,S3,false,False,True,True,VERIFIED,0.989088,1.0,0.0,437.47500899917213,False,0.0,0.0,False,False,[True],[0.9506940917742792]
+ke_health__certificate_required__p2,S0,false,False,True,True,UNVERIFIED,0.890232,,0.0,430.8802289997402,False,0.0,0.0,False,False,[],[]
+ke_health__certificate_required__p2,S1,false,False,True,True,VERIFIED,0.970688,1.0,0.0,465.4068189993268,False,0.0,0.0,False,False,[True],[0.85]
+ke_health__certificate_required__p2,S2,false,False,True,True,VERIFIED,0.970688,1.0,0.0,479.39713100095105,False,0.0,0.0,False,False,[True],[0.85]
+ke_health__certificate_required__p2,S3,false,False,True,True,VERIFIED,0.989088,1.0,0.0,443.7275939999381,False,0.0,0.0,False,False,[True],[0.9506940917742792]
+uk_customs__duty_free_limit__p1,S0,390 GBP,"(390.0, 'GBP')",True,True,UNVERIFIED,0.801783,,0.0,440.7110299998749,False,0.0,0.0,True,False,[],[]
+uk_customs__duty_free_limit__p1,S1,390 GBP,"(390.0, 'GBP')",True,True,VERIFIED,0.962673,1.0,0.0,434.79336900054477,False,0.0,0.0,True,False,[True],[0.825]
+uk_customs__duty_free_limit__p1,S2,390 GBP,"(390.0, 'GBP')",True,True,VERIFIED,0.952574,1.0,0.0,519.2813360008586,False,0.0,0.0,True,False,[True],[0.8]
+uk_customs__duty_free_limit__p1,S3,390 GBP,"(390.0, 'GBP')",True,True,VERIFIED,0.952574,1.0,0.0,577.5259440015361,False,0.0,0.0,True,False,[True],[0.8]
+uk_customs__duty_free_limit__p2,S0,390 GBP,"(390.0, 'GBP')",True,True,UNVERIFIED,0.84855,,0.0,420.7220110001799,False,0.0,0.0,True,False,[],[]
+uk_customs__duty_free_limit__p2,S1,390 GBP,"(390.0, 'GBP')",True,True,VERIFIED,0.962673,1.0,0.0,451.3835400011885,False,0.0,0.0,True,False,[True],[0.825]
+uk_customs__duty_free_limit__p2,S2,390 GBP,"(390.0, 'GBP')",True,True,VERIFIED,0.952574,1.0,0.0,458.05883599859953,False,0.0,0.0,True,False,[True],[0.8]
+uk_customs__duty_free_limit__p2,S3,390 GBP,"(390.0, 'GBP')",True,True,VERIFIED,0.952574,1.0,0.0,439.2783800012694,False,0.0,0.0,True,False,[True],[0.8]
+uk_customs__duty_free_limit__p3,S0,390 GBP,"(390.0, 'GBP')",True,True,UNVERIFIED,0.794745,,0.0,411.0078869998688,False,0.0,0.0,True,False,[],[]
+uk_customs__duty_free_limit__p3,S1,390 GBP,"(390.0, 'GBP')",True,True,VERIFIED,0.962673,1.0,0.0,432.3075249994872,False,0.0,0.0,True,False,[True],[0.825]
+uk_customs__duty_free_limit__p3,S2,390 GBP,"(390.0, 'GBP')",True,True,VERIFIED,0.952574,1.0,0.0,793.1800229998771,False,0.0,0.0,True,False,[True],[0.8]
+uk_customs__duty_free_limit__p3,S3,390 GBP,"(390.0, 'GBP')",True,True,VERIFIED,0.952574,1.0,0.0,454.976319000707,False,0.0,0.0,True,False,[True],[0.8]
+us_customs__duty_free_limit__p1,S0,800 USD,"(800.0, 'USD')",True,True,UNVERIFIED,0.812728,,0.0,432.33371099995566,False,0.0,0.0,True,False,[],[]
+us_customs__duty_free_limit__p1,S1,800 USD,"(800.0, 'USD')",True,True,VERIFIED,0.946597,1.0,0.0,494.0709410002455,False,0.0,0.0,True,False,[True],[0.7874999999999999]
+us_customs__duty_free_limit__p1,S2,800 USD,"(800.0, 'USD')",True,True,VERIFIED,0.932453,1.0,0.0,542.5158269990789,False,0.0,0.0,True,False,[True],[0.7625]
+us_customs__duty_free_limit__p1,S3,800 USD,"(800.0, 'USD')",True,True,VERIFIED,0.932453,1.0,0.0,487.76727599943115,False,0.0,0.0,True,False,[True],[0.7625]
+us_customs__duty_free_limit__p2,S0,800 USD,"(800.0, 'USD')",True,True,UNVERIFIED,0.786763,,0.0,520.9293290008645,False,0.0,0.0,True,False,[],[]
+us_customs__duty_free_limit__p2,S1,800 USD,"(800.0, 'USD')",True,True,VERIFIED,0.946597,1.0,0.0,432.0689569995011,False,0.0,0.0,True,False,[True],[0.7874999999999999]
+us_customs__duty_free_limit__p2,S2,800 USD,"(800.0, 'USD')",True,True,VERIFIED,0.932453,1.0,0.0,434.1142209996178,False,0.0,0.0,True,False,[True],[0.7625]
+us_customs__duty_free_limit__p2,S3,800 USD,"(800.0, 'USD')",True,True,VERIFIED,0.932453,1.0,0.0,514.7891409997101,False,0.0,0.0,True,False,[True],[0.7625]
+au_customs__duty_free_limit__p1,S0,900 AUD,"(900.0, 'AUD')",True,True,UNVERIFIED,0.819661,,0.0,454.1503800010105,False,0.0,0.0,False,False,[],[]
+au_customs__duty_free_limit__p1,S1,900 AUD,"(900.0, 'AUD')",True,True,VERIFIED,0.946597,1.0,0.0,438.86844299959193,False,0.0,0.0,False,False,[True],[0.7874999999999999]
+au_customs__duty_free_limit__p1,S2,900 AUD,"(900.0, 'AUD')",True,True,VERIFIED,0.932453,1.0,0.0,425.66207999880135,False,0.0,0.0,False,False,[True],[0.7625]
+au_customs__duty_free_limit__p1,S3,900 AUD,"(900.0, 'AUD')",True,True,VERIFIED,0.932453,1.0,0.0,653.2411079988378,False,0.0,0.0,False,False,[True],[0.7625]
+au_customs__duty_free_limit__p2,S0,900 AUD,"(900.0, 'AUD')",True,True,UNVERIFIED,0.859287,,0.0,692.1158360000845,False,0.0,0.0,False,False,[],[]
+au_customs__duty_free_limit__p2,S1,900 AUD,"(900.0, 'AUD')",True,True,VERIFIED,0.946597,1.0,0.0,473.1416380000155,False,0.0,0.0,False,False,[True],[0.7874999999999999]
+au_customs__duty_free_limit__p2,S2,900 AUD,"(900.0, 'AUD')",True,True,VERIFIED,0.932453,1.0,0.0,425.45576699922094,False,0.0,0.0,False,False,[True],[0.7625]
+au_customs__duty_free_limit__p2,S3,900 AUD,"(900.0, 'AUD')",True,True,VERIFIED,0.932453,1.0,0.0,451.5346030002547,False,0.0,0.0,False,False,[True],[0.7625]
+au_customs__item_allowed_food__p1,S0,restricted,restricted,True,True,UNVERIFIED,0.797133,,0.0,434.84834999981103,False,0.0,0.0,True,False,[],[]
+au_customs__item_allowed_food__p1,S1,restricted,restricted,True,True,VERIFIED,0.962673,1.0,0.0,463.3886049996363,False,0.0,0.0,True,False,[True],[0.825]
+au_customs__item_allowed_food__p1,S2,restricted,restricted,True,True,VERIFIED,0.952574,1.0,0.0,459.12934399893857,False,0.0,0.0,True,False,[True],[0.7999999999999999]
+au_customs__item_allowed_food__p1,S3,restricted,restricted,True,True,VERIFIED,0.952574,1.0,0.0,440.59170599939534,False,0.0,0.0,True,False,[True],[0.7999999999999999]
+au_customs__item_allowed_food__p2,S0,restricted,restricted,True,True,UNVERIFIED,0.779966,,0.0,457.8444770013448,False,0.0,0.0,True,False,[],[]
+au_customs__item_allowed_food__p2,S1,restricted,restricted,True,True,VERIFIED,0.962673,1.0,0.0,432.7922470001795,False,0.0,0.0,True,False,[True],[0.825]
+au_customs__item_allowed_food__p2,S2,restricted,restricted,True,True,VERIFIED,0.952574,1.0,0.0,428.7203860003501,False,0.0,0.0,True,False,[True],[0.7999999999999999]
+au_customs__item_allowed_food__p2,S3,restricted,restricted,True,True,VERIFIED,0.952574,1.0,0.0,434.4654359993001,False,0.0,0.0,True,False,[True],[0.7999999999999999]
+au_customs__item_allowed_food__p3,S0,restricted,restricted,True,True,UNVERIFIED,0.774472,,0.0,855.6243139992148,False,0.0,0.0,True,False,[],[]
+au_customs__item_allowed_food__p3,S1,restricted,restricted,True,True,VERIFIED,0.962673,1.0,0.0,447.9401120006514,False,0.0,0.0,True,False,[True],[0.825]
+au_customs__item_allowed_food__p3,S2,restricted,restricted,True,True,VERIFIED,0.952574,1.0,0.0,440.12493599984737,False,0.0,0.0,True,False,[True],[0.7999999999999999]
+au_customs__item_allowed_food__p3,S3,restricted,restricted,True,True,VERIFIED,0.952574,1.0,0.0,546.446348000245,False,0.0,0.0,True,False,[True],[0.7999999999999999]
+au_customs__declaration_required__p1,S0,true,True,True,True,UNVERIFIED,0.884677,,0.0,591.5669829992112,False,0.0,0.0,False,False,[],[]
+au_customs__declaration_required__p1,S1,true,True,True,True,VERIFIED,0.962673,1.0,0.0,576.6094150003482,False,0.0,0.0,False,False,[True],[0.825]
+au_customs__declaration_required__p1,S2,true,True,True,True,VERIFIED,0.952574,1.0,0.0,536.4246300014202,False,0.0,0.0,False,False,[True],[0.7999999999999999]
+au_customs__declaration_required__p1,S3,true,True,True,True,VERIFIED,0.952574,1.0,0.0,439.7674090014334,False,0.0,0.0,False,False,[True],[0.7999999999999999]
+au_customs__declaration_required__p2,S0,true,True,True,True,UNVERIFIED,0.881166,,0.0,591.3895339999726,False,0.0,0.0,False,False,[],[]
+au_customs__declaration_required__p2,S1,true,True,True,True,VERIFIED,0.962673,1.0,0.0,446.80818900087615,False,0.0,0.0,False,False,[True],[0.825]
+au_customs__declaration_required__p2,S2,true,True,True,True,VERIFIED,0.952574,1.0,0.0,478.0197229993064,False,0.0,0.0,False,False,[True],[0.7999999999999999]
+au_customs__declaration_required__p2,S3,true,True,True,True,VERIFIED,0.952574,1.0,0.0,465.7287369991536,False,0.0,0.0,False,False,[True],[0.7999999999999999]
+ca_in_visa__visa_required__p1,S0,true,False,False,False,UNVERIFIED,0.898291,,0.0,448.27690700003586,False,0.0,0.0,True,False,[],[]
+ca_in_visa__visa_required__p1,S1,true,True,True,True,VERIFIED,0.540645,1.0,0.0,447.0225210006902,False,0.0,0.0,True,True,"[True, False]","[0.28750000000000003, 0.03269077845982142]"
+ca_in_visa__visa_required__p1,S2,true,True,True,True,VERIFIED,0.705785,1.0,0.0,441.51797499944223,False,0.0,0.0,True,True,"[True, False]","[0.29375000000000007, 0.0]"
+ca_in_visa__visa_required__p1,S3,true,True,True,True,VERIFIED,0.594622,1.0,0.0,528.3186260003276,False,0.0,0.0,True,True,"[True, False]","[0.26915531400025333, 0.0]"
+ca_in_visa__visa_required__p2,S0,true,True,True,True,UNVERIFIED,0.899527,,0.0,450.7711210007983,False,0.0,0.0,True,False,[],[]
+ca_in_visa__visa_required__p2,S1,true,True,True,True,VERIFIED,0.540645,1.0,0.0,472.0038739997108,False,0.0,0.0,True,True,"[True, False]","[0.28750000000000003, 0.03269077845982142]"
+ca_in_visa__visa_required__p2,S2,true,True,True,True,VERIFIED,0.705785,1.0,0.0,431.63238300076046,False,0.0,0.0,True,True,"[True, False]","[0.29375000000000007, 0.0]"
+ca_in_visa__visa_required__p2,S3,true,True,True,True,VERIFIED,0.594622,1.0,0.0,437.87789000089106,False,0.0,0.0,True,True,"[True, False]","[0.26915531400025333, 0.0]"
+ca_in_visa__visa_required__p3,S0,true,False,False,False,UNVERIFIED,0.901282,,0.0,448.99456600069243,False,0.0,0.0,True,False,[],[]
+ca_in_visa__visa_required__p3,S1,true,True,True,True,VERIFIED,0.540645,1.0,0.0,682.7565549992869,False,0.0,0.0,True,True,"[True, False]","[0.28750000000000003, 0.03269077845982142]"
+ca_in_visa__visa_required__p3,S2,true,True,True,True,VERIFIED,0.705785,1.0,0.0,645.7282770006714,False,0.0,0.0,True,True,"[True, False]","[0.29375000000000007, 0.0]"
+ca_in_visa__visa_required__p3,S3,true,True,True,True,VERIFIED,0.594622,1.0,0.0,534.391791001326,False,0.0,0.0,True,True,"[True, False]","[0.26915531400025333, 0.0]"
+ca_in_visa__max_stay_days__p1,S0,180,180,True,True,UNVERIFIED,0.896637,,0.0,649.179694999475,False,0.0,0.0,False,False,[],[]
+ca_in_visa__max_stay_days__p1,S1,180,180,True,True,VERIFIED,0.962673,1.0,0.0,559.296073999576,False,0.0,0.0,False,False,[True],[0.825]
+ca_in_visa__max_stay_days__p1,S2,180,180,True,True,VERIFIED,0.974043,1.0,0.0,988.873426000282,False,0.0,0.0,False,False,[True],[0.8625]
+ca_in_visa__max_stay_days__p1,S3,180,180,True,True,VERIFIED,0.976559,1.0,0.0,1011.7906469986337,False,0.0,0.0,False,False,[True],[0.8729543526909613]
+ca_in_visa__max_stay_days__p2,S0,180,180,True,True,UNVERIFIED,0.824543,,0.0,652.5067649999983,False,0.0,0.0,False,False,[],[]
+ca_in_visa__max_stay_days__p2,S1,180,180,True,True,VERIFIED,0.962673,1.0,0.0,756.7784219991154,False,0.0,0.0,False,False,[True],[0.825]
+ca_in_visa__max_stay_days__p2,S2,180,180,True,True,VERIFIED,0.974043,1.0,0.0,995.2951619998203,False,0.0,0.0,False,False,[True],[0.8625]
+ca_in_visa__max_stay_days__p2,S3,180,180,True,True,VERIFIED,0.976559,1.0,0.0,710.6185339998774,False,0.0,0.0,False,False,[True],[0.8729543526909613]
+in_gb_visa__max_stay_days__p1,S0,180,60,False,False,UNVERIFIED,0.935625,,0.0,783.3411090014124,False,0.0,0.0,True,False,[],[]
+in_gb_visa__max_stay_days__p1,S1,180,180,True,True,VERIFIED,0.839809,1.0,0.0,743.0983880003623,False,0.0,0.0,True,True,"[True, False]","[0.5625, 0.07125000000000924]"
+in_gb_visa__max_stay_days__p1,S2,180,180,True,True,VERIFIED,0.895708,1.0,0.0,913.5172639998927,False,0.0,0.0,True,True,"[True, False]","[0.5624999999999999, 0.027500000000013847]"
+in_gb_visa__max_stay_days__p1,S3,180,180,True,True,VERIFIED,0.744666,1.0,0.0,751.1812240009021,False,0.0,0.0,True,True,"[True, False]","[0.48531581227771103, 0.03202067777596329]"
+in_gb_visa__max_stay_days__p2,S0,180,60,False,False,UNVERIFIED,0.793765,,0.0,848.95698299988,False,0.0,0.0,True,False,[],[]
+in_gb_visa__max_stay_days__p2,S1,180,180,True,True,VERIFIED,0.839809,1.0,0.0,481.6016619988659,False,0.0,0.0,True,True,"[True, False]","[0.5625, 0.07125000000000924]"
+in_gb_visa__max_stay_days__p2,S2,180,180,True,True,VERIFIED,0.895708,1.0,0.0,474.2348839990882,False,0.0,0.0,True,True,"[True, False]","[0.5624999999999999, 0.027500000000013847]"
+in_gb_visa__max_stay_days__p2,S3,180,180,True,True,VERIFIED,0.744666,1.0,0.0,473.3419109998067,False,0.0,0.0,True,True,"[True, False]","[0.48531581227771103, 0.03202067777596329]"
+in_gb_visa__visa_type__p1,S0,evisa,evisa,True,True,UNVERIFIED,0.810165,,0.0,419.2246090005938,False,0.0,0.0,False,False,[],[]
+in_gb_visa__visa_type__p1,S1,evisa,evisa,True,True,VERIFIED,0.962673,1.0,0.0,530.5178550006531,False,0.0,0.0,False,False,"[True, True]","[0.825, 0.4925000000000185]"
+in_gb_visa__visa_type__p1,S2,evisa,evisa,True,True,VERIFIED,0.970688,1.0,0.0,494.4485949999944,False,0.0,0.0,False,False,"[True, True]","[0.8499999999999999, 0.4050000000000277]"
+in_gb_visa__visa_type__p1,S3,evisa,evisa,True,True,VERIFIED,0.958675,1.0,0.0,605.3937840006256,False,0.0,0.0,False,False,"[True, True]","[0.814409612048842, 0.39868508024238125]"
+in_gb_visa__visa_type__p2,S0,evisa,evisa,True,True,UNVERIFIED,0.876176,,0.0,436.4692740000464,False,0.0,0.0,False,False,[],[]
+in_gb_visa__visa_type__p2,S1,evisa,evisa,True,True,VERIFIED,0.962673,1.0,0.0,422.8309240006638,False,0.0,0.0,False,False,"[True, True]","[0.825, 0.4925000000000185]"
+in_gb_visa__visa_type__p2,S2,evisa,evisa,True,True,VERIFIED,0.970688,1.0,0.0,467.68440100095177,False,0.0,0.0,False,False,"[True, True]","[0.8499999999999999, 0.4050000000000277]"
+in_gb_visa__visa_type__p2,S3,evisa,evisa,True,True,VERIFIED,0.958675,1.0,0.0,542.0176100014942,False,0.0,0.0,False,False,"[True, True]","[0.814409612048842, 0.39868508024238125]"
+in_us_visa__visa_required__p1,S0,true,True,True,True,UNVERIFIED,0.809657,,0.0,458.74613500018313,False,0.0,0.0,False,False,[],[]
+in_us_visa__visa_required__p1,S1,true,True,True,True,VERIFIED,0.962673,1.0,0.0,434.4078479989548,False,0.0,0.0,False,False,[True],[0.825]
+in_us_visa__visa_required__p1,S2,true,True,True,True,VERIFIED,0.970688,1.0,0.0,430.0227530002303,False,0.0,0.0,False,False,[True],[0.8499999999999999]
+in_us_visa__visa_required__p1,S3,true,True,True,True,VERIFIED,0.958675,1.0,0.0,459.37752700046985,False,0.0,0.0,False,False,[True],[0.814409612048842]
+in_us_visa__visa_required__p2,S0,true,True,True,True,UNVERIFIED,0.827113,,0.0,757.7780739993614,False,0.0,0.0,False,False,[],[]
+in_us_visa__visa_required__p2,S1,true,True,True,True,VERIFIED,0.962673,1.0,0.0,421.8252999999095,False,0.0,0.0,False,False,[True],[0.825]
+in_us_visa__visa_required__p2,S2,true,True,True,True,VERIFIED,0.970688,1.0,0.0,429.3240880015219,False,0.0,0.0,False,False,[True],[0.8499999999999999]
+in_us_visa__visa_required__p2,S3,true,True,True,True,VERIFIED,0.958675,1.0,0.0,571.600256000238,False,0.0,0.0,False,False,[True],[0.814409612048842]
+ph_in_visa__visa_type__p1,S0,visa_free,visa_free,True,True,UNVERIFIED,0.791505,,0.0,538.0449909989693,False,0.0,0.0,True,False,[],[]
+ph_in_visa__visa_type__p1,S1,visa_free,visa_free,True,True,VERIFIED,0.6,1.0,0.0,497.44281000130286,False,0.0,0.0,True,True,"[True, False, True]","[0.934206280418471, 0.044516048638956744, 0.7587245931126033]"
+ph_in_visa__visa_type__p1,S2,visa_free,visa_free,True,True,VERIFIED,0.6,1.0,0.0,553.925337999317,False,0.0,0.0,True,True,"[True, False, True]","[0.9341862437426114, 0.02102407295843511, 0.7712077112171618]"
+ph_in_visa__visa_type__p1,S3,visa_free,visa_free,True,True,VERIFIED,0.6,1.0,0.0,471.39076399980695,False,0.0,0.0,True,True,"[True, False, True]","[0.8596921075743486, 0.0012771648928874943, 0.6329914566745785]"
+ph_in_visa__visa_type__p2,S0,visa_free,evisa,False,False,UNVERIFIED,0.891623,,0.0,438.45129999863275,False,0.0,0.0,True,False,[],[]
+ph_in_visa__visa_type__p2,S1,visa_free,visa_free,True,True,VERIFIED,0.6,1.0,0.0,465.48402100052044,False,0.0,0.0,True,True,"[False, True, True]","[0.044516048638956744, 0.934206280418471, 0.7587245931126033]"
+ph_in_visa__visa_type__p2,S2,visa_free,visa_free,True,True,VERIFIED,0.6,1.0,0.0,542.1165119987563,False,0.0,0.0,True,True,"[False, True, True]","[0.02102407295843511, 0.9341862437426114, 0.7712077112171618]"
+ph_in_visa__visa_type__p2,S3,visa_free,visa_free,True,True,VERIFIED,0.6,1.0,0.0,494.47125699953176,False,0.0,0.0,True,True,"[False, True, True]","[0.0012771648928874943, 0.8596921075743486, 0.6329914566745785]"

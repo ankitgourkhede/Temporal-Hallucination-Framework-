@@ -34,7 +34,9 @@ def test_pipeline_returns_verified_cited_mock_answer() -> None:
     assert response["faithfulness"] == 1.0
     assert "30 days" in response["answer"]
     assert len(response["sources"]) == 1
-    assert response["confidence"] < 0.10
+    # A government page (30 days) conflicts with a blog (45 days): confidence must stay low.
+    # quality_x_share counts the conflict once (via support share), not twice.
+    assert 0.0 < response["confidence"] < 0.5
     assert response["trace"]["generations"] == 1
 
 
@@ -228,3 +230,38 @@ def test_each_trust_system_scores_with_its_own_weight_vector() -> None:
         assert response["trace"]["weights_source"] == expected
         used[system] = evidence[0]["weights"]
     assert used["S1"] != used["S2"]
+
+
+def test_unreachable_llm_falls_back_to_template_answer(monkeypatch) -> None:
+    from trustrag.online.generation import llm as llm_module
+
+    class Down:
+        def generate(self, *args, **kwargs):
+            raise ConnectionError("ollama is not running")
+
+    monkeypatch.setattr(llm_module, "build_llm", lambda name, config: Down())
+    response = TrustRAGPipeline("trustrag/config.yaml").answer(
+        "How long can Indian travellers stay in Vietnam?", system="S2", llm="ollama", as_of="2026-11-09"
+    )
+    assert "30 days" in response["answer"]
+    assert "llm_fallback:ollama:ConnectionError" in response["flags"]
+
+
+def test_high_volatility_answers_found_offline_are_rechecked_live(monkeypatch) -> None:
+    calls = []
+
+    class CountingFetcher:
+        def __init__(self, config_path):
+            pass
+
+        def fetch(self, policy, *, mode="demo", live_requested=True):
+            calls.append(policy["category"])
+            return [], []
+
+    monkeypatch.setattr("trustrag.pipeline.LiveFetcher", CountingFetcher)
+    response = TrustRAGPipeline("trustrag/config.yaml", llm=MockLLM()).answer(
+        "How long can Indian travellers stay in Vietnam?", system="S2", llm="mock",
+        as_of="2026-11-09", live_check=True,
+    )
+    assert calls == ["visa_policy"]  # max_stay_days was found offline, yet visa is High volatility
+    assert "live_verify" in response["trace"]["retrieval_fallback_stages"]

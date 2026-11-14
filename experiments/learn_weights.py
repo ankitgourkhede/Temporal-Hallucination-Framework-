@@ -10,7 +10,6 @@ import numpy as np
 import pandas as pd
 import yaml
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import StratifiedKFold, cross_val_score
 
 FEATURES = ("A", "F", "QE", "SR", "CP")

@@ -27,10 +27,24 @@ def build_generation_payload(
     baseline_evidence: list[dict[str, Any]] | None = None,
     max_evidence: int = 6,
     min_trust: float = 0.20,
+    required_slots: set[str] | None = None,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     if trust_result.get("evidence"):
-        chosen = sorted(trust_result["evidence"], key=lambda item: item.get("Trust", 0.0), reverse=True)
-        chosen = [item for item in chosen if item.get("Trust", 0.0) >= min_trust][:max_evidence]
+        ranked = sorted(trust_result["evidence"], key=lambda item: item.get("Trust", 0.0), reverse=True)
+        chosen = [item for item in ranked if item.get("Trust", 0.0) >= min_trust][:max_evidence]
+        # The slot the user asked about must reach the answer even when a conflict penalty has
+        # pushed its winning evidence below min_trust; otherwise the reply silently omits it.
+        for slot in trust_result.get("fusion", []):
+            if slot["slot"] not in (required_slots or set()):
+                continue
+            if any(item.get("slot") == slot["slot"] and item.get("value_norm") == slot["value"] for item in chosen):
+                continue
+            best = next(
+                (item for item in ranked if item.get("slot") == slot["slot"] and item.get("value_norm") == slot["value"]),
+                None,
+            )
+            if best is not None:
+                chosen = [best, *chosen][:max_evidence]
         trust_key = "Trust"
     else:
         chosen = sorted(baseline_evidence or [], key=lambda item: item.get("relevance", 0.0), reverse=True)[:max_evidence]

@@ -5,6 +5,7 @@ from __future__ import annotations
 import streamlit as st
 import yaml
 
+from trustrag.offline.embed_index import EmbeddingModelUnavailable
 from trustrag.pipeline import TrustRAGPipeline
 
 
@@ -80,7 +81,7 @@ for message in st.session_state.messages:
                         for source in response["sources"]
                     ],
                     hide_index=True,
-                    use_container_width=True,
+                    width="stretch",
                 )
             if response["conflicts"]:
                 with st.expander("Conflicting evidence"):
@@ -96,21 +97,30 @@ for message in st.session_state.messages:
                             for item in trust_trace
                         ],
                         hide_index=True,
-                        use_container_width=True,
+                        width="stretch",
                     )
             if show_trace:
                 with st.expander("Pipeline trace"):
                     st.json(response["trace"])
 
+st.caption(
+    "**Status** says whether every sentence is backed by the cited evidence (VERIFIED / PARTIAL / "
+    "VERIFICATION_REQUIRED). **Confidence** is how sure the system is about the value itself; it drops "
+    "when sources disagree."
+)
 question = st.chat_input("Ask about visa, health-entry, or customs rules")
 if question:
     st.session_state.messages.append({"role": "user", "content": question})
     with st.chat_message("user"):
         st.markdown(question)
     with st.chat_message("assistant"):
-        response = TrustRAGPipeline(config_path).answer(
-            question, system=system, llm=backend, live_check=live_check
-        )
+        try:
+            response = TrustRAGPipeline(config_path).answer(
+                question, system=system, llm=backend, live_check=live_check
+            )
+        except EmbeddingModelUnavailable as error:
+            st.error(str(error))
+            st.stop()
         st.markdown(response["answer"])
         st.caption(
             f"{response['verification_status']} · {response['confidence']:.0%} confidence · "
@@ -118,6 +128,10 @@ if question:
         )
         if "index_stale" in response["flags"]:
             st.info("An official live page differs from the saved snapshot; the live evidence was used and queued for reindexing.")
+        fallback = next((flag for flag in response["flags"] if flag.startswith("llm_fallback:")), None)
+        if fallback:
+            st.info(f"The {backend} model was unavailable ({fallback.split(':')[-1]}), so the answer was written "
+                    "by the built-in template generator from the same verified facts.")
         if any(flag.startswith("live_check_failed") for flag in response["flags"]):
             st.caption("Couldn't check one configured official site live; the answer uses available saved evidence.")
         if response["trace"].get("live_documents"):
@@ -129,7 +143,7 @@ if question:
                     for source in response["sources"]
                 ],
                 hide_index=True,
-                use_container_width=True,
+                width="stretch",
             )
         if response["unsupported_claims"]:
             st.warning("Some claims could not be verified.")
@@ -148,7 +162,7 @@ if question:
                         for item in trust_trace
                     ],
                     hide_index=True,
-                    use_container_width=True,
+                    width="stretch",
                 )
         if show_trace:
             with st.expander("Pipeline trace"):
@@ -190,5 +204,5 @@ if st.session_state.compare_results:
                 st.dataframe(
                     [{"Source": source["title"], "Type": source["source_type"], "Trust": source["trust"]} for source in result["sources"]],
                     hide_index=True,
-                    use_container_width=True,
+                    width="stretch",
                 )

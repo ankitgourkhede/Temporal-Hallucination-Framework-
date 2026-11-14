@@ -1,6 +1,6 @@
 {
-  "git_hash": "38770cf5404a6b90b3e49d5e8ec16d945b38fdfd",
-  "config_sha256": "af755160e7e87b9e6303d75f72e390c91ecbc3aae40df138158be0e15570b3cf",
+  "git_hash": "25821ae2c2cf9165a4de1800a366a777f4bda608",
+  "config_sha256": "ae2f7db47a27ede45ccb864c8024a8c6a8ac798e2dbf40c0b4cbe20ec8ecf67c",
   "model": "BAAI/bge-small-en-v1.5",
   "llm": "mock",
   "seed": 42,

@@ -514,7 +514,7 @@ def datasheet(docs: list[Doc], questions: list[Question], rows: list[dict[str, s
         f"- Corpus documents: {len(docs)} ({sum(d.is_primary for d in docs)} primary, "
         f"{sum(not d.is_primary for d in docs)} secondary) across {len({d.destination for d in docs})} destinations",
         f"- Benchmark questions (paraphrase groups): {len(questions)}; benchmark rows: {len(rows)}",
-        f"- Questions per split: " + ", ".join(f"{k} {v}" for k, v in sorted(split_q.items())),
+        "- Questions per split: " + ", ".join(f"{k} {v}" for k, v in sorted(split_q.items())),
         f"- Non-Indian nationality share of rows: "
         f"{sum(r['nationality'] != 'India' for r in rows) / len(rows):.1%}",
         f"- Classifier training rows: {len(clf)} in {len({r['paraphrase_of'] for r in clf})} paraphrase groups",

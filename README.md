@@ -1,151 +1,88 @@
-# Temporal Hallucination Framework
+# Temporal Hallucination Framework (TrustRAG)
 
-A research and engineering workspace for studying, detecting, and mitigating temporal hallucinations in LLM-driven systems.
+M.Tech research project on **temporal hallucination** in retrieval-augmented generation: answers
+that were once true but are now outdated, because the retriever surfaced a stale source. The
+domain is travel advisories (visa, vaccination and customs rules), where rules change and old
+pages linger.
 
-## Project goal
+TrustRAG scores every retrieved fact for authority, freshness, agreement, evidence quality,
+source reputation and conflict, picks one value per question slot, generates a cited answer,
+and verifies each sentence before showing it.
 
-This repository is structured as a modular research project with separate areas for:
+- **Architecture, formulas and failure handling:** [docs/system_design.md](docs/system_design.md)
+- **Benchmark datasheet:** [data/benchmark/DATASHEET.md](data/benchmark/DATASHEET.md)
+- **Writing new blind test cases:** [docs/benchmark_authoring_protocol.md](docs/benchmark_authoring_protocol.md)
+- **Latest results:** [results/REPORT.md](results/REPORT.md)
 
-- literature review and source material
-- datasets and experiment tracking
-- notebooks for analysis and prototyping
-- Python package modules for the core pipeline
-- evaluation, reporting, and presentation assets
+## Systems compared
+
+| System | Description |
+|---|---|
+| S0 | Vanilla RAG: most similar passage, no trust scoring, no verification |
+| S1 | Trust RAG with one fixed weight vector |
+| S2 | Trust RAG with per-topic weights set by volatility (proposed method) |
+| S3 | Trust RAG with per-topic weights learned from the train split |
 
 ## Quick start
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python -m temporal_hallucination
+python -m venv .venv && source .venv/bin/activate
+make setup                 # install requirements
+make test                  # unit tests
+make demo                  # Streamlit UI on http://localhost:8501
 ```
 
-## Repository structure
+In the UI, pick the **Benchmark corpus** knowledge base and a system, then ask e.g. *"How long
+can Indian tourists stay in Thailand?"* and press **Compare RAG systems**.
+
+## Reproducing the benchmark
+
+```bash
+make reproduce
+```
+
+This rebuilds everything from `data/benchmark/facts.yaml` in order: corpus and benchmark CSV,
+FAISS index, query classifiers, benchmark checks, freshness ablation, reputation and S3 fitting
+(train split only), the S0–S3 run on the test split, the report, the weight-sensitivity study
+(train and dev only), and the unit tests. Individual steps are Makefile targets (`dataset`,
+`index-benchmark`, `train-classifiers`, `fit`, `benchmark-experiments`, `report`, `sensitivity`).
+
+## Repository layout
 
 ```text
-Temporal-Hallucination-Framework/
-├── README.md
-├── .gitignore
-├── requirements.txt
-├── pyproject.toml
-├── Dockerfile
-├── handbook/
-│   ├── Chapter-01-Introduction.md
-│   ├── Chapter-02-LLM-Fundamentals.md
-│   ├── Chapter-03-Hallucinations.md
-│   ├── Chapter-04-Information-Retrieval.md
-│   ├── Chapter-05-RAG.md
-│   ├── Chapter-06-Multi-Source-Retrieval.md
-│   ├── Chapter-07-Fact-Classification.md
-│   ├── Chapter-08-Volatility-Classification.md
-│   ├── Chapter-09-Source-Freshness.md
-│   ├── Chapter-10-Reconciliation.md
-│   ├── Chapter-11-Adaptive-Weighting.md
-│   ├── Chapter-12-Temporal-Hallucination.md
-│   ├── Chapter-13-Evaluation.md
-│   ├── Chapter-14-Deployment.md
-│   └── References.md
-├── literature/
-│   ├── papers/
-│   ├── summaries/
-│   ├── ieee_notes/
-│   └── bibliography.bib
-├── thesis/
-│   ├── proposal/
-│   ├── chapters/
-│   ├── figures/
-│   ├── tables/
-│   ├── references/
-│   └── final_submission/
-├── patent/
-│   ├── novelty_notes.md
-│   ├── claims.md
-│   └── diagrams/
-├── datasets/
-│   ├── raw/
-│   ├── processed/
-│   ├── benchmark/
-│   ├── labelled/
-│   └── evaluation/
-├── experiments/
-│   ├── exp001/
-│   ├── exp002/
-│   ├── exp003/
-│   └── logs/
-├── notebooks/
-│   ├── data_exploration.ipynb
-│   ├── volatility_classifier.ipynb
-│   ├── embeddings.ipynb
-│   └── evaluation.ipynb
-├── src/
-│   └── temporal_hallucination/
-│       ├── adapters/
-│       ├── retrieval/
-│       ├── extraction/
-│       ├── preprocessing/
-│       ├── classifiers/
-│       ├── freshness/
-│       ├── reconciliation/
-│       ├── adaptive_weighting/
-│       ├── temporal_detector/
-│       ├── llm/
-│       ├── api/
-│       ├── ui/
-│       ├── utils/
-│       ├── config/
-│       ├── __init__.py
-│       ├── __main__.py
-│       └── pipeline.py
-├── models/
-│   ├── embeddings/
-│   ├── classifiers/
-│   ├── checkpoints/
-│   └── exported/
-├── vector_db/
-├── cache/
-├── evaluation/
-│   ├── metrics/
-│   ├── baselines/
-│   ├── calibration/
-│   ├── reports/
-│   └── plots/
-├── tests/
-├── scripts/
-├── docs/
-├── presentations/
-│   ├── proposal/
-│   ├── progress_review/
-│   ├── final_viva/
-│   └── ieee_presentation/
-└── .venv/  # local environment (not tracked)
+trustrag/
+  offline/        ingest, metadata, chunking + embedding (FAISS), change detection, reputation
+  online/
+    query/        intent/category classification, entities, clarification
+    policy/       volatility score, retrieval strategy, weight vectors
+    retrieval/    vector search, slot-value extraction, nationality-scope filter
+    live/         live official-site fetch (GOV.UK, whitelist), Google fallback
+    trust/        trust features, scoring, slot fusion
+    generation/   prompt building, LLM backends (+ template fallback), verification
+  policies/       authority tiers, categories, strategy rules, weight vectors
+  pipeline.py     orchestration of S0-S3
+  api.py, cli.py  FastAPI service and command line
+ui/app.py         Streamlit demo
+data/
+  benchmark/      facts.yaml (source of truth), benchmark.csv, datasheet
+  benchmark_corpus/  generated synthetic documents (75)
+  corpus/         original 4-document demo corpus (used by unit tests)
+  train/          classifier training queries, trust features for S3
+experiments/      fitting, S0-S3 runs, metrics, statistics, sensitivity study, report
+scripts/          build_dataset.py (benchmark generator and validator)
+results/          main results, ablation, sensitivity figures, report
+tests/            unit tests
 ```
 
-## Core Python package layout
+## Configuration
 
-The code is organized around a modular pipeline:
+- `trustrag/config.benchmark.yaml`: benchmark corpus and index, content-relative freshness (default for experiments and the UI).
+- `trustrag/config.benchmark.legacy.yaml`: same, with the legacy crawl-date freshness rule (ablation baseline).
+- `trustrag/config.yaml`: the 4-document demo corpus used by the unit tests.
 
-- `src/temporal_hallucination/config` – settings and environment configuration
-- `src/temporal_hallucination/preprocessing` – cleaning and normalization
-- `src/temporal_hallucination/retrieval` – document and evidence retrieval
-- `src/temporal_hallucination/extraction` – claim and fact extraction
-- `src/temporal_hallucination/freshness` – temporal recency and source checks
-- `src/temporal_hallucination/classifiers` – fact and volatility models
-- `src/temporal_hallucination/reconciliation` – conflict resolution logic
-- `src/temporal_hallucination/adaptive_weighting` – weighting signals by confidence and time sensitivity
-- `src/temporal_hallucination/temporal_detector` – core detection logic
-- `src/temporal_hallucination/api` – service interface for endpoint integration
-- `src/temporal_hallucination/ui` – optional dashboards or front-end wrappers
-- `src/temporal_hallucination/utils` – reusable helper functions
+LLM backends: `mock` (deterministic template writer, used for all benchmark runs), `ollama`
+(llama3.1:8b, local), `openai` (gpt-4o-mini, `OPENAI_API_KEY`), `anthropic` (claude-haiku-5-5,
+`ANTHROPIC_API_KEY`). If a backend is unavailable the answer falls back to the template writer.
 
-## Recommended next steps
-
-1. Create the research dataset schema.
-2. Implement the retrieval and preprocessing pipeline.
-3. Add a benchmark evaluation runner.
-4. Build a small FastAPI endpoint for demonstration.
-5. Track experiments under `experiments/expNNN`.
-
-## Notes
-
-This scaffold is intentionally lightweight and intentionally designed to grow into a full research codebase without forcing a rigid architecture too early.
+The benchmark content is **synthetic**: modelled on real policy changes, but not verified against
+live government pages. Do not use it as travel advice.

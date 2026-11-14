@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from trustrag.online.generation.claims import Claim, extract_claims
+from trustrag.online.generation.claims import extract_claims
 from trustrag.online.retrieval.evidence import extract_claims as extract_slot_values
 from trustrag.online.retrieval.evidence import normalize_days, normalize_enum
 from trustrag.online.trust.scoring import _same_value

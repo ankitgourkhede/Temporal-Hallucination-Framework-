@@ -97,7 +97,8 @@ Example: *"How long can Indian tourists stay in Thailand?"*
   (visa_required, visa_type, max_stay_days).
 - **Fallback chain**, demo mode only (benchmark mode blocks all network access):
   1. Offline index.
-  2. If the asked slot was not found and live check is on: live fetch from the GOV.UK content
+  2. If the asked slot was not found, **or the topic's volatility is listed in
+     `live.verify_found_answers` (default High)**, and live check is on: live fetch from the GOV.UK content
      API and whitelisted official URLs (robots.txt respected, 5 s per adapter, 6 s total,
      cached 12 h for visa and 24 h otherwise). Live pages whose hash differs from the indexed
      copy are queued for reindexing (`index_stale` flag).
@@ -205,15 +206,21 @@ Current weight vectors:
 - Group evidence by value; each domain counts once (its highest-trust item).
 - `support(v) = Σ_domains Trust`; winner v* = argmax support.
 - `share = support(v*) / Σ_v support(v)`; `answer_trust = share · max Trust among v*'s evidence`.
+- `answer_trust = share · max T_quality` in the default `quality_x_share` mode, where
+  `T_quality = clip(T_raw, 0, 1)` is the winning source's trust before the (1 − CP) multiplier.
+  Disagreement then enters once, through the share. The legacy `trust` mode uses
+  `share · max Trust` and so counts a resolved conflict twice.
 - `confidence = 1 / (1 + e^(−10·(answer_trust − 0.5)))`, capped at 0.60 if the slot has no
   primary evidence or primary sources conflict.
 - The runner-up value is reported as the conflicting view.
 
-**Step 5: Generation.** The context is the top 6 evidence items by Trust with Trust ≥ 0.20.
+**Step 5: Generation.** The context is the top 6 evidence items by Trust with Trust ≥ 0.20,
+plus the asked slot's winning evidence if it fell below the threshold.
 The prompt holds the fused facts and the evidence, and asks the model to cite every factual
 sentence ([E1], …) and use only the evidence. LLM backends: `mock` (deterministic templates,
 used for all benchmark runs), `ollama` (llama3.1:8b, local), `openai` (gpt-4o-mini),
-`anthropic` (model id set in config).
+`anthropic` (claude-haiku-5-5). If the chosen backend can't be built or reached, the
+template writer answers instead and the response is flagged `llm_fallback`.
 
 **Step 6: Verification** (`verify.py:verify_answer`). Split the answer into sentences with
 their citations. For each sentence:
@@ -246,15 +253,15 @@ their citations. For each sentence:
 | LLM invents a fact or citation | Verification marks it; fabricated citation or contradiction blocks the answer; one retry, then VERIFICATION_REQUIRED | Covered |
 | Ambiguous question | Asks the user to clarify (topic or destination) | Covered |
 | Off-topic question | Out-of-scope reply, no retrieval | Covered |
-| **Offline answer found but outdated, and no newer source is indexed** | Live check only runs when the asked fact is *missing* offline, so a found-but-stale answer is never re-checked live | **Gap** |
-| **Selected LLM unavailable** (Ollama not running, no API key) | The request errors; there is no fallback to another backend or to a template answer | **Gap** |
-| **Embedding model fails to load** | Silently replaced by a hashing encoder (`_FallbackEncoder`); retrieval quality collapses with no flag or warning | **Gap** |
-| **Asked fact is contested** | A conflict penalty can push its evidence below the 0.20 context threshold, so the answer omits the asked fact while still showing VERIFIED (on the test split: 98.7% resolved correctly, but 92.3% state the answer) | **Gap** |
-| **Confidence after a resolved conflict** | The conflict penalty also drives the fused confidence down, so correct answers to contested questions show 1–2% confidence next to VERIFIED (trust systems' ECE ≈ 0.37) | **Gap** |
+| Offline answer found but possibly outdated | Live check also runs for volatility levels in `live.verify_found_answers` (default High = visa) even when the fact was found offline (trace stage `live_verify`) | Covered (fixed) |
+| Selected LLM unavailable (Ollama not running, no API key, package missing) | `FallbackLLM` answers with the template writer from the same verified facts; flag `llm_fallback:<backend>:<error>` and a UI notice | Covered (fixed) |
+| Embedding model fails to load | `EmbeddingModelUnavailable` with instructions, shown in the UI; the hashing encoder is used only if `embedding.allow_hash_fallback: true` | Covered (fixed) |
+| Asked fact is contested | The asked slot's winning evidence is always passed to the generator, even below the 0.20 trust threshold, so the reply states it. Benchmark accuracy now requires the asked slot to be stated (`resolved_accuracy` keeps the internal-decision number) | Covered (fixed) |
+| Confidence after a resolved conflict | `trust.confidence_mode: quality_x_share` counts the conflict once (through the support share) instead of twice | Covered (fixed) |
 | GOV.UK travel advice | Written for British travellers; scoped GB, so it only answers British-nationality visa questions | Limitation |
 | Live coverage | GOV.UK plus 4 whitelisted pages (Singapore customs, Vietnam e-visa, two UK pages) | Limitation |
 | Google Custom Search API | Check availability before relying on it; Google has been restricting this API | Verify |
-| Anthropic default model `claude-3-5-haiku-latest` | Likely retired; set a current model id in `llm.anthropic.model` before use | Fix before use |
+| Anthropic backend | Default model `claude-haiku-5-5` (set in `llm.anthropic.model`); needs `ANTHROPIC_API_KEY` | Configured |
 
 ## 5. Trying it from the UI
 
@@ -268,7 +275,8 @@ Sidebar:
 - **Knowledge base**: *Benchmark corpus* (75 documents, 15 countries, content_relative
   freshness) or *Demo corpus* (the original 4 documents).
 - **System**: S0–S3. **Compare RAG systems** (below the chat) runs the last question through all four.
-- **LLM**: keep `mock` unless Ollama is running or an API key is set (see the gaps above).
+- **LLM**: `mock` is the deterministic template writer. Other backends need Ollama running or an
+  API key; if unavailable, the answer falls back to the template writer with a notice.
 - **Show trace**: the full pipeline trace. **Trust breakdown** (under each answer) shows
   A, F, G, QE, SR, CP and Trust for every evidence item.
 - **Live check**: fetches official pages in demo mode, and writes to the benchmark store's
@@ -278,7 +286,7 @@ Questions that show the behaviour (benchmark corpus):
 
 | Question | What to look for |
 |---|---|
-| How long can Indian tourists stay in Thailand? | S0 answers "15 days" from the outdated embassy page with ~88% confidence (a confident temporal hallucination). S2 resolves 60 days and visa-free entry, but its answer omits the stay length and shows ~2% confidence (both known gaps). Use **Compare RAG systems** |
+| How long can Indian tourists stay in Thailand? | S0 answers "15 days" from the outdated embassy page with ~88% confidence (a confident temporal hallucination). S2 answers 60 days, visa-free. Use **Compare RAG systems** |
 | Do Indians need a visa for Sri Lanka? | S0 says a visa is required (unrevised ETA page). S2 says visa-free entry; the Trust breakdown shows Freshness F ≈ 0 for the old page and 1.0 for the High Commission notice |
 | What is the duty-free allowance when arriving in India? | Both S0 and S2 answer INR 50,000: customs retrieves official sources only, so the old blog (INR 35,000) never reaches any system |
 | Can I bring an e-cigarette through customs in Thailand? | Item rule: prohibited |

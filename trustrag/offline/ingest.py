@@ -17,7 +17,7 @@ from urllib.parse import urlsplit
 
 import yaml
 
-from trustrag.offline.change_detect import compute_diff_magnitude, hash_content
+from trustrag.offline.change_detect import hash_content
 from trustrag.offline.metadata import DocumentMetadata
 
 

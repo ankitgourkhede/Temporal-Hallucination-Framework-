@@ -8,9 +8,7 @@ sources before consulting lower-trust validation sources.
 
 from __future__ import annotations
 
-import json
 import hashlib
-import math
 from pathlib import Path
 from typing import Any
 
@@ -24,7 +22,23 @@ except Exception:  # pragma: no cover - graceful fallback for constrained enviro
     SentenceTransformer = None  # type: ignore[assignment]
 
 from trustrag.offline.ingest import ingest_corpus
-from trustrag.offline.metadata import DocumentMetadata, fetch_chunk_rows, fetch_document_rows, init_metadata_store, upsert_chunk, upsert_document
+from trustrag.offline.metadata import fetch_chunk_rows, fetch_document_rows, init_metadata_store, upsert_chunk, upsert_document
+
+
+class EmbeddingModelUnavailable(RuntimeError):
+    """The configured embedding model could not be loaded."""
+
+
+def _fallback_or_raise(embedding: dict[str, Any], model_name: str, dimension: int) -> "_FallbackEncoder":
+    # A hashing encoder cannot search an index built with the real model (or vice versa), so
+    # using it silently returns irrelevant evidence. Fail loudly unless explicitly allowed.
+    if bool(embedding.get("allow_hash_fallback", False)):
+        return _FallbackEncoder(dimension)
+    raise EmbeddingModelUnavailable(
+        f"Embedding model {model_name!r} could not be loaded. Download it once with internet access "
+        "(it is cached afterwards), or set embedding.allow_hash_fallback: true to use the low-quality "
+        "hashing encoder for both indexing and queries."
+    )
 
 
 class _FallbackEncoder:
@@ -67,7 +81,7 @@ def encode_query_vector(query: str, config_path: str | Path) -> np.ndarray:
             )
         except Exception:
             pass
-    encoder = encoder or _FallbackEncoder(dimension)
+    encoder = encoder or _fallback_or_raise(embedding, model_name, dimension)
     vector = np.asarray(encoder.encode([text])[0], dtype="float32")[:dimension]
     if vector.shape[0] < dimension:
         vector = np.pad(vector, (0, dimension - vector.shape[0]))
@@ -120,7 +134,7 @@ class OfflineFAISSIndex:
                 return SentenceTransformer(self.model_name, device="cpu")
             except Exception:  # pragma: no cover - fallback path
                 pass
-        return _FallbackEncoder(self.dimension)
+        return _fallback_or_raise(self.embedding_cfg, self.model_name, self.dimension)
 
     def _chunk_text(self, text: str, chunk_size: int = 180, overlap: int = 30) -> list[str]:
         sentences = [sentence.strip() for sentence in __import__("re").split(r"(?<=[.!?])\s+", text) if sentence.strip()]

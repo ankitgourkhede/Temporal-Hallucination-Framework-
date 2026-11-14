@@ -21,7 +21,7 @@ from sklearn.metrics import roc_auc_score
 
 from experiments.benchmark import check_nationality_coverage, validate_benchmark
 from experiments.metrics import ABSTENTION_STATUSES, answer_accuracy, expected_calibration_error, hallucination_rate, values_match
-from experiments.stats import bootstrap_ci, mcnemar
+from experiments.stats import bootstrap_ci
 from trustrag.pipeline import TrustRAGPipeline
 
 
@@ -97,7 +97,12 @@ def _run_query(row: dict[str, Any], system: str, config_path: str) -> dict[str, 
         "system": system,
         "gold_value": row["gold_value"],
         "predicted_value": resolved,
-        "correct": bool(_equal(resolved, row["gold_value"])) and response["verification_status"] not in ABSTENTION_STATUSES,
+        # Correct = what the user reads: the right value AND the asked slot is stated in the
+        # answer (its evidence was given to the generator). resolved_correct ignores the text.
+        "correct": bool(_equal(resolved, row["gold_value"]))
+        and any(item.get("slot") == row["gold_slot"] for item in trace.get("context_evidence", []))
+        and response["verification_status"] not in ABSTENTION_STATUSES,
+        "resolved_correct": bool(_equal(resolved, row["gold_value"])),
         "verification_status": response["verification_status"],
         "confidence": response["confidence"],
         "faithfulness": response["faithfulness"],
@@ -133,6 +138,7 @@ def _summarize(predictions: pd.DataFrame) -> pd.DataFrame:
             {
                 "system": system,
                 **accuracy,
+                "resolved_accuracy": float(frame["resolved_correct"].astype(bool).mean()) if "resolved_correct" in frame else float("nan"),
                 "accuracy_ci_low": confidence_interval[0],
                 "accuracy_ci_high": confidence_interval[1],
                 "hallucination_rate": float(np.mean(claims_hallucination)) if claims_hallucination else 0.0,

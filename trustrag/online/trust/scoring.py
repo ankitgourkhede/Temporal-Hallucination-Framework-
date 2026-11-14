@@ -288,6 +288,9 @@ def score_evidence(
             + float(weights["w_SR"]) * current["SR"]
         )
         current["T_raw"] = positive - float(weights["w_C"]) * current["CP"]
+        # Source quality before the conflict multiplier; used by quality_x_share confidence,
+        # where disagreement is already captured by the winning value's support share.
+        current["T_quality"] = min(1.0, max(0.0, current["T_raw"]))
         clipped = min(1.0, max(0.0, current["T_raw"]))
         if conflict_mode == "subtract":
             trust = clipped

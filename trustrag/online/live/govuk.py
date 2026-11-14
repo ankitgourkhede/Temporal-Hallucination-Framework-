@@ -8,7 +8,6 @@ import re
 from datetime import datetime, timezone
 from html import unescape
 from typing import Any
-from urllib.error import URLError
 from urllib.request import Request, urlopen
 
 from bs4 import BeautifulSoup
